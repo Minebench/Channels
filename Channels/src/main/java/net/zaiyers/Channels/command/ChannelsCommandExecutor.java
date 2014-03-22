@@ -38,6 +38,12 @@ public class ChannelsCommandExecutor extends Command {
 				cmd = new ChannelRemoveModCommand(sender, args);
 			} else if (cmdName.equalsIgnoreCase("autojoin")) {
 				cmd = new ChannelAutojoinCommand(sender, args);
+			} else if (cmdName.equalsIgnoreCase("ban")) {
+				cmd = new ChannelBanCommand(sender, args);
+			} else if (cmdName.equalsIgnoreCase("kick")) {
+				cmd = new ChannelKickCommand(sender, args);
+			} else if (cmdName.equalsIgnoreCase("unban")) {
+				cmd = new ChannelUnbanCommand(sender, args);
 			} else {
 				// notify sender and exit
 				
@@ -53,7 +59,7 @@ public class ChannelsCommandExecutor extends Command {
 			if (cmd.validateInput()) {
 				cmd.execute();
 			} else {
-				Channels.notify(sender, "channels.usage."+getClass().getName());
+				Channels.notify(sender, "channels.usage."+cmd.getClass().getName());
 			}
 		}
 	}

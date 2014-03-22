@@ -14,7 +14,10 @@ channels:
       channel-no-permission: '§cYou are not allowed to perform this operation.'
       chatter-not-mod: '§6%chatter% §cis not a moderator.'
       channel-last-mod: '§cThere must always be a moderator.'
-      channel-mod-removed: '§6%modeator%§c is no longer a moderator in %channelColor%%channel%§c.'
+      channel-mod-removed: '§6%modeator%§a is no longer a moderator in %channelColor%%channel%§a.'
+      channel-chatter-banned: '§6%chatter%§a has been banned from %channelColor%%channel%§a.'
+      channel-chatter-unbanned: '§6%chatter%§a has been unbanned from %channelColor%%channel%§a.'
+      channel-chatter-kicked: '§6%chatter%§a has been kicked from %channelColor%%channel%§a.'
    usage:
       ChannelSubscribeCommand: '/channel subscribe <channel> [password]'
       unknown-command: '§cUnknown command: §e%command%'

@@ -6,10 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.google.common.collect.ImmutableMap;
+
 import net.md_5.bungee.api.ChatColor;
 import net.zaiyers.Channels.config.ChannelConfig;
 import net.zaiyers.Channels.message.ChannelMessage;
 import net.zaiyers.Channels.message.ConsoleMessage;
+import net.zaiyers.bungee.UUIDDB.UUIDDB;
 
 public class Channel {
 	/**
@@ -296,5 +299,64 @@ public class Channel {
 	 */
 	public boolean doAutojoin() {
 		return cfg.doAutojoin();
+	}
+
+	/**
+	 * ban and kick player from channel
+	 * @param chatterUUID
+	 */
+	public void banChatter(String chatterUUID) {
+		cfg.addBan(chatterUUID);
+		
+		Chatter chatter = Channels.getInstance().getChatter(chatterUUID);
+		if (chatter != null) {
+			chatter.unsubscribe(getUUID());
+		}
+		
+		// announce
+		for (String subscriber: subscribers) {
+			Channels.notify(Channels.getInstance().getChatter(subscriber).getPlayer(), "channels.command.channel-chatter-banned", ImmutableMap.of(
+					"chatter", UUIDDB.getInstance().getNameByUUID(chatterUUID),
+					"channelColor", getColor().toString(),
+					"channel", getName()
+			));
+		}
+	}
+	
+	/**
+	 * kick chatter from channel
+	 * @param chatterUUID
+	 */
+	public void kickChatter(String chatterUUID) {
+		Chatter chatter = Channels.getInstance().getChatter(chatterUUID);
+		if (chatter != null) {
+			chatter.unsubscribe(getUUID());
+		}
+		
+		// announce
+		for (String subscriber: subscribers) {
+			Channels.notify(Channels.getInstance().getChatter(subscriber).getPlayer(), "channels.command.channel-chatter-kicked", ImmutableMap.of(
+					"chatter", UUIDDB.getInstance().getNameByUUID(chatterUUID),
+					"channelColor", getColor().toString(),
+					"channel", getName()
+			));
+		}
+	}
+
+	/**
+	 * remove chatter from channel banlist
+	 * @param chatterUUID
+	 */
+	public void unbanChatter(String chatterUUID) {
+		cfg.removeBan(chatterUUID);
+		
+		// announce
+		for (String subscriber: subscribers) {
+			Channels.notify(Channels.getInstance().getChatter(subscriber).getPlayer(), "channels.command.channel-chatter-unbanned", ImmutableMap.of(
+					"chatter", UUIDDB.getInstance().getNameByUUID(chatterUUID),
+					"channelColor", getColor().toString(),
+					"channel", getName()
+			));
+		}
 	}
 }

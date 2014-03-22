@@ -185,4 +185,26 @@ public class ChannelConfig extends AbstractConfig {
 	public boolean doAutojoin() {
 		return cfg.getBoolean("autojoin", false);
 	}
+
+	/**
+	 * add uuid to bans
+	 * @param chatterUUID
+	 */
+	public void addBan(String chatterUUID) {
+		List<String> bans = getBans();
+		bans.add(chatterUUID);
+		
+		cfg.set("bans", bans);
+	}
+
+	/**
+	 * remove uuid from banlist
+	 * @param chatterUUID
+	 */
+	public void removeBan(String chatterUUID) {
+		List<String> bans = getBans();
+		bans.remove(chatterUUID);
+		
+		cfg.set("bans", bans);
+	}
 }
