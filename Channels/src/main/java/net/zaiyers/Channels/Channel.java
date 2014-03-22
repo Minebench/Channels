@@ -16,6 +16,11 @@ public class Channel {
 	private boolean temporary = false;
 
 	/**
+	 * channel is global
+	 */
+	private boolean global = true;
+	
+	/**
 	 * list of subscribers
 	 */
 	private ArrayList<String> subscribers = new ArrayList<String>();
@@ -183,5 +188,9 @@ public class Channel {
 
 	public String getConsoleFormat() {
 		return cfg.getConsoleFormat();
+	}
+
+	public void setGlobal(boolean parseBoolean) {
+		global = true;
 	}
 }

@@ -24,6 +24,8 @@ public class ChannelsCommandExecutor extends Command {
 				cmd = new ChannelUnsubscribeCommand(sender, args);
 			} else if (cmdName.matches("^speak|say$")) {
 				cmd = new ChannelSpeakCommand(sender, args);
+			} else if (cmdName.equalsIgnoreCase("global")) {
+				cmd = new ChannelGlobalCommand(sender, args);
 			} else {
 				// notify sender and exit
 				
