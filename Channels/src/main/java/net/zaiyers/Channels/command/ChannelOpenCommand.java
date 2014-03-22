@@ -27,7 +27,7 @@ public class ChannelOpenCommand extends ChannelCreateCommand {
 			Channels.getInstance().getChannel(args[1]).setTemporary(true);
 			
 			// add sender to moderators
-			Channels.getInstance().getChannel(args[1]).addModerator(Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUUID()));
+			Channels.getInstance().getChannel(args[1]).addModerator(((ProxiedPlayer) sender).getUUID());
 		}
 	}
 

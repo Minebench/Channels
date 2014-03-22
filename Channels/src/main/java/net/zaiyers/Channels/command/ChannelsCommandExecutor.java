@@ -32,6 +32,8 @@ public class ChannelsCommandExecutor extends Command {
 				cmd = new ChannelRemoveServerCommand(sender, args);
 			} else if (cmdName.equalsIgnoreCase("open")) {
 				cmd = new ChannelOpenCommand(sender, args);
+			} else if (cmdName.equalsIgnoreCase("addmod")) {
+				cmd = new ChannelAddModCommand(sender, args);
 			} else {
 				// notify sender and exit
 				

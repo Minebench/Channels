@@ -252,7 +252,7 @@ public class Channel {
 	 * add chatter as moderator
 	 * @param sender
 	 */
-	public void addModerator(Chatter chatter) {
-		cfg.addModerator(chatter.getPlayer().getUUID());
+	public void addModerator(String uuid) {
+		cfg.addModerator(uuid);
 	}
 }
