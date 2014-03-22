@@ -109,13 +109,31 @@ public class ChannelConfig extends AbstractConfig {
 		return UUID.fromString(configFile.getName().substring(0, 36));
 	}
 	
+	/**
+	 * create a new config
+	 */
 	public void createDefaultConfig() {
 		cfg = ymlCfg.load(new InputStreamReader(Channels.getInstance().getResourceAsStream("channel.yml")));
 				
 		save();
 	}
 
+	/**
+	 * get format for console messages
+	 * @return
+	 */
 	public String getConsoleFormat() {
 		return cfg.getString("consoleFormat");
+	}
+
+	/**
+	 * add server to distribute list
+	 * @param servername
+	 */
+	public void addServer(String servername) {
+		List<String> servers = getServers();
+		servers.add(servername);
+		
+		cfg.set("servers", servers);
 	}
 }

@@ -26,6 +26,8 @@ public class ChannelsCommandExecutor extends Command {
 				cmd = new ChannelSpeakCommand(sender, args);
 			} else if (cmdName.equalsIgnoreCase("global")) {
 				cmd = new ChannelGlobalCommand(sender, args);
+			} else if (cmdName.equalsIgnoreCase("addserver")) {
+				cmd = new ChannelAddServerCommand(sender, args);
 			} else {
 				// notify sender and exit
 				

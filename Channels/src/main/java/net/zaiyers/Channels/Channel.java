@@ -29,7 +29,7 @@ public class Channel {
 	 * channel configuration
 	 */
 	private ChannelConfig cfg;
-	
+		
 	/**
 	 * add subscriber
 	 */
@@ -103,6 +103,9 @@ public class Channel {
 			Chatter reciever = Channels.getInstance().getChatter(uuid);
 			if (reciever.getIgnores().contains(sender.getPlayer().getUUID())) {
 				// I don't want to read this message
+				continue;
+			} else if (!global && !reciever.hasPermission(this, "globalread") && !cfg.getServers().contains(reciever.getPlayer().getServer().getInfo().getName())) {
+				// channel is not distributed to this players server
 				continue;
 			}
 			
@@ -186,11 +189,26 @@ public class Channel {
 		return temporary;
 	}
 
+	/**
+	 * format for console messages
+	 * @return
+	 */
 	public String getConsoleFormat() {
 		return cfg.getConsoleFormat();
 	}
 
-	public void setGlobal(boolean parseBoolean) {
-		global = true;
+	/**
+	 * toggle global status
+	 * @param global
+	 */
+	public void setGlobal(boolean global) {
+		this.global = true;
+	}
+	
+	/**
+	 * add server to distribute to
+	 */
+	public void addServer(String servername) {
+		cfg.addServer(servername);
 	}
 }
