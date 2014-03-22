@@ -3,6 +3,7 @@ package net.zaiyers.Channels;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import net.md_5.bungee.api.ChatColor;
@@ -254,5 +255,30 @@ public class Channel {
 	 */
 	public void addModerator(String uuid) {
 		cfg.addModerator(uuid);
+	}
+
+	/**
+	 * check if uuid is in moderators
+	 * @param uuid
+	 * @return
+	 */
+	public boolean isMod(String uuid) {
+		return cfg.getModerators().contains(uuid);
+	}
+
+	/**
+	 * get list of moderator uuids
+	 * @return
+	 */
+	public List<String> getModerators() {
+		return cfg.getModerators();
+	}
+
+	/**
+	 * remove moderator from channel
+	 * @param modUUID
+	 */
+	public void removeModerator(String modUUID) {
+		cfg.removeModerator(modUUID);
 	}
 }

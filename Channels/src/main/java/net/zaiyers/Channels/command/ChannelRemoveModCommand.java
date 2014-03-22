@@ -9,13 +9,13 @@ import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.bungee.UUIDDB.UUIDDB;
 
-public class ChannelAddModCommand extends AbstractCommand {
-	public ChannelAddModCommand(CommandSender sender, String[] args) {
+public class ChannelRemoveModCommand extends AbstractCommand {
+	public ChannelRemoveModCommand(CommandSender sender, String[] args) {
 		super(sender, args);
 	}
 
 	public String getPermission() {
-		return "channels.addmod";
+		return "channels.removemod";
 	}
 
 	public void execute() {
@@ -25,7 +25,7 @@ public class ChannelAddModCommand extends AbstractCommand {
 			return;
 		}
 		
-		if (!(sender instanceof ConsoleCommandSender) && !chan.isMod(((ProxiedPlayer) sender).getUUID()) && sender.hasPermission("channels.addmod.foreign")) {
+		if (!(sender instanceof ConsoleCommandSender) && !chan.isMod(((ProxiedPlayer) sender).getUUID()) && sender.hasPermission("channels.removemod.foreign")) {
 			Channels.notify(sender, "channels.command.channel-no-permission");
 			return;
 		}
@@ -42,17 +42,14 @@ public class ChannelAddModCommand extends AbstractCommand {
 			}
 		}
 		
-		chan.addModerator(modUUID);
-		Channels.notify(sender, "channels.command.channel-moderator-added", ImmutableMap.of(
-				"chatter", UUIDDB.getInstance().getNameByUUID(modUUID),
-				"channelColor", chan.getColor().toString(),
-				"channel", chan.getName()
-		));
-		
-		// notify player as well 
-		if (player != null) {
-			Channels.notify(player, "channels.command.channel-moderator-added", ImmutableMap.of(
-					"chatter", UUIDDB.getInstance().getNameByUUID(modUUID),
+		if (!chan.isMod(modUUID)) {
+			Channels.notify(sender, "channels.command.chatter-not-mod", ImmutableMap.of("chatter", args[2]));
+		} else if (chan.getModerators().size() == 1 && chan.isTemporary()) {
+			Channels.notify(sender, "channels.command.channel-last-mod");
+		} else {
+			chan.removeModerator(modUUID);
+			Channels.notify(sender, "channels.command.channel-mod-removed", ImmutableMap.of(
+					"moderator", args[2],
 					"channelColor", chan.getColor().toString(),
 					"channel", chan.getName()
 			));

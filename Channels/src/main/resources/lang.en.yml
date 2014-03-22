@@ -9,6 +9,12 @@ channels:
       channel-created: '§aChannel created.'
       channel-not-found: '§cChannel §6%channel% §ccould not be found.'
       channel-removed: '§aChannel %channelColor%%channel% §ahas been removed.'
+      chatter-not-found: '§6%chatter% §ccould not be found.'
+      channel-moderator-added: '§6%moderator% §ais now a moderator of %channelColor%%channel%§a.'
+      channel-no-permission: '§cYou are not allowed to perform this operation.'
+      chatter-not-mod: '§6%chatter% §cis not a moderator.'
+      channel-last-mod: '§cThere must always be a moderator.'
+      channel-mod-removed: '§6%modeator%§c is no longer a moderator in %channelColor%%channel%§c.'
    usage:
       ChannelSubscribeCommand: '/channel subscribe <channel> [password]'
       unknown-command: '§cUnknown command: §e%command%'

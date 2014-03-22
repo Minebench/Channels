@@ -158,4 +158,11 @@ public class ChannelConfig extends AbstractConfig {
 		
 		cfg.set("moderators", moderators);
 	}
+
+	public void removeModerator(String modUUID) {
+		List<String> moderators = getModerators();
+		moderators.remove(modUUID);
+		
+		cfg.set("moderators", moderators);
+	}
 }
