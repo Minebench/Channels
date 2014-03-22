@@ -34,6 +34,10 @@ public class ChannelsCommandExecutor extends Command {
 				cmd = new ChannelOpenCommand(sender, args);
 			} else if (cmdName.equalsIgnoreCase("addmod")) {
 				cmd = new ChannelAddModCommand(sender, args);
+			} else if (cmdName.equalsIgnoreCase("removemod")) {
+				cmd = new ChannelRemoveModCommand(sender, args);
+			} else if (cmdName.equalsIgnoreCase("autojoin")) {
+				cmd = new ChannelAutojoinCommand(sender, args);
 			} else {
 				// notify sender and exit
 				

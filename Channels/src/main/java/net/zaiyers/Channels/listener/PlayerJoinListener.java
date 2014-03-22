@@ -34,7 +34,7 @@ public class PlayerJoinListener implements Listener {
 			
 			// check for autojoin channels
 			for (Channel channel: Channels.getInstance().getChannels().values()) {
-				if (chatter.hasPermission(channel, "autojoin")) {
+				if (channel.doAutojoin() && chatter.hasPermission(channel, "subscribe")) {
 					// joining twice doesn't matter, caught elsewhere
 					Channels.getInstance().getChannel(channel.getUUID()).subscribe(chatter);
 				}

@@ -159,10 +159,30 @@ public class ChannelConfig extends AbstractConfig {
 		cfg.set("moderators", moderators);
 	}
 
+	/**
+	 * remove moderator
+	 * @param modUUID
+	 */
 	public void removeModerator(String modUUID) {
 		List<String> moderators = getModerators();
 		moderators.remove(modUUID);
 		
 		cfg.set("moderators", moderators);
+	}
+
+	/**
+	 * set autojoin behavior
+	 * @param b
+	 */
+	public void setAutojoin(boolean b) {
+		cfg.set("autojoin", b);
+	}
+
+	/**
+	 * get autojoin behavior
+	 * @return
+	 */
+	public boolean doAutojoin() {
+		return cfg.getBoolean("autojoin", false);
 	}
 }

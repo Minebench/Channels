@@ -281,4 +281,20 @@ public class Channel {
 	public void removeModerator(String modUUID) {
 		cfg.removeModerator(modUUID);
 	}
+
+	/**
+	 * toggle autojoin behavior
+	 * @param b
+	 */
+	public void setAutojoin(boolean b) {
+		cfg.setAutojoin(b);
+	}
+	
+	/**
+	 * get autojoin behavior
+	 * @return
+	 */
+	public boolean doAutojoin() {
+		return cfg.doAutojoin();
+	}
 }
