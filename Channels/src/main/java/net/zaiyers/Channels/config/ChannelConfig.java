@@ -207,4 +207,8 @@ public class ChannelConfig extends AbstractConfig {
 		
 		cfg.set("bans", bans);
 	}
+
+	public void setColor(ChatColor color) {
+		cfg.set("color", color.name());
+	}
 }

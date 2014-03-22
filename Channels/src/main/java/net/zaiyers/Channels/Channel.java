@@ -359,4 +359,8 @@ public class Channel {
 			));
 		}
 	}
+
+	public void setColor(ChatColor color) {
+		cfg.setColor(color);
+	}
 }

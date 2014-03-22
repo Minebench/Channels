@@ -44,6 +44,8 @@ public class ChannelsCommandExecutor extends Command {
 				cmd = new ChannelKickCommand(sender, args);
 			} else if (cmdName.equalsIgnoreCase("unban")) {
 				cmd = new ChannelUnbanCommand(sender, args);
+			} else if (cmdName.equalsIgnoreCase("color")) {
+				cmd = new ChannelColorCommand(sender, args);
 			} else {
 				// notify sender and exit
 				
