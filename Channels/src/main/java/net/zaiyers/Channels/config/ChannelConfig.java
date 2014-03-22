@@ -136,4 +136,15 @@ public class ChannelConfig extends AbstractConfig {
 		
 		cfg.set("servers", servers);
 	}
+
+	/**
+	 * remove server from distribute list
+	 * @param servername
+	 */
+	public void removeServer(String servername) {
+		List<String> servers = getServers();
+		servers.remove(servername);
+		
+		cfg.set("servers", servers);
+	}
 }

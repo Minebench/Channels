@@ -211,4 +211,8 @@ public class Channel {
 	public void addServer(String servername) {
 		cfg.addServer(servername);
 	}
+
+	public void removeServer(String servername) {
+		cfg.removeServer(servername);
+	}
 }
