@@ -233,4 +233,20 @@ public class Chatter {
 	public void setMuted(boolean b) {
 		cfg.setMuted(b);
 	}
+
+	/**
+	 * set chatter prefix
+	 * @param prefix
+	 */
+	public void setPrefix(String prefix) {
+		cfg.setPrefix(prefix);
+	}
+
+	/**
+	 * set chatter suffix
+	 * @param suffix
+	 */
+	public void setSuffix(String suffix) {
+		cfg.setSuffix(suffix);
+	}
 }

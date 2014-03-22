@@ -50,6 +50,10 @@ public class ChannelsCommandExecutor extends Command {
 				cmd = new ChannelMuteCommand(sender, args);
 			} else if (cmdName.equalsIgnoreCase("unmute")) {
 				cmd = new ChannelUnmuteCommand(sender, args);
+			} else if (cmdName.equalsIgnoreCase("prefix")) {
+				cmd = new ChannelPrefixCommand(sender, args);
+			} else if (cmdName.equalsIgnoreCase("suffix")) {
+				cmd = new ChannelSuffixCommand(sender, args);
 			} else {
 				// notify sender and exit
 				

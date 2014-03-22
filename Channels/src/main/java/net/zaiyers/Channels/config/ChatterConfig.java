@@ -1,5 +1,6 @@
 package net.zaiyers.Channels.config;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -20,6 +21,26 @@ public class ChatterConfig extends AbstractConfig {
 		super(configFilePath);
 	}
 
+	/**
+	 * load a config instance by player uuid
+	 * @param uuid
+	 * @return
+	 */
+	public static ChatterConfig load(String uuid) {
+		String configFilePath = Channels.getInstance().getDataFolder()+("/chatters/"+uuid.substring(0,2)+"/"+uuid.substring(2,4)+"/"+uuid+".yml").toLowerCase();
+		File cfgFile = new File(configFilePath);
+		if (cfgFile.exists()) {
+			try {
+				return new ChatterConfig(configFilePath);
+			} catch (IOException e) {
+				e.printStackTrace();
+				return null;
+			}
+		} else {
+			return null;
+		}
+	}
+	
 	/**
 	 * read subscriptions from configuration
 	 * @return
@@ -132,5 +153,21 @@ public class ChatterConfig extends AbstractConfig {
 	 */
 	public void setMuted(boolean b) {
 		cfg.set("muted", b);
+	}
+
+	/**
+	 * set chatter prefix
+	 * @param prefix
+	 */
+	public void setPrefix(String prefix) {
+		cfg.set("prefix", prefix);
+	}
+
+	/**
+	 * set chatter suffix
+	 * @param string
+	 */
+	public void setSuffix(String suffix) {
+		cfg.set("prefix", suffix);
 	}
 }

@@ -4,6 +4,8 @@ channels:
       channel-has-password: '§cChannel %channelColor%%channel% §cis password protected.'
       channel-not-subscribed: '§cYou have not subscribed to %channelColor%%channel%'
       wrong-password: '§cWrong password.'
+      set-prefix: '§aSet prefix of §6%chatter% §ato §r%prefix%§a.'
+      set-suffix: '§aSet suffix of §6%chatter% §ato §r%suffix%§a.'
    command:
       is-player-command: '§cThis command for players only.'
       channel-created: '§aChannel created.'
