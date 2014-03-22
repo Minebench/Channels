@@ -1,0 +1,9 @@
+name: ''
+tag: ''
+format: '%channelColor%[%channelTag%] §f%sender%: §7%msg%'
+consoleFormat: '%channelColor%[%channelTag%] §f(Console): §7%msg%'
+color: DARK_GRAY
+password: ''
+servers: {}
+moderators: {}
+bans: {}

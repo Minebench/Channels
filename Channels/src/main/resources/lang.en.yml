@@ -1,0 +1,17 @@
+channels:
+   chatter:
+      is-muted: '§cYou have been muted and can not talk.'
+      channel-has-password: '§cChannel %channelColor%%channel% §cis password protected.'
+      channel-not-subscribed: '§cYou have not subscribed to %channelColor%%channel%'
+      wrong-password: '§cWrong password.'
+   command:
+      is-player-command: '§cThis command for players only.'
+      channel-created: '§aChannel created.'
+      channel-not-found: '§cChannel §6%channel% §ccould not be found.'
+      channel-removed: '§aChannel %channelColor%%channel% §ahas been removed.'
+   usage:
+      ChannelSubscribeCommand: '/channel subscribe <channel> [password]'
+      unknown-command: '§cUnknown command: §e%command%'
+   permission:
+      subscribe-channel: 'You are not allowed to subscribe to %channelColor%%channel%'
+      unsubscribe-channel: 'You are not allowed to unsubscribe from %channelColor%%channel%'

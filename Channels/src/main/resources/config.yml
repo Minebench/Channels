@@ -1,0 +1,3 @@
+defaultChannelUUID: ''
+privateMessageFormat: '§b[%sender% -> %reciever%]: %message%'
+language: 'en'
