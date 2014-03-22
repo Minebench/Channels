@@ -34,6 +34,8 @@ public class ConsoleMessage extends AbstractMessage {
 	}
 	
 	public void send() {
+		processMessage();
 		
+		channel.send(this);	
 	}
 }

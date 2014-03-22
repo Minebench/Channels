@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.CommandSender;
 import net.zaiyers.Channels.config.ChannelConfig;
 import net.zaiyers.Channels.message.ChannelMessage;
+import net.zaiyers.Channels.message.ConsoleMessage;
 
 public class Channel {
 	/**
@@ -112,6 +112,23 @@ public class Channel {
 			
 			// send the message
 			reciever.sendMessage(message);
+		}
+	}
+	
+	/**
+	 * send console message to channel
+	 * @param consoleMessage
+	 */
+	public void send(ConsoleMessage consoleMessage) {
+		for (String uuid: subscribers) {
+			Chatter reciever = Channels.getInstance().getChatter(uuid);
+			if (!global && !reciever.hasPermission(this, "globalread") && !cfg.getServers().contains(reciever.getPlayer().getServer().getInfo().getName())) {
+				// channel is not distributed to this players server
+				continue;
+			}
+			
+			// send the message
+			reciever.sendMessage(consoleMessage);
 		}
 	}
 
