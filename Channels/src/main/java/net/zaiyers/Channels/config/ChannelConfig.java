@@ -147,4 +147,15 @@ public class ChannelConfig extends AbstractConfig {
 		
 		cfg.set("servers", servers);
 	}
+
+	/**
+	 * add moderator
+	 * @param uuid
+	 */
+	public void addModerator(String uuid) {
+		List<String> moderators = getModerators();
+		moderators.add(uuid);
+		
+		cfg.set("moderators", moderators);
+	}
 }

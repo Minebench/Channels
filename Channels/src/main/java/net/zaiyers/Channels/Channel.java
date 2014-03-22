@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.CommandSender;
 import net.zaiyers.Channels.config.ChannelConfig;
 import net.zaiyers.Channels.message.ChannelMessage;
 
@@ -169,7 +170,9 @@ public class Channel {
 	 * write channel configuration to disk
 	 */
 	public void save() {
-		cfg.save();
+		if (!temporary) {
+			cfg.save();
+		}
 	}
 
 	/**
@@ -185,7 +188,7 @@ public class Channel {
 	 * channel is temporary
 	 * @return
 	 */
-	public boolean isTemp() {
+	public boolean isTemporary() {
 		return temporary;
 	}
 
@@ -212,7 +215,27 @@ public class Channel {
 		cfg.addServer(servername);
 	}
 
+	/**
+	 * remove server from distribute list
+	 * @param servername
+	 */
 	public void removeServer(String servername) {
 		cfg.removeServer(servername);
+	}
+
+	/**
+	 * toggle temporary status
+	 * @param b
+	 */
+	public void setTemporary(boolean b) {
+		temporary = b;
+	}
+
+	/**
+	 * add chatter as moderator
+	 * @param sender
+	 */
+	public void addModerator(Chatter chatter) {
+		cfg.addModerator(chatter.getPlayer().getUUID());
 	}
 }
