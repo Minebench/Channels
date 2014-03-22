@@ -35,12 +35,12 @@ public class ChannelKickCommand extends AbstractCommand {
 		ProxiedPlayer player = Channels.getInstance().getProxy().getPlayer(args[2]);
 		if (player == null) {
 			chatterUUID = UUIDDB.getInstance().getUUIDByName(args[2]);
-		} else {
-			chatterUUID = player.getUUID();
 			if (chatterUUID == null) {
 				Channels.notify(sender, "channels.command.chatter-not-found", ImmutableMap.of("chatter", args[2]));
 				return;
 			}
+		} else {
+			chatterUUID = player.getUUID();
 		}
 		
 		chan.kickChatter(chatterUUID);

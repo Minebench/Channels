@@ -125,4 +125,12 @@ public class ChatterConfig extends AbstractConfig {
 		
 		cfg.set("subscriptions", subscriptions);
 	}
+
+	/**
+	 * set muted status
+	 * @param b
+	 */
+	public void setMuted(boolean b) {
+		cfg.set("muted", b);
+	}
 }

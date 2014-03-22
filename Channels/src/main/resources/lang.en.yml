@@ -19,6 +19,8 @@ channels:
       channel-chatter-unbanned: '§6%chatter%§a has been unbanned from %channelColor%%channel%§a.'
       channel-chatter-kicked: '§6%chatter%§a has been kicked from %channelColor%%channel%§a.'
       color-not-found: '§cUnknown color: §6%color%§c.'
+      chatter-muted: '§6%chatter%§a has been muted.'
+      chatter-unmuted: '§6%chatter%§a has been unmuted.'
    usage:
       ChannelSubscribeCommand: '/channel subscribe <channel> [password]'
       unknown-command: '§cUnknown command: §e%command%'

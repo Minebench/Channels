@@ -34,12 +34,12 @@ public class ChannelRemoveModCommand extends AbstractCommand {
 		ProxiedPlayer player = Channels.getInstance().getProxy().getPlayer(args[2]);
 		if (player == null) {
 			modUUID = UUIDDB.getInstance().getUUIDByName(args[2]);
-		} else {
-			modUUID = player.getUUID();
 			if (modUUID == null) {
 				Channels.notify(sender, "channels.command.chatter-not-found", ImmutableMap.of("chatter", args[2]));
 				return;
 			}
+		} else {
+			modUUID = player.getUUID();
 		}
 		
 		if (!chan.isMod(modUUID)) {

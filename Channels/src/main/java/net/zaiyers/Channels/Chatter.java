@@ -225,4 +225,12 @@ public class Chatter {
 	public UUID getDefaultChannelUUID() {
 		return defaultChannel;
 	}
+
+	/**
+	 * toggle mute status
+	 * @param b
+	 */
+	public void setMuted(boolean b) {
+		cfg.setMuted(b);
+	}
 }
