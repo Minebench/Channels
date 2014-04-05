@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import com.google.common.collect.ImmutableMap;
+
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -83,7 +85,7 @@ public class Channels extends Plugin {
 		getProxy().getPluginManager().registerListener(this, pql);
 		
 		// register command executor
-		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("channel", "", new String[] {"ch", "pm", "tell", "msg", "r", "reply", "afk", "dnd"}));
+		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("channel", "", new String[] {"ch", "pm", "tell", "msg", "r", "reply", "afk", "dnd", "ignore"}));
 		
 		// load and register channels
 		for (UUID channelUUID: config.getChannels()) {
@@ -148,6 +150,21 @@ public class Channels extends Plugin {
 		return chatters.get(uuid);
 	}
 
+	/**
+	 * get chatter by name
+	 * @return null if chatter not found
+	 */
+	public Chatter getChatterByName(String name) {
+		name = name.toLowerCase();
+		for (Chatter onlinechatter: chatters.values().toArray(new Chatter[Channels.getInstance().getChatters().size()])) {
+			if (onlinechatter != null && onlinechatter.getName().toLowerCase().startsWith(name)) {
+				return onlinechatter;
+			}
+		}
+		
+		return null;
+	}
+	
 	/**
 	 * adds a channel
 	 */

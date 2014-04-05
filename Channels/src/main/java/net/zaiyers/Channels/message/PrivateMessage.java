@@ -34,6 +34,11 @@ public class PrivateMessage extends AbstractMessage {
 			return;
 		}
 		
+		if (recipient.getIgnores().contains(sender.getPlayer().getUUID())) {
+			// i don't want to read messages from this guy
+			return;
+		}
+		
 		recipient.sendMessage(this);
 	}
 	

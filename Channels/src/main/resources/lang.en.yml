@@ -42,7 +42,10 @@ channels:
       channel-info-moderators: "&aModerators: &f%moderators%"
       channel-info-bans: "&aBanned: &f%bans%"
       channel-info-subscribers: "&aSubscribers: &f%subscribers%"
-      
+      ignore-removed: "§aNo longer ignoring §6%chatter%§a."
+      ignore-added: "§aNow ignoring §6%chatter%§a."
+      ignore-list-head: "§aYou will not receive messages from these players:"
+      ignore-list-empty: "§aYou are not ignoring anyone."
    usage:
       ChannelSubscribeCommand: '/channel subscribe <channel> [password]'
       unknown-command: '§cUnknown command: §e%command%'

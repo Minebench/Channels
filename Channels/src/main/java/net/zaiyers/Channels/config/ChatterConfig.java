@@ -170,4 +170,26 @@ public class ChatterConfig extends AbstractConfig {
 	public void setSuffix(String suffix) {
 		cfg.set("prefix", suffix);
 	}
+
+	/**
+	 * remove player from ignores
+	 * @param ignoreUUID
+	 */
+	public void removeIgnore(String ignoreUUID) {
+		List<String> ignores = cfg.getStringList("ignores");
+		ignores.remove(ignoreUUID);
+		
+		cfg.set("ignores", ignores);
+	}
+
+	/**
+	 * add player to ignore list
+	 * @param uuid
+	 */
+	public void addIgnore(String uuid) {
+		List<String> ignores = cfg.getStringList("ignores");
+		ignores.add(uuid);
+		
+		cfg.set("ignores", ignores);
+	}
 }

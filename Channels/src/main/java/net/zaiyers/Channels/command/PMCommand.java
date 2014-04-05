@@ -36,16 +36,11 @@ public class PMCommand extends AbstractCommand {
 
 		if (args.length > 0) {
 			//set recipient
-			Chatter recipient = Channels.getInstance().getChatter(args[0]);
-			for (Chatter onlinechatter: Channels.getInstance().getChatters().values().toArray(new Chatter[Channels.getInstance().getChatters().size()])) {
-				if (onlinechatter != null && onlinechatter.getName().toLowerCase().startsWith(args[0].toLowerCase())) {
-					chatter.setPrivateRecipient(onlinechatter.getPlayer().getUUID());
-					Channels.notify(sender, "channels.command.recipient-set", ImmutableMap.of("recipient", recipient.getName()));
-					return;
-				}
-			}
-			
-			if (recipient == null) {
+			Chatter recipient = Channels.getInstance().getChatterByName(args[1]);
+			if (recipient != null && args.length == 1) {
+				chatter.setPrivateRecipient(recipient.getPlayer().getUUID());
+				Channels.notify(sender, "channels.command.recipient-set", ImmutableMap.of("recipient", recipient.getName()));
+			} else if (chatter == null) {
 				//nobody matched
 				Channels.notify(sender, "channels.command.chatter-not-found", ImmutableMap.of("chatter", args[0]));
 				return;

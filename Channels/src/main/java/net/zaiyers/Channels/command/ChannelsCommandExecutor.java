@@ -29,6 +29,10 @@ public class ChannelsCommandExecutor extends Command {
 				cmd = new AFKCommand(sender, args);
 			} else if (command.equals("dnd")) {
 				cmd = new DNDCommand(sender, args);
+			} else if (command.equals("ignore")) {
+				cmd = new IgnoreCommand(sender, args);
+			} else if (cmdName.equals("ignore")) {
+				cmd = new IgnoreCommand(sender, args);
 			} else if (cmdName.matches("^subscribe|join$")) {
 				cmd = new ChannelSubscribeCommand(sender, args);
 			} else if (cmdName.matches("^unsubscribe|quit$")) {
