@@ -7,6 +7,10 @@ channels:
       set-prefix: '§aSet prefix of §6%chatter% §ato §r%prefix%§a.'
       set-suffix: '§aSet suffix of §6%chatter% §ato §r%suffix%§a.'
       recipient-offline: '§cRecipient went offline.'
+      is-afk: '§6%chatter%§c is AFK and may not read your message.'
+      is-afk-with-msg: '§6%chatter%§c is AFK (§m%msg%§r§c) and may not read your message.'
+      is-dnd: '§6%chatter%§c doesn\'t want to be disturbed.'
+      is-dnd-with-msg: '§6%chatter%§c doesn\'t want to be disturbed. (§m%msg%§r§c)'
    command:
       is-player-command: '§cThis command for players only.'
       channel-created: '§aChannel created.'

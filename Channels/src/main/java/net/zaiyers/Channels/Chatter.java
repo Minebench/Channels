@@ -312,4 +312,20 @@ public class Chatter {
 		dnd = isDnd;
 		dndMessage = dndMsg;
 	}
+
+	/**
+	 * get afk message
+	 * @return
+	 */
+	public String getAFKMessage() {
+		return afkMessage;
+	}
+
+	/**
+	 * get dnd message
+	 * @return
+	 */
+	public String getDNDMessage() {
+		return dndMessage;
+	}
 }
