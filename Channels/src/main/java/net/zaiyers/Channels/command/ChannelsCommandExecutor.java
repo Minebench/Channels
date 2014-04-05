@@ -25,9 +25,9 @@ public class ChannelsCommandExecutor extends Command {
 				cmd = new PMCommand(sender, args);
 			} else if (command.matches("^r|reply$")) {
 				cmd = new ReplyCommand(sender, args);
-			} else if (command.equalsIgnoreCase("afk")) {
+			} else if (command.equals("afk")) {
 				cmd = new AFKCommand(sender, args);
-			} else if (command.equalsIgnoreCase("dnd")) {
+			} else if (command.equals("dnd")) {
 				cmd = new DNDCommand(sender, args);
 			} else if (cmdName.matches("^subscribe|join$")) {
 				cmd = new ChannelSubscribeCommand(sender, args);
@@ -35,40 +35,42 @@ public class ChannelsCommandExecutor extends Command {
 				cmd = new ChannelUnsubscribeCommand(sender, args);
 			} else if (cmdName.matches("^speak|say$")) {
 				cmd = new ChannelSpeakCommand(sender, args);
-			} else if (cmdName.equalsIgnoreCase("global")) {
+			} else if (cmdName.equals("global")) {
 				cmd = new ChannelGlobalCommand(sender, args);
-			} else if (cmdName.equalsIgnoreCase("addserver")) {
+			} else if (cmdName.equals("addserver")) {
 				cmd = new ChannelAddServerCommand(sender, args);
-			} else if (cmdName.equalsIgnoreCase("removeserver")) {
+			} else if (cmdName.equals("removeserver")) {
 				cmd = new ChannelRemoveServerCommand(sender, args);
-			} else if (cmdName.equalsIgnoreCase("open")) {
+			} else if (cmdName.equals("open")) {
 				cmd = new ChannelOpenCommand(sender, args);
-			} else if (cmdName.equalsIgnoreCase("addmod")) {
+			} else if (cmdName.equals("addmod")) {
 				cmd = new ChannelAddModCommand(sender, args);
-			} else if (cmdName.equalsIgnoreCase("removemod")) {
+			} else if (cmdName.equals("removemod")) {
 				cmd = new ChannelRemoveModCommand(sender, args);
-			} else if (cmdName.equalsIgnoreCase("autojoin")) {
+			} else if (cmdName.equals("autojoin")) {
 				cmd = new ChannelAutojoinCommand(sender, args);
-			} else if (cmdName.equalsIgnoreCase("ban")) {
+			} else if (cmdName.equals("ban")) {
 				cmd = new ChannelBanCommand(sender, args);
-			} else if (cmdName.equalsIgnoreCase("kick")) {
+			} else if (cmdName.equals("kick")) {
 				cmd = new ChannelKickCommand(sender, args);
-			} else if (cmdName.equalsIgnoreCase("unban")) {
+			} else if (cmdName.equals("unban")) {
 				cmd = new ChannelUnbanCommand(sender, args);
-			} else if (cmdName.equalsIgnoreCase("color")) {
+			} else if (cmdName.equals("color")) {
 				cmd = new ChannelColorCommand(sender, args);
-			} else if (cmdName.equalsIgnoreCase("mute")) {
+			} else if (cmdName.equals("mute")) {
 				cmd = new ChannelMuteCommand(sender, args);
-			} else if (cmdName.equalsIgnoreCase("unmute")) {
+			} else if (cmdName.equals("unmute")) {
 				cmd = new ChannelUnmuteCommand(sender, args);
-			} else if (cmdName.equalsIgnoreCase("prefix")) {
+			} else if (cmdName.equals("prefix")) {
 				cmd = new ChannelPrefixCommand(sender, args);
-			} else if (cmdName.equalsIgnoreCase("suffix")) {
+			} else if (cmdName.equals("suffix")) {
 				cmd = new ChannelSuffixCommand(sender, args);
-			} else if (cmdName.equalsIgnoreCase("serverdefaultchannel")) {
+			} else if (cmdName.equals("serverdefaultchannel")) {
 				cmd = new ServerDefaultChannelCommand(sender, args);
 			} else if (cmdName.matches("^list|who$")) {
 				cmd = new ServerDefaultChannelCommand(sender, args);
+			} else if (cmdName.equals("info")) {
+				cmd = new ChannelInfoCommand(sender, args);
 			} else {
 				// notify sender and exit
 				

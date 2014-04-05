@@ -29,6 +29,20 @@ channels:
       color-not-found: '§cUnknown color: §6%color%§c.'
       chatter-muted: '§6%chatter%§a has been muted.'
       chatter-unmuted: '§6%chatter%§a has been unmuted.'
+      channel-info-head: "&aChannel %channelColor%%channel% &aInformation:"
+      channel-info-name: "&aName: &f%name%"
+      channel-info-shorttag: "&aTag: &f%tag%"
+      channel-info-color: "&aColor: %color%%colorName%"
+      channel-info-password: "&aPassword: &f%password%"
+      channel-info-autojoin: "&aAutojoin: &f%autojoin%"
+      channel-info-msgFormat: "&aMessage Format: &f%format%"
+      channel-info-global: "&aGlobal: &f%global%"
+      channel-info-servers: "&aServers: &f%servers%"
+      channel-info-temp: "&aTemporary: &f%temporary%"
+      channel-info-moderators: "&aModerators: &f%moderators%"
+      channel-info-bans: "&aBanned: &f%bans%"
+      channel-info-subscribers: "&aSubscribers: &f%subscribers%"
+      
    usage:
       ChannelSubscribeCommand: '/channel subscribe <channel> [password]'
       unknown-command: '§cUnknown command: §e%command%'
@@ -36,3 +50,4 @@ channels:
       subscribe-channel: 'You are not allowed to subscribe to %channelColor%%channel%'
       unsubscribe-channel: 'You are not allowed to unsubscribe from %channelColor%%channel%'
       list-channel: 'You are not allowed see members of %channelColor%%channel%'
+      list-channel: 'You are not allowed see info for channel %channelColor%%channel%'
