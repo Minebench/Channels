@@ -288,4 +288,17 @@ public class Channels extends Plugin {
 			tagCommandExecutors.remove(tag);
 		}
 	}
+
+	/**
+	 * set default channel for server
+	 * @param serverName
+	 * @param channelUUID
+	 */
+	public void setServerDefaultChannel(String serverName, UUID channelUUID) {
+		config.setServerDefaultChannel(serverName, channelUUID); 
+	}
+
+	public HashMap<String, Chatter> getChatters() {
+		return chatters;
+	}
 }

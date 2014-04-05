@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.zaiyers.Channels.config.ChatterConfig;
-import net.zaiyers.Channels.message.ChannelMessage;
 import net.zaiyers.Channels.message.Message;
 
 public class Chatter {
@@ -45,6 +44,21 @@ public class Chatter {
 	 */
 	private UUID defaultChannel;
 	
+	/**
+	 * uuid of the recipient for private messages
+	 */
+	private String privateRecipient = null; 
+	
+	/**
+	 * uuid of chatter who last wrote to me
+	 */
+	private String lastPrivateSender = null;
+	
+	/**
+	 * 
+	 * @param player
+	 * @throws IOException
+	 */
 	public Chatter(ProxiedPlayer player) throws IOException {
 		this.player = player;
 		
@@ -248,5 +262,21 @@ public class Chatter {
 	 */
 	public void setSuffix(String suffix) {
 		cfg.setSuffix(suffix);
+	}
+
+	/**
+	 * set recipient for private messages
+	 * @param recipientUUID
+	 */
+	public void setPrivateRecipient(String recipientUUID) {
+		privateRecipient = recipientUUID;
+	}
+
+	/**
+	 * set last private message sender
+	 * @param chatter
+	 */
+	public void setLastPrivateSender(Chatter chatter) {
+		lastPrivateSender = chatter.getPlayer().getUUID();
 	}
 }

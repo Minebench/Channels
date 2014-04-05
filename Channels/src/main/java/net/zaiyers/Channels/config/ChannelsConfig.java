@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -109,5 +110,17 @@ public class ChannelsConfig extends AbstractConfig {
 	 */
 	public String getLanguage() {
 		return cfg.getString("language");
+	}
+
+	/**
+	 * set server default channel
+	 * @param serverName
+	 * @param channelUUID
+	 */
+	public void setServerDefaultChannel(String serverName, UUID channelUUID) {
+		@SuppressWarnings("unchecked")
+		HashMap<String, String> serverDefaultChannels = (HashMap<String, String>) cfg.get("serverDefaultChannels");
+		serverDefaultChannels.put(serverName, channelUUID.toString());
+		cfg.set("serverDefaultChannels", serverDefaultChannels);
 	}
 }
