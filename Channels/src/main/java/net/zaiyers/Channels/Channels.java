@@ -83,7 +83,7 @@ public class Channels extends Plugin {
 		getProxy().getPluginManager().registerListener(this, pql);
 		
 		// register command executor
-		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("channel", "", new String[] {"ch"}));
+		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("channel", "", new String[] {"ch", "pm", "tell", "msg", "r", "reply", "afk"}));
 		
 		// load and register channels
 		for (UUID channelUUID: config.getChannels()) {

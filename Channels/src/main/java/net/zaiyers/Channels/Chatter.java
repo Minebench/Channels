@@ -158,10 +158,7 @@ public class Chatter {
 	 * person I last wrote to
 	 */
 	public String getLastRecipient() {
-		String lastRecipient = cfg.getLastRecipient();
-		if (Channels.getInstance().getChatter(lastRecipient) == null) { lastRecipient = null; } // not online :(
-		
-		return lastRecipient;
+		return privateRecipient;
 	}
 	
 	/**
@@ -278,5 +275,41 @@ public class Chatter {
 	 */
 	public void setLastPrivateSender(Chatter chatter) {
 		lastPrivateSender = chatter.getPlayer().getUUID();
+	}
+
+	/**
+	 * returns true if chatter is afk
+	 * @return
+	 */
+	public boolean isAFK() {
+		return afk;
+	}
+
+	/**
+	 * change chatter afk status
+	 * @param isAfk
+	 * @param afkMessage
+	 */
+	public void setAFK(boolean isAfk, String afkMessage) {
+		afk = isAfk;
+		this.afkMessage = afkMessage;
+	}
+
+	/**
+	 * returns true if chatter is in dnd
+	 * @return
+	 */
+	public boolean isDND() {
+		return dnd;
+	}
+
+	/**
+	 * change chatter dnd status
+	 * @param isDnd
+	 * @param dndMsg
+	 */
+	public void setDND(boolean isDnd, String dndMsg) {
+		dnd = isDnd;
+		dndMessage = dndMsg;
 	}
 }

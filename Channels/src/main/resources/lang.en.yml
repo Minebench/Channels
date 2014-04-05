@@ -6,6 +6,7 @@ channels:
       wrong-password: '§cWrong password.'
       set-prefix: '§aSet prefix of §6%chatter% §ato §r%prefix%§a.'
       set-suffix: '§aSet suffix of §6%chatter% §ato §r%suffix%§a.'
+      recipient-offline: '§cRecipient went offline.'
    command:
       is-player-command: '§cThis command for players only.'
       channel-created: '§aChannel created.'
