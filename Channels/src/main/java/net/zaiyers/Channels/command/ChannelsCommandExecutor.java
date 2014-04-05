@@ -67,6 +67,8 @@ public class ChannelsCommandExecutor extends Command {
 				cmd = new ChannelSuffixCommand(sender, args);
 			} else if (cmdName.equalsIgnoreCase("serverdefaultchannel")) {
 				cmd = new ServerDefaultChannelCommand(sender, args);
+			} else if (cmdName.matches("^list|who$")) {
+				cmd = new ServerDefaultChannelCommand(sender, args);
 			} else {
 				// notify sender and exit
 				

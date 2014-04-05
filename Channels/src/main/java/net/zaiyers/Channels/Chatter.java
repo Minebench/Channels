@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.zaiyers.Channels.config.ChatterConfig;
 import net.zaiyers.Channels.message.Message;
@@ -327,5 +328,13 @@ public class Chatter {
 	 */
 	public String getDNDMessage() {
 		return dndMessage;
+	}
+
+	/**
+	 * send raw message
+	 * @param string
+	 */
+	public void sendMessage(String string) {
+		player.sendMessage(new TextComponent(string));
 	}
 }

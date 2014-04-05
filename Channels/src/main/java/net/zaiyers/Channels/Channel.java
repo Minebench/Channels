@@ -369,4 +369,24 @@ public class Channel {
 	public void setColor(ChatColor color) {
 		cfg.setColor(color);
 	}
+
+	/**
+	 * returns true if channel is global
+	 * @return
+	 */
+	public boolean isGlobal() {
+		return global;
+	}
+
+	public List<String> getServers() {
+		return cfg.getServers();
+	}
+
+	/**
+	 * get list of channel subscriber uuids
+	 * @return
+	 */
+	public List<String> getSubscribers() {
+		return subscribers;
+	}
 }
