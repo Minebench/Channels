@@ -7,8 +7,12 @@ import net.md_5.bungee.api.plugin.Command;
 import net.zaiyers.Channels.Channels;
 
 public class ChannelsCommandExecutor extends Command {
+	String command;
+	
 	public ChannelsCommandExecutor(String name, String permission,	String[] aliases) {
 		super(name, permission, aliases);
+		
+		command = name;
 	}
 
 	@Override
@@ -17,8 +21,11 @@ public class ChannelsCommandExecutor extends Command {
 		
 		if (args.length > 0) {
 			String cmdName = args[0].toLowerCase();
-			
-			if (cmdName.matches("^subscribe|join$")) {
+			if (command.matches("^pm|msg|tell$")) {
+				cmd = new PMCommand(sender, args);
+			} else if (command.matches("^r|reply$")) {
+				cmd = new ReplyCommand(sender, args);
+			} else if (cmdName.matches("^subscribe|join$")) {
 				cmd = new ChannelSubscribeCommand(sender, args);
 			} else if (cmdName.matches("^unsubscribe|quit$")) {
 				cmd = new ChannelUnsubscribeCommand(sender, args);
@@ -54,6 +61,8 @@ public class ChannelsCommandExecutor extends Command {
 				cmd = new ChannelPrefixCommand(sender, args);
 			} else if (cmdName.equalsIgnoreCase("suffix")) {
 				cmd = new ChannelSuffixCommand(sender, args);
+			} else if (cmdName.equalsIgnoreCase("serverdefaultchannel")) {
+				cmd = new ServerDefaultChannelCommand(sender, args);
 			} else {
 				// notify sender and exit
 				
