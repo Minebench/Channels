@@ -16,10 +16,6 @@ public class ChannelColorCommand extends AbstractCommand {
 		super(sender, args);
 	}
 
-	public String getPermission() {
-		return "channels.color";
-	}
-
 	public void execute() {
 		if (args.length == 1) {
 			//list available colors
@@ -40,7 +36,7 @@ public class ChannelColorCommand extends AbstractCommand {
 			return;
 		}
 		
-		if (!(sender instanceof ConsoleCommandSender) && !chan.isMod(((ProxiedPlayer) sender).getUUID()) && sender.hasPermission("channels.color.foreign")) {
+		if (!(sender instanceof ConsoleCommandSender) && !chan.isMod(((ProxiedPlayer) sender).getUUID()) && !sender.hasPermission("channels.color.foreign")) {
 			Channels.notify(sender, "channels.command.channel-no-permission");
 			return;
 		}
@@ -55,7 +51,7 @@ public class ChannelColorCommand extends AbstractCommand {
 	}
 
 	public boolean validateInput() {
-		return args.length > 1;
+		return args.length > 0;
 	}
 
 }

@@ -15,10 +15,6 @@ public class ChannelUnbanCommand extends AbstractCommand {
 		super(sender, args);
 	}
 
-	public String getPermission() {
-		return "channels.unban";
-	}
-
 	public void execute() {
 		Channel chan = Channels.getInstance().getChannel(args[1]);
 		if (chan == null) {
@@ -26,7 +22,7 @@ public class ChannelUnbanCommand extends AbstractCommand {
 			return;
 		}
 		
-		if (!(sender instanceof ConsoleCommandSender) && !chan.isMod(((ProxiedPlayer) sender).getUUID()) && sender.hasPermission("channels.unban.foreign")) {
+		if (!(sender instanceof ConsoleCommandSender) && !chan.isMod(((ProxiedPlayer) sender).getUUID()) && !sender.hasPermission("channels.unban.foreign")) {
 			Channels.notify(sender, "channels.command.channel-no-permission");
 			return;
 		}

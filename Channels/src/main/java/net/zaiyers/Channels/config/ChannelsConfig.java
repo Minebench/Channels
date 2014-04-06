@@ -6,10 +6,14 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
+import net.zaiyers.Channels.command.PMCommand;
+import net.zaiyers.Channels.message.PrivateMessage;
+import net.zaiyers.Channels.message.PrivateMessage.SenderRole;
 
 public class ChannelsConfig extends AbstractConfig {
 	
@@ -88,10 +92,15 @@ public class ChannelsConfig extends AbstractConfig {
 
 	/**
 	 * format for private messages
+	 * @param role 
 	 * @return
 	 */
-	public String getPrivateMessageFormat() {
-		return cfg.getString("privateMessageFormat", "§b[%sender% -> %reciever%]: %message%");
+	public String getPrivateMessageFormat(SenderRole role) {
+		if (role.equals(PrivateMessage.SenderRole.SENDER)) {
+			return cfg.getString("privateMessageFormatSender", "§bTo %receiver%: %message%");
+		} else if (role.equals(PrivateMessage.SenderRole.RECEIVER)) {
+			return cfg.getString("privateMessageFormatReceiver", "§dFrom %sender%: %message%");
+		} else return null;
 	}
 
 	/**
@@ -119,8 +128,14 @@ public class ChannelsConfig extends AbstractConfig {
 	 */
 	public void setServerDefaultChannel(String serverName, UUID channelUUID) {
 		@SuppressWarnings("unchecked")
-		HashMap<String, String> serverDefaultChannels = (HashMap<String, String>) cfg.get("serverDefaultChannels");
+		Map<String, String> serverDefaultChannels = (Map<String, String>) cfg.get("serverDefaultChannels");
 		serverDefaultChannels.put(serverName, channelUUID.toString());
 		cfg.set("serverDefaultChannels", serverDefaultChannels);
+	}
+
+	public UUID getServerDefaultChannel(String serverName) {
+		@SuppressWarnings("unchecked")
+		Map<String, String> serverDefaultChannels = (Map<String, String>) cfg.get("serverDefaultChannels");
+		return (serverDefaultChannels.get(serverName) != null) ? UUID.fromString(serverDefaultChannels.get(serverName)) : null;
 	}
 }

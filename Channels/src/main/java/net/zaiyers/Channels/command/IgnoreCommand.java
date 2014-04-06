@@ -16,10 +16,6 @@ public class IgnoreCommand extends AbstractCommand {
 		super(sender, args);
 	}
 
-	public String getPermission() {
-		return "channels.ignore";
-	}
-
 	public void execute() {
 		if (!(sender instanceof ProxiedPlayer)) {
 			Channels.notify(sender, "channels.command.is-player-command");
@@ -58,7 +54,7 @@ public class IgnoreCommand extends AbstractCommand {
 				chatter.removeIgnore(ignoreUUID);
 				Channels.notify(sender, "channels.command.ignore-removed", ImmutableMap.of("chatter", ignoreName));			
 			} else {
-				chatter.addIgnore(ignore.getPlayer().getUUID());
+				chatter.addIgnore(ignoreUUID);
 				Channels.notify(sender, "channels.command.ignore-added", ImmutableMap.of("chatter", ignoreName));
 			}
 		} else {
@@ -66,9 +62,9 @@ public class IgnoreCommand extends AbstractCommand {
 			Chatter chatter = Channels.getInstance().getChatter( ((ProxiedPlayer) sender).getUUID() );
 			List<String> ignores = chatter.getIgnores();
 			if (ignores.size() > 0) {
-				String ignoreList = ignores.get(0);
+				String ignoreList = UUIDDB.getInstance().getNameByUUID(ignores.get(0));
 				for (int i=1; i<ignores.size(); i++) {
-					ignoreList+=", "+ignores.get(i);
+					ignoreList+=", "+UUIDDB.getInstance().getNameByUUID(ignores.get(i));
 				}
 				
 				Channels.notify(sender, "channels.command.ignore-list-head");

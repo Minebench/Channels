@@ -12,10 +12,6 @@ public class ChannelAddServerCommand extends AbstractCommand {
 		super(sender, args);
 	}
 
-	public String getPermission() {
-		return "channels.addserver";
-	}
-
 	public void execute() {
 		Channel chan = Channels.getInstance().getChannel(args[1]);
 		if (chan == null) {

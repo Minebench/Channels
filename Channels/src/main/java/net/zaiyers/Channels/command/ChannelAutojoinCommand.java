@@ -11,10 +11,6 @@ public class ChannelAutojoinCommand extends AbstractCommand {
 		super(sender, args);
 	}
 
-	public String getPermission() {
-		return "channels.autojoin";
-	}
-
 	public void execute() {
 		Channel chan = Channels.getInstance().getChannel(args[1]);
 		if (chan == null) {
@@ -25,6 +21,7 @@ public class ChannelAutojoinCommand extends AbstractCommand {
 		try {
 			chan.setAutojoin(Boolean.parseBoolean(args[2]));
 			Channels.notify(sender, "channels.command.channel-modified", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
+			Channels.getInstance().checkSanity(sender, chan.getUUID());
 		} catch (ClassCastException e) {
 			Channels.notify(sender, "channels.usage.autojoin");
 		}

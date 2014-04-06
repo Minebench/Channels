@@ -16,10 +16,6 @@ public class ChannelListCommand extends AbstractCommand {
 		super(sender, args);
 	}
 
-	public String getPermission() {
-		return "channels.list";
-	}
-
 	public void execute() {
 		boolean isConsoleCommand = (sender instanceof ConsoleCommandSender);
 		Chatter chatter = null;
@@ -48,15 +44,15 @@ public class ChannelListCommand extends AbstractCommand {
 							)
 						)
 				) {
-						chatter.sendMessage(" - " + channel.getColor() + channel.getName() + ChatColor.WHITE + " (" + ((channel.getPassword() == null) ? "public":"private") + ")");
+						chatter.sendMessage(" - " + channel.getColor() + channel.getTag() + " - " + channel.getName() + ChatColor.WHITE + " (" + ((channel.getPassword().isEmpty()) ? "public":"private") + ")");
 				}
 			}
 		} else if (args.length == 2 || (args.length == 1 && args[0].equalsIgnoreCase("who") && !isConsoleCommand)) {
 			Channel channel = null;
 			if (args.length == 2) {
 				channel = Channels.getInstance().getChannel(args[1]);
-			} else if (chatter.getDefaultChannelUUID() != null) {
-				channel = Channels.getInstance().getChannel(chatter.getDefaultChannelUUID());
+			} else if (chatter.getChannel() != null) {
+				channel = Channels.getInstance().getChannel(chatter.getChannel());
 			} else {
 				Channels.notify(sender, "channels.chatter.has-no-channel");
 			}

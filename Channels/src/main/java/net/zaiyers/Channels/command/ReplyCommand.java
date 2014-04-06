@@ -1,5 +1,7 @@
 package net.zaiyers.Channels.command;
 
+import com.google.common.collect.ImmutableMap;
+
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.zaiyers.Channels.Channels;
@@ -11,10 +13,6 @@ import net.zaiyers.Channels.message.PrivateMessage;
 public class ReplyCommand extends AbstractCommand {
 	public ReplyCommand(CommandSender sender, String[] args) {
 		super(sender, args);
-	}
-
-	public String getPermission() {
-		return "channels.pm";
 	}
 
 	public void execute() {
@@ -30,6 +28,7 @@ public class ReplyCommand extends AbstractCommand {
 			if (recipient != null) {
 				if (args.length == 0) {
 					chatter.setPrivateRecipient(chatter.getLastSender());
+					Channels.notify(sender, "channels.chatter.recipient-set", ImmutableMap.of("recipient", recipient.getName()));
 				} else {
 					String text = args[0];
 					for (int i=1; i<args.length; i++) {
@@ -40,9 +39,10 @@ public class ReplyCommand extends AbstractCommand {
 					ChannelsChatEvent chatEvent = new ChannelsChatEvent(msg);
 					if (!Channels.getInstance().getProxy().getPluginManager().callEvent( chatEvent ).isCancelled()) {
 						msg.send();
-						recipient.setLastPrivateSender(chatter);
 					}
 				}
+			} else {
+				Channels.notify(sender, "channels.chatter.recipient-offline");
 			}
 		} else {
 			Channels.notify(sender, "channels.chatter.nobody-wrote");

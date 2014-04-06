@@ -14,10 +14,6 @@ public class ChannelAddModCommand extends AbstractCommand {
 		super(sender, args);
 	}
 
-	public String getPermission() {
-		return "channels.addmod";
-	}
-
 	public void execute() {
 		Channel chan = Channels.getInstance().getChannel(args[1]);
 		if (chan == null) {
@@ -25,7 +21,7 @@ public class ChannelAddModCommand extends AbstractCommand {
 			return;
 		}
 		
-		if (!(sender instanceof ConsoleCommandSender) && !chan.isMod(((ProxiedPlayer) sender).getUUID()) && sender.hasPermission("channels.addmod.foreign")) {
+		if (!(sender instanceof ConsoleCommandSender) && !chan.isMod(((ProxiedPlayer) sender).getUUID()) && !sender.hasPermission("channels.addmod.foreign")) {
 			Channels.notify(sender, "channels.command.channel-no-permission");
 			return;
 		}
@@ -48,15 +44,6 @@ public class ChannelAddModCommand extends AbstractCommand {
 				"channelColor", chan.getColor().toString(),
 				"channel", chan.getName()
 		));
-		
-		// notify player as well 
-		if (player != null) {
-			Channels.notify(player, "channels.command.channel-moderator-added", ImmutableMap.of(
-					"chatter", UUIDDB.getInstance().getNameByUUID(modUUID),
-					"channelColor", chan.getColor().toString(),
-					"channel", chan.getName()
-			));
-		}
 	}
 
 	public boolean validateInput() {

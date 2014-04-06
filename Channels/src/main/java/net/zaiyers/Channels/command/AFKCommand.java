@@ -13,10 +13,6 @@ public class AFKCommand extends AbstractCommand {
 		super(sender, args);
 	}
 
-	public String getPermission() {
-		return "channels.afk";
-	}
-
 	public void execute() {
 		if (!(sender instanceof ProxiedPlayer)) {
 			Channels.notify(sender, "channels.command.is-player-command");

@@ -211,4 +211,12 @@ public class ChannelConfig extends AbstractConfig {
 	public void setColor(ChatColor color) {
 		cfg.set("color", color.name());
 	}
+
+	public void setGlobal(boolean global) {
+		cfg.set("global", global);
+	}
+
+	public boolean isGlobal() {
+		return cfg.getBoolean("global");
+	}
 }

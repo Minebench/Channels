@@ -3,26 +3,49 @@ channels:
       is-muted: '§cYou have been muted and can not talk.'
       channel-has-password: '§cChannel %channelColor%%channel% §cis password protected.'
       channel-not-subscribed: '§cYou have not subscribed to %channelColor%%channel%'
+      channel-list-chatters: "&aPeople in Channel %channelColor%%channel%&a:"
       wrong-password: '§cWrong password.'
+      default-channel-set: "&aYou are now speaking in %channelColor%%channel%"
       set-prefix: '§aSet prefix of §6%chatter% §ato §r%prefix%§a.'
       set-suffix: '§aSet suffix of §6%chatter% §ato §r%suffix%§a.'
       recipient-offline: '§cRecipient went offline.'
+      recipient-set: "&aYou are now talking to &e%recipient%&a."
+      nobody-wrote: "&cNobody has written."
       has-no-channel: '§cYou have not set a default channel.'
       is-afk: '§6%chatter%§c is AFK and may not read your message.'
-      is-afk-with-msg: '§6%chatter%§c is AFK (§m%msg%§r§c) and may not read your message.'
-      is-dnd: '§6%chatter%§c doesn\'t want to be disturbed.'
-      is-dnd-with-msg: '§6%chatter%§c doesn\'t want to be disturbed. (§m%msg%§r§c)'
+      is-afk-with-msg: '§6%chatter%§c is AFK (§o%msg%§r§c) and may not read your message.'
+      is-dnd: '§6%chatter%§c does not want to be disturbed.'
+      is-dnd-with-msg: '§6%chatter%§c does not want to be disturbed. (§o%msg%§r§c)'
+      now-dnd: '§aYou are now marked as DND.'
+      now-dnd-with-msg: '§aYou are now marked as DND. (§o%msg%§r§a)'
+      no-longer-dnd: '§aYou are no longer marked as DND.'
+      now-afk: '§aYou are now marked as AFK.'
+      now-afk-with-msg: '§aYou are now marked as AFK. (§o%msg%§r§a)'
+      no-longer-afk: '§aYou are no longer marked as AFK.'
+      available-channels: "§fAvailable Channels"
+      banned-me-from-channel: "&cYou have been banned from %channelColor%%channel%&c."
+      banned-from-channel: "&e%chatter% &chas been banned from %channelColor%%channel%&c."
+      unbanned-from-channel: "&e%chatter% &chas been unbanned from %channelColor%%channel%&c."
+      kicked-me-from-channel: "&cYou have been kicked from %channelColor%%channel%&c."
+      kicked-from-channel: "&e%chatter% &chas been kicked from %channelColor%%channel%&c."
    command:
       is-player-command: '§cThis command for players only.'
       channel-created: '§aChannel created.'
       channel-not-found: '§cChannel §6%channel% §ccould not be found.'
       channel-removed: '§aChannel %channelColor%%channel% §ahas been removed.'
+      channel-modified: '§aChannel modified.'
       chatter-not-found: '§6%chatter% §ccould not be found.'
-      channel-moderator-added: '§6%moderator% §ais now a moderator of %channelColor%%channel%§a.'
+      channel-moderator-added: '§6%chatter% §ais now a moderator of %channelColor%%channel%§a.'
+      channel-subscribed: "§aYou have subscribed to %channelColor%%channel%§a"
+      channel-unsubscribed: "§aYou have unsubscribed from %channelColor%%channel%§a"
+      channel-adding-unknown-server: "&cServer %server% is unkown, remove it again if you are unsure"
+      channel-added-server: "&aServer %server% added to channel %channelColor%%channel%"
+      channel-removed-server: "&aServer %server% removed from channel %channelColor%%channel%"
+      channel-removed-unknown-server: "Removed unknown server from channel %channelColor%%channel%"
       channel-no-permission: '§cYou are not allowed to perform this operation.'
       chatter-not-mod: '§6%chatter% §cis not a moderator.'
       channel-last-mod: '§cThere must always be a moderator.'
-      channel-mod-removed: '§6%modeator%§a is no longer a moderator in %channelColor%%channel%§a.'
+      channel-mod-removed: '§6%chatter%§a is no longer a moderator in %channelColor%%channel%§a.'
       channel-chatter-banned: '§6%chatter%§a has been banned from %channelColor%%channel%§a.'
       channel-chatter-unbanned: '§6%chatter%§a has been unbanned from %channelColor%%channel%§a.'
       channel-chatter-kicked: '§6%chatter%§a has been kicked from %channelColor%%channel%§a.'
@@ -31,7 +54,7 @@ channels:
       chatter-unmuted: '§6%chatter%§a has been unmuted.'
       channel-info-head: "&aChannel %channelColor%%channel% &aInformation:"
       channel-info-name: "&aName: &f%name%"
-      channel-info-shorttag: "&aTag: &f%tag%"
+      channel-info-tag: "&aTag: &f%tag%"
       channel-info-color: "&aColor: %color%%colorName%"
       channel-info-password: "&aPassword: &f%password%"
       channel-info-autojoin: "&aAutojoin: &f%autojoin%"
@@ -46,11 +69,98 @@ channels:
       ignore-added: "§aNow ignoring §6%chatter%§a."
       ignore-list-head: "§aYou will not receive messages from these players:"
       ignore-list-empty: "§aYou are not ignoring anyone."
+      channel-tag-in-use: "§cTag is already used by another channel."
+      channel-name-in-use: "§cThere is already a channel by that name."
+      set-server-default-channel: "&aSet default channel of &f%server%&a to %channelColor%%channel%"
+      channel-has-no-servers: "§eWARNING: Channel %channelColor%%channel% §ehas no servers configured."
+      default-no-defchannel-available: "§eWARNING: No defaultchannel for server §6%server% §eis available."
+      default-channel-unavailable: "§eWARNING: Defaultchannel for server §6%server% §eis not available."
+      default-channel-no-autojoin: "§eWARNING: %channelColor%%channel% §eis a defaultchannel and has autojoin = false."
    usage:
-      ChannelSubscribeCommand: '/channel subscribe <channel> [password]'
-      unknown-command: '§cUnknown command: §e%command%'
+      ChannelAddModCommand: 'Usage: /channel addMod <channel> <chatter>'
+      ChannelAddServerCommand: 'Usage: /channel addServer <channel> <server>'
+      ChannelAutojoinCommand: 'Usage: /channel autojoin <channel> <true|false>'
+      ChannelBanCommand: 'Usage: /channel ban <channel> <chatter>'
+      ChannelColorCommand: 'Usage: /channel color <channel> <color>'
+      ChannelCreateCommand: 'Usage: /channel create <channel> <tag> [password]'
+      ChannelGlobalCommand: 'Usage: /channel global <channel> <true|false>'
+      ChannelKickCommand: 'Usage: /channel kick <channel> <chatter>'
+      ChannelMuteCommand: 'Usage: /channel mute <chatter>'
+      ChannelOpenCommand: 'Usage: /channel open <channel> <tag> [password]'
+      ChannelPrefixCommand: 'Usage: /channel prefix <chatter> "[prefix]"'
+      ChannelRemoveCommand: 'Usage: /channel remove <channel>'
+      ChannelRemoveModCommand: 'Usage: /channel removeMod <channel> <moderator>'
+      ChannelRemoveServerCommand: 'Usage: /channel removeServer <channel> <server>'
+      ChannelSpeakCommand: 'Usage: /channel speak <channel> [message]'
+      ChannelSubscribeCommand: 'Usage: /channel subscribe <channel> [password]'
+      ChannelUnbanCommand: 'Usage: /channel unban <channel> <player>'
+      ChannelUnsubscribeCommand: 'Usage: /channel unsubscribe <channel>'
+      PMCommand: 'Usage: /pm <player> [message]'
+      ServerDefaultChannelCommand: 'Usage: /channel serverDefaultChannel <server> <channel>'
+      unknown-command: '§cUnknown command: §6%command%'
+      ChannelHelpCommand: "§aHelp - §a/channel help <§6admin§a|§6mod§a|§6user>"
+      help-adminCommands: "§aAdmin commands:"
+      help-modCommands: "§aModerator commands:"
+      help-userCommands: "§aUser commands:"
+      help-ChannelAddModCommand: " - §a/channel addMod <§6channel§a> <§6moderator§a>"
+      explain-ChannelAddModCommand: adds a new moderator to your channel
+      help-ChannelAddServerCommand: " - §a/channel addServer <§6channel§a> <§6server§a>"
+      explain-ChannelAddServerCommand: starts distributing a channel to another server
+      help-ChannelAutojoinCommand: " - §a/channel autojoin <§6true§a|§6false§a>"
+      explain-ChannelAutojoinCommand: make players automatically join a channel
+      help-ChannelBanCommand: " - §a/channel ban <§6channel§a> <§6player§a>"
+      explain-ChannelBanCommand: bans a player from a channel
+      help-ChannelColorCommand: " - §a/channel color [<§6channel§a> <§6color§a>]"
+      explain-ChannelColorCommand: changes a channels color
+      help-ChannelCreateCommand: " - §a/channel create <§6name§a> <§6tag§a> [§6password§a]"
+      explain-ChannelCreateCommand: creates a new channel
+      help-ChannelGlobalCommand: " - §a/channel global <§6channel§a> <§6true§a|false§6>"
+      explain-ChannelGlobalCommand: distributes a channel to all servers
+      help-ChannelInfoCommand: " - §a/channel info <§6channel§a>"
+      explain-ChannelInfoCommand: displays a channels configuration
+      help-ChannelKickCommand: " - §a/channel kick <§6channel§a> <§6player§a>"
+      explain-ChannelKickCommand: kicks a player from a channel
+      help-ChannelListCommand: " - §a/channel <§6list§a|§6who§a> [§6channel§a]"
+      explain-ChannelListCommand: list channels or players in a channel
+      help-ChannelMuteCommand: " - §a/channel mute <§6player§a>"
+      explain-ChannelMuteCommand: mutes a player
+      help-ChannelOpenCommand: " - §a/channel open <§6name§a> <§6tag§a> [§6password§a]"
+      explain-ChannelOpenCommand: creates a new temporary channel
+      help-ChannelPrefixCommand: " - §a/channel prefix <§6player§a> <§6prefix§a>"
+      explain-ChannelPrefixCommand: sets a prefix for a player
+      help-ChannelRemoveCommand: " - §a/channel remove <§6channel§a>"
+      explain-ChannelRemoveCommand: removes a channel
+      help-ChannelRemoveModCommand: " - §a/channel removeMod <§6channel§a> <§6moderator§a>"
+      explain-ChannelRemoveModCommand: removes a moderator from a channel
+      help-ChannelRemoveServerCommand: " - §a/channel removeServer <§6channel§a> <§6server§a>"
+      explain-ChannelRemoveServerCommand: stops a channel from being distributed to a server
+      help-ChannelSpeakCommand: " - §a/channel speak <§6channel§a> [§6message§a]"
+      explain-ChannelSpeakCommand: sends a message to a channel or sets channel
+      help-ChannelSubscribeCommand: " - §a/channel subscribe <§6channel§a>"
+      explain-ChannelSubscribeCommand: adds a channel subscription
+      help-ChannelSuffixCommand: " - §a/channel suffix <§6player§a> <§6suffix§a>"
+      explain-ChannelSuffixCommand: sets a suffix for a player
+      help-ChannelUnbanCommand: " - §a/channel unban <§6channel§a> <§6player§a>"
+      explain-ChannelUnbanCommand: unbans a player from a channel
+      help-ChannelUnmuteCommand: " - §a/channel unmute <§6player§a>"
+      explain-ChannelUnmuteCommand: unmutes a player
+      help-ChannelUnsubscribeCommand: " - §a/channel unsubscribe <§6channel§a>"
+      explain-ChannelUnsubscribeCommand: removes a channel subscription
+      help-PMCommand: " - §a/pm [§6player§a]"
+      explain-PMCommand: sends a private message to a player
+      help-ReplyCommand: " - §a/reply [§6message§a]"
+      explain-ReplyCommand: sends a reply to a player
+      help-DNDCommand: " - §a/dnd [§6message§a]"
+      explain-DNDCommand: toggles my dnd state
+      help-AFKCommand: " - §a/afk [§6message§a]"
+      explain-AFKCommand: toggles my afk state
+      help-IgnoreCommand: " - §a/ignore [§6player§a]"
+      explain-IgnoreCommand: toggles ignoring a player or lists ignores
+      help-ServerDefaultChannelCommand: " - §a/channel serverDefaultChannel <§6server§a> <§6channel§a>"
+      explain-ServerDefaultChannelCommand: sets a defaultchannel for a server
    permission:
-      subscribe-channel: 'You are not allowed to subscribe to %channelColor%%channel%'
-      unsubscribe-channel: 'You are not allowed to unsubscribe from %channelColor%%channel%'
-      list-channel: 'You are not allowed see members of %channelColor%%channel%'
-      list-channel: 'You are not allowed see info for channel %channelColor%%channel%'
+      subscribe-channel: '§cYou are not allowed to subscribe to %channelColor%%channel%'
+      unsubscribe-channel: '§cYou are not allowed to unsubscribe from %channelColor%%channel%'
+      list-channel: '§cYou are not allowed see members of %channelColor%%channel%'
+      list-channel: '§cYou are not allowed see info for channel %channelColor%%channel%'
+      insufficient-permission: '§cYou do not have permission: §6%permission%'

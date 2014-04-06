@@ -18,10 +18,6 @@ public class ChannelSpeakCommand extends AbstractCommand {
 		super(sender, args);
 	}
 
-	public String getPermission() {
-		return "channels.speak";
-	}
-
 	public void execute() {
 		if (!args[1].matches("^[a-zA-Z0-9]+$")) {
 			Channels.notify(sender, "channels.command.channel-not-found", ImmutableMap.of("channel", args[1]));

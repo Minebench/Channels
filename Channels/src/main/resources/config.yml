@@ -1,3 +1,5 @@
 defaultChannelUUID: ''
-privateMessageFormat: '§b[%sender% -> %reciever%]: %message%'
+privateMessageFormatSender: '§bTo %receiver%: %msg%'
+privateMessageFormatReceiver: '§dFrom %sender%: %msg%'
 language: 'en'
+serverDefaultChannels: {}

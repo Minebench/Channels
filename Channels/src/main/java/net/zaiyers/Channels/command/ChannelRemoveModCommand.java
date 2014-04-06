@@ -14,10 +14,6 @@ public class ChannelRemoveModCommand extends AbstractCommand {
 		super(sender, args);
 	}
 
-	public String getPermission() {
-		return "channels.removemod";
-	}
-
 	public void execute() {
 		Channel chan = Channels.getInstance().getChannel(args[1]);
 		if (chan == null) {
@@ -25,7 +21,7 @@ public class ChannelRemoveModCommand extends AbstractCommand {
 			return;
 		}
 		
-		if (!(sender instanceof ConsoleCommandSender) && !chan.isMod(((ProxiedPlayer) sender).getUUID()) && sender.hasPermission("channels.removemod.foreign")) {
+		if (!(sender instanceof ConsoleCommandSender) && !chan.isMod(((ProxiedPlayer) sender).getUUID()) && !sender.hasPermission("channels.removemod.foreign")) {
 			Channels.notify(sender, "channels.command.channel-no-permission");
 			return;
 		}
@@ -49,7 +45,7 @@ public class ChannelRemoveModCommand extends AbstractCommand {
 		} else {
 			chan.removeModerator(modUUID);
 			Channels.notify(sender, "channels.command.channel-mod-removed", ImmutableMap.of(
-					"moderator", args[2],
+					"chatter", args[2],
 					"channelColor", chan.getColor().toString(),
 					"channel", chan.getName()
 			));

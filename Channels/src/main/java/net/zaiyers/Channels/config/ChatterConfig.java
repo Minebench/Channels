@@ -192,4 +192,12 @@ public class ChatterConfig extends AbstractConfig {
 		
 		cfg.set("ignores", ignores);
 	}
+
+	public void setDefaultChannel(UUID uuid) {
+		cfg.set("channelUUID", uuid.toString());
+	}
+
+	public void setLastSender(String uuid) {
+		cfg.set("lastSender", uuid);
+	}
 }

@@ -13,10 +13,6 @@ public class ChannelMuteCommand extends AbstractCommand {
 		super(sender, args);
 	}
 
-	public String getPermission() {
-		return "channels.mute";
-	}
-
 	public void execute() {
 		ProxiedPlayer player = Channels.getInstance().getProxy().getPlayer(args[1]);
 		if (player == null) {

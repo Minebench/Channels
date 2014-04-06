@@ -1,9 +1,14 @@
 package net.zaiyers.Channels.listener;
 
+import java.util.UUID;
+
+import com.google.common.collect.ImmutableMap;
+
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
+import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.ChannelsChatEvent;
 import net.zaiyers.Channels.Chatter;
@@ -49,6 +54,25 @@ public class MessageListener implements Listener {
 				}
 			} else {
 				// channel message
+				Channel chan = Channels.getInstance().getChannel(chatter.getChannel());
+				if (!chan.isGlobal() && !chan.getServers().contains(chatter.getPlayer().getServer().getInfo().getName())) {
+					// channel is not available on this server
+					UUID serverDefaultChannel = Channels.getInstance().getServerDefaultChannel(chatter.getPlayer().getServer().getInfo().getName());
+					if (serverDefaultChannel != null) {
+						// use server default channel
+						chan = Channels.getInstance().getChannel(serverDefaultChannel);
+					} else {
+						// use global default channel
+						chan = Channels.getInstance().getChannel(Channels.getConfig().getDefaultChannelUUID());
+					}
+					
+					if (chan.doAutojoin() && chatter.hasPermission(chan, "subscribe")) {
+						chatter.setDefaultChannelUUID(chan.getUUID());
+						chatter.subscribe(chan.getUUID());
+						Channels.notify(chatter.getPlayer(), "channels.chatter.default-channel-set", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
+					} // else the guy is screwed due to a misconfiguration - see Channels.checkSanity()
+				}
+				
 				Message msg = new ChannelMessage(chatter, Channels.getInstance().getChannel(chatter.getChannel()), event.getMessage());
 				ChannelsChatEvent chatEvent = new ChannelsChatEvent(msg);
 				if (!Channels.getInstance().getProxy().getPluginManager().callEvent( chatEvent ).isCancelled()) {

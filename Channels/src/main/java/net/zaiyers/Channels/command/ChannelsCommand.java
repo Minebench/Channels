@@ -1,12 +1,6 @@
 package net.zaiyers.Channels.command;
 
-public interface ChannelsCommand {
-	/**
-	 * get the required permission to run this command
-	 * @return
-	 */
-	public String getPermission();
-	
+public interface ChannelsCommand {	
 	/**
 	 * run the command
 	 */

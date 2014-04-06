@@ -14,10 +14,6 @@ public class ChannelUnmuteCommand extends AbstractCommand {
 		super(sender, args);
 	}
 
-	public String getPermission() {
-		return "channels.unmute";
-	}
-
 	public void execute() {
 		String chatterUUID;
 		ProxiedPlayer player = Channels.getInstance().getProxy().getPlayer(args[1]);

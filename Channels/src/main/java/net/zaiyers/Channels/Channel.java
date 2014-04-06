@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import com.google.common.collect.ImmutableMap;
@@ -20,11 +19,6 @@ public class Channel {
 	 * channel is temporary
 	 */
 	private boolean temporary = false;
-
-	/**
-	 * channel is global
-	 */
-	private boolean global = true;
 	
 	/**
 	 * list of subscribers
@@ -116,7 +110,7 @@ public class Channel {
 			if (reciever.getIgnores().contains(sender.getPlayer().getUUID())) {
 				// I don't want to read this message
 				continue;
-			} else if (!global && !reciever.hasPermission(this, "globalread") && !cfg.getServers().contains(reciever.getPlayer().getServer().getInfo().getName())) {
+			} else if (!cfg.isGlobal() && !reciever.hasPermission(this, "globalread") && !cfg.getServers().contains(reciever.getPlayer().getServer().getInfo().getName())) {
 				// channel is not distributed to this players server
 				continue;
 			}
@@ -133,7 +127,7 @@ public class Channel {
 	public void send(ConsoleMessage consoleMessage) {
 		for (String uuid: subscribers) {
 			Chatter reciever = Channels.getInstance().getChatter(uuid);
-			if (!global && !reciever.hasPermission(this, "globalread") && !cfg.getServers().contains(reciever.getPlayer().getServer().getInfo().getName())) {
+			if (!cfg.isGlobal() && !reciever.hasPermission(this, "globalread") && !cfg.getServers().contains(reciever.getPlayer().getServer().getInfo().getName())) {
 				// channel is not distributed to this players server
 				continue;
 			}
@@ -233,7 +227,7 @@ public class Channel {
 	 * @param global
 	 */
 	public void setGlobal(boolean global) {
-		this.global = true;
+		cfg.setGlobal(global);
 	}
 	
 	/**
@@ -318,12 +312,14 @@ public class Channel {
 		Chatter chatter = Channels.getInstance().getChatter(chatterUUID);
 		if (chatter != null) {
 			chatter.unsubscribe(getUUID());
+			Channels.notify(chatter.getPlayer(), "channels.chatter.banned-me-from-channel", ImmutableMap.of("channelColor", getColor().toString(), "channel", getName()));
 		}
 		
 		// announce
+		String banned = UUIDDB.getInstance().getNameByUUID(chatterUUID);
 		for (String subscriber: subscribers) {
-			Channels.notify(Channels.getInstance().getChatter(subscriber).getPlayer(), "channels.command.channel-chatter-banned", ImmutableMap.of(
-					"chatter", UUIDDB.getInstance().getNameByUUID(chatterUUID),
+			Channels.notify(Channels.getInstance().getChatter(subscriber).getPlayer(), "channels.chatter.banned-from-channel", ImmutableMap.of(
+					"chatter", banned,
 					"channelColor", getColor().toString(),
 					"channel", getName()
 			));
@@ -338,11 +334,12 @@ public class Channel {
 		Chatter chatter = Channels.getInstance().getChatter(chatterUUID);
 		if (chatter != null) {
 			chatter.unsubscribe(getUUID());
+			Channels.notify(chatter.getPlayer(), "channels.chatter.kicked-me-from-channel", ImmutableMap.of("channelColor", getColor().toString(), "channel", getName()));
 		}
 		
 		// announce
 		for (String subscriber: subscribers) {
-			Channels.notify(Channels.getInstance().getChatter(subscriber).getPlayer(), "channels.command.channel-chatter-kicked", ImmutableMap.of(
+			Channels.notify(Channels.getInstance().getChatter(subscriber).getPlayer(), "channels.chatter.kicked-from-channel", ImmutableMap.of(
 					"chatter", UUIDDB.getInstance().getNameByUUID(chatterUUID),
 					"channelColor", getColor().toString(),
 					"channel", getName()
@@ -358,12 +355,13 @@ public class Channel {
 		cfg.removeBan(chatterUUID);
 		
 		// announce
+		String banned = UUIDDB.getInstance().getNameByUUID(chatterUUID);
 		for (String subscriber: subscribers) {
-			Channels.notify(Channels.getInstance().getChatter(subscriber).getPlayer(), "channels.command.channel-chatter-unbanned", ImmutableMap.of(
-					"chatter", UUIDDB.getInstance().getNameByUUID(chatterUUID),
+			Channels.notify(Channels.getInstance().getChatter(subscriber).getPlayer(), "channels.chatter.unbanned-from-channel", ImmutableMap.of(
+					"chatter", banned,
 					"channelColor", getColor().toString(),
 					"channel", getName()
-			));
+				));
 		}
 	}
 
@@ -376,7 +374,7 @@ public class Channel {
 	 * @return
 	 */
 	public boolean isGlobal() {
-		return global;
+		return cfg.isGlobal();
 	}
 
 	public List<String> getServers() {

@@ -12,10 +12,6 @@ public class ChannelGlobalCommand extends AbstractCommand {
 		super(sender, args);
 	}
 
-	public String getPermission() {
-		return "channels.global";
-	}
-
 	public void execute() {
 		Channel chan = Channels.getInstance().getChannel(args[1]);
 		if (chan == null) {
@@ -25,7 +21,8 @@ public class ChannelGlobalCommand extends AbstractCommand {
 
 		try {
 			chan.setGlobal(Boolean.parseBoolean(args[2]));
-			Channels.notify(sender, "channels.command.channel-modified", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
+			Channels.notify(sender, "channels.command.channel-modified");
+			Channels.getInstance().checkSanity(sender, chan.getUUID());
 		} catch (ClassCastException e) {
 			Channels.notify(sender, "channels.usage.global");
 		}

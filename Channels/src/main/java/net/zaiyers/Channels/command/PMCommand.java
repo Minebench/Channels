@@ -36,10 +36,10 @@ public class PMCommand extends AbstractCommand {
 
 		if (args.length > 0) {
 			//set recipient
-			Chatter recipient = Channels.getInstance().getChatterByName(args[1]);
+			Chatter recipient = Channels.getInstance().getChatterByName(args[0]);
 			if (recipient != null && args.length == 1) {
 				chatter.setPrivateRecipient(recipient.getPlayer().getUUID());
-				Channels.notify(sender, "channels.command.recipient-set", ImmutableMap.of("recipient", recipient.getName()));
+				Channels.notify(sender, "channels.chatter.recipient-set", ImmutableMap.of("recipient", recipient.getName()));
 			} else if (chatter == null) {
 				//nobody matched
 				Channels.notify(sender, "channels.command.chatter-not-found", ImmutableMap.of("chatter", args[0]));
@@ -57,10 +57,6 @@ public class PMCommand extends AbstractCommand {
 				}
 			}
 		}
-	}
-	
-	public String getPermission() {
-		return "channels.pm";
 	}
 
 	public boolean validateInput() {

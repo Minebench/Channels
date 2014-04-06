@@ -30,6 +30,7 @@ public class ConsoleMessage extends AbstractMessage {
 									.replaceAll("%channelColor%",	channel.getColor().toString())
 									.replaceAll("%channelTag%",		channel.getTag())
 									.replaceAll("%channelName%",	channel.getName())
+									.replaceAll("%msg%", rawMessage)
 		);
 	}
 	

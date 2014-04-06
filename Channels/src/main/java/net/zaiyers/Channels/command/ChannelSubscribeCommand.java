@@ -14,10 +14,6 @@ public class ChannelSubscribeCommand extends AbstractCommand {
 		super(sender, args);
 	}
 
-	public String getPermission() {
-		return "channels.subscribe";
-	}
-
 	public void execute() {
 		if (sender instanceof ConsoleCommandSender) {
 			Channels.notify(sender, "channels.command.is-player-command");
@@ -52,6 +48,7 @@ public class ChannelSubscribeCommand extends AbstractCommand {
 			
 			// subscribe
 			chatter.subscribe(chan.getUUID());
+			Channels.notify(sender, "channels.command.channel-subscribed", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
 		}
 	}
 

@@ -13,12 +13,8 @@ public class ChannelCreateCommand extends AbstractCommand implements ChannelsCom
 		super(sender, args);
 	}
 
-	public String getPermission() {
-		return "channels.create";
-	}
-
 	public void execute() {
-		String name, tag, password;
+		String name, tag, password = "";
 		if (args[1].matches("^[a-zA-Z0-9_]+$")) {
 			name = args[1];
 		} else {
@@ -35,11 +31,18 @@ public class ChannelCreateCommand extends AbstractCommand implements ChannelsCom
 		
 		if (args.length > 3 && args[3].matches("^[a-zA-Z0-9_]+$")) {
 			password = args[3];
-		} else {
+		} else if (args.length > 3) {
 			Channels.notify(sender, "channels.usage.channelpassword-disallowed-chars");
 			return;
 		}
 	
+		if (Channels.getInstance().getChannel(tag) != null) {
+			Channels.notify(sender, "channels.command.channel-tag-in-use");
+			return;
+		} else if (Channels.getInstance().getChannel(name) != null) {
+			Channels.notify(sender, "channels.command.channel-name-in-use");
+			return;
+		}
 		
 		try {
 			// generate new uuid
@@ -54,11 +57,12 @@ public class ChannelCreateCommand extends AbstractCommand implements ChannelsCom
 			chan.setTag(tag);
 			chan.setPassword(password);
 			chan.save();
-			
-			Channels.notify(sender, "channels.config.channel-created");
-			
+									
 			// register channel
 			Channels.getInstance().addChannel(chan);
+			Channels.getInstance().registerTag(tag);
+			
+			Channels.notify(sender, "channels.command.channel-created");
 		} catch (IOException e) {
 			Channels.getInstance().getLogger().severe("Unable to create new config");
 			e.printStackTrace();

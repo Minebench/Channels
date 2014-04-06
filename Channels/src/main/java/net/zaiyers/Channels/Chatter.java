@@ -39,21 +39,11 @@ public class Chatter {
 	 * configuration for this guy
 	 */
 	private ChatterConfig cfg;
-
-	/**
-	 * we talk in this one by default
-	 */
-	private UUID defaultChannel;
 	
 	/**
 	 * uuid of the recipient for private messages
 	 */
 	private String privateRecipient = null; 
-	
-	/**
-	 * uuid of chatter who last wrote to me
-	 */
-	private String lastPrivateSender = null;
 	
 	/**
 	 * 
@@ -151,7 +141,6 @@ public class Chatter {
 	public String getLastSender() {
 		String lastSender = cfg.getLastSender();
 		
-		if (Channels.getInstance().getChatter(lastSender) == null) { lastSender = null; } // not online :(
 		return lastSender;
 	}
 	
@@ -227,15 +216,7 @@ public class Chatter {
 	 * @param uuid
 	 */
 	public void setDefaultChannelUUID(UUID uuid) {
-		defaultChannel = uuid;		
-	}
-	
-	/**
-	 * get my default channel
-	 * @return
-	 */
-	public UUID getDefaultChannelUUID() {
-		return defaultChannel;
+		cfg.setDefaultChannel(uuid);		
 	}
 
 	/**
@@ -275,7 +256,7 @@ public class Chatter {
 	 * @param chatter
 	 */
 	public void setLastPrivateSender(Chatter chatter) {
-		lastPrivateSender = chatter.getPlayer().getUUID();
+		cfg.setLastSender(chatter.getPlayer().getUUID());
 	}
 
 	/**

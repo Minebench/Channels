@@ -10,6 +10,7 @@ import com.google.common.collect.ImmutableMap;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.zaiyers.Channels.command.ChannelTagCommandExecutor;
 import net.zaiyers.Channels.command.ChannelsCommandExecutor;
@@ -84,8 +85,13 @@ public class Channels extends Plugin {
 		getProxy().getPluginManager().registerListener(this, pjl);
 		getProxy().getPluginManager().registerListener(this, pql);
 		
-		// register command executor
-		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("channel", "", new String[] {"ch", "pm", "tell", "msg", "r", "reply", "afk", "dnd", "ignore"}));
+		// register command executors
+		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("channel", "", new String[] {"ch"}));
+		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("pm", "", new String[] {"tell", "msg"}));
+		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("reply", "", new String[] {"r"}));
+		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("afk", "", new String[] {}));
+		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("dnd", "", new String[] {}));
+		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("ignore", "", new String[] {}));
 		
 		// load and register channels
 		for (UUID channelUUID: config.getChannels()) {
@@ -100,6 +106,8 @@ public class Channels extends Plugin {
 				e.printStackTrace();
 			}
 		}
+		
+		checkSanity(getProxy().getConsole(), null);
 	}
 	
 	/**
@@ -115,6 +123,8 @@ public class Channels extends Plugin {
 		for (Chatter chatter: chatters.values()) {
 			chatter.save();
 		}
+		
+		config.save();
 	}
 	
 	/**
@@ -138,6 +148,14 @@ public class Channels extends Plugin {
 	 * @param id
 	 */
 	public void removeChannel(UUID uuid) {
+		Channel chan = channels.get(uuid);
+		if (chan != null) {
+			ImmutableMap<String, String> replacements = ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString());
+			for (String subscriberUUID: chan.getSubscribers()) {
+				Channels.notify(chatters.get(subscriberUUID).getPlayer(), "channels.command.channel-removed", replacements);
+			}
+		}
+		
 		channels.remove(uuid);
 	}
 
@@ -189,7 +207,7 @@ public class Channels extends Plugin {
 	 */
 	public Channel getChannel(String string) {
 		if (channelMappings.containsKey(string.toLowerCase())) {
-			return channels.get(channelMappings.get(string));
+			return channels.get(channelMappings.get(string.toLowerCase()));
 		} else {
 			
 			// cycle through channels
@@ -258,7 +276,7 @@ public class Channels extends Plugin {
 	 * @param string
 	 */
 	public static void notify(CommandSender sender, String key, Map<String, String> replacements) {
-		String string = lang.getTranslation(key);
+		String string = Channels.getInstance().getLanguage().getTranslation(key);
 		
 		// insert replacements
 		if (replacements != null) {
@@ -279,7 +297,7 @@ public class Channels extends Plugin {
 	 * 
 	 * @return
 	 */
-	public static LanguageConfig getLanguage() {
+	public LanguageConfig getLanguage() {
 		return lang;
 	}
 
@@ -314,8 +332,47 @@ public class Channels extends Plugin {
 	public void setServerDefaultChannel(String serverName, UUID channelUUID) {
 		config.setServerDefaultChannel(serverName, channelUUID); 
 	}
+	
+	/**
+	 * get default channel for server
+	 * @param serverName
+	 * @return UUID for servers default channel
+	 */
+	public UUID getServerDefaultChannel(String serverName) {
+		return config.getServerDefaultChannel(serverName);
+	}
 
 	public HashMap<String, Chatter> getChatters() {
 		return chatters;
+	}
+
+	/**
+	 * check if users will be able to talk in a chanenl
+	 * @param sender
+	 * @param uuid
+	 */
+	public void checkSanity(CommandSender sender, UUID uuid) {
+		Channel chan = channels.get(uuid);
+		Channel def = channels.get(config.getDefaultChannelUUID());
+		
+		// check channel
+		if (chan != null && !chan.isGlobal() && chan.getServers().isEmpty()) {
+			Channels.notify(sender, "channels.command.channel-has-no-servers", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
+		}
+		
+		// check servers
+		for (ServerInfo server: getProxy().getServers().values()) {
+			Channel serverDef = channels.get(getServerDefaultChannel(server.getName()));
+			if (serverDef != null) {
+				if (!serverDef.isGlobal() && !serverDef.getServers().contains(server.getName())) {
+					Channels.notify(sender, "channels.command.default-channel-unavailable", ImmutableMap.of("server", server.getName()));
+				}
+				if (!serverDef.doAutojoin()) {
+					Channels.notify(sender, "channels.command.default-channel-no-autojoin", ImmutableMap.of("channel", serverDef.getName(), "channelColor", serverDef.getColor().toString()));
+				}
+			} else if (!def.isGlobal() && !def.getServers().contains(server.getName())) {
+				Channels.notify(sender, "channels.command.default-no-defchannel-available", ImmutableMap.of("server", server.getName()));
+			}
+		}
 	}
 }

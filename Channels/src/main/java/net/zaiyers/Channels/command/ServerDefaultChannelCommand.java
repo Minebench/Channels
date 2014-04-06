@@ -11,10 +11,6 @@ public class ServerDefaultChannelCommand extends AbstractCommand {
 		super(sender, args);
 	}
 
-	public String getPermission() {
-		return "channels.serverdefaultchannel";
-	}
-
 	public void execute() {		
 		if (Channels.getInstance().getProxy().getServerInfo(args[1]) == null) {
 			Channels.notify(sender, "channels.command.channel-unknown-server");
@@ -29,6 +25,7 @@ public class ServerDefaultChannelCommand extends AbstractCommand {
 		
 		Channels.getInstance().setServerDefaultChannel(args[1], chan.getUUID());
 		Channels.notify(sender, "channels.command.set-server-default-channel", ImmutableMap.of("server", args[1], "channel", chan.getName(), "channelColor", chan.getColor().toString()));
+		Channels.getInstance().checkSanity(sender, chan.getUUID());
 	}
 
 	public boolean validateInput() {

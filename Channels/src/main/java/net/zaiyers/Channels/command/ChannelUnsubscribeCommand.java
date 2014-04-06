@@ -15,10 +15,6 @@ public class ChannelUnsubscribeCommand extends AbstractCommand implements Channe
 		super(sender, args);
 	}
 
-	public String getPermission() {
-		return "channels.unsubscribe";
-	}
-
 	public void execute() {
 		if (sender instanceof ConsoleCommandSender) {
 			Channels.notify(sender, "channels.command.is-player-command");
@@ -41,12 +37,13 @@ public class ChannelUnsubscribeCommand extends AbstractCommand implements Channe
 			}
 			
 			// no permission to unsubscribe
-			if (chatter.hasPermission(chan, "unsubscribe")) {
+			if (!chatter.hasPermission(chan, "unsubscribe")) {
 				Channels.notify(sender, "channels.permission.unsubscribe-channel", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
 				return;
 			}
 			
 			chatter.unsubscribe(chan.getUUID());
+			Channels.notify(sender, "channels.command.channel-unsubscribed", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
 		}		
 	}
 

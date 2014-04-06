@@ -8,49 +8,53 @@ import net.zaiyers.Channels.Chatter;
 
 public class PrivateMessage extends AbstractMessage {
 	private Chatter sender;
-	private Chatter recipient;
+	private Chatter receiver;
 	
-	public PrivateMessage(Chatter sender, Chatter recipient, String message) {
+	public static enum SenderRole {
+		SENDER, RECEIVER
+	}
+	
+	public PrivateMessage(Chatter sender, Chatter receiver, String message) {
 		this.sender = sender;
-		this.recipient = recipient;
+		this.receiver = receiver;
 		rawMessage = message;
 	}
 
-	public void send() {
-		processMessage();
-		
-		if (recipient.isAFK()) {
-			if (recipient.getAFKMessage() != null) {
-				Channels.notify(sender.getPlayer(), "channels.chatter.is-afk-with-msg", ImmutableMap.of("chatter", recipient.getName(), "msg", recipient.getAFKMessage()));
+	public void send() {		
+		if (receiver.isAFK()) {
+			if (receiver.getAFKMessage() != null) {
+				Channels.notify(sender.getPlayer(), "channels.chatter.is-afk-with-msg", ImmutableMap.of("chatter", receiver.getName(), "msg", receiver.getAFKMessage()));
 			} else {
-				Channels.notify(sender.getPlayer(), "channels.chatter.is-afk", ImmutableMap.of("chatter", recipient.getName()));
+				Channels.notify(sender.getPlayer(), "channels.chatter.is-afk", ImmutableMap.of("chatter", receiver.getName()));
 			}
-		} else if (recipient.isDND()) {
-			if (recipient.getDNDMessage() != null) {
-				Channels.notify(sender.getPlayer(), "channels.chatter.is-dnd-with-msg", ImmutableMap.of("chatter", recipient.getName(), "msg", recipient.getDNDMessage()));
+		} else if (receiver.isDND()) {
+			if (receiver.getDNDMessage() != null) {
+				Channels.notify(sender.getPlayer(), "channels.chatter.is-dnd-with-msg", ImmutableMap.of("chatter", receiver.getName(), "msg", receiver.getDNDMessage()));
 			} else {
-				Channels.notify(sender.getPlayer(), "channels.chatter.is-dnd", ImmutableMap.of("chatter", recipient.getName()));
+				Channels.notify(sender.getPlayer(), "channels.chatter.is-dnd", ImmutableMap.of("chatter", receiver.getName()));
 			}
 			return;
 		}
+				
+		processMessage(SenderRole.SENDER);
+		sender.sendMessage(this);
 		
-		if (recipient.getIgnores().contains(sender.getPlayer().getUUID())) {
-			// i don't want to read messages from this guy
-			return;
+		if (!receiver.getIgnores().contains(sender.getPlayer().getUUID())) {
+			processMessage(SenderRole.RECEIVER);
+			receiver.sendMessage(this);
+			receiver.setLastPrivateSender(sender);
 		}
-		
-		recipient.sendMessage(this);
 	}
 	
 	/**
 	 * generate private message output
 	 * @return
 	 */
-	private void processMessage() {
+	private void processMessage(SenderRole role) {
 		processedMessage = new TextComponent(
-			Channels.getConfig().getPrivateMessageFormat()	.replaceAll("%sender%", sender.getName())
-															.replaceAll("%recipient%", recipient.getName())
-															.replaceAll("%message%", rawMessage)
+			Channels.getConfig().getPrivateMessageFormat(role)	.replaceAll("%sender%", sender.getName())
+																.replaceAll("%receiver%", receiver.getName())
+																.replaceAll("%msg%", rawMessage)
 		);
 	}
 }

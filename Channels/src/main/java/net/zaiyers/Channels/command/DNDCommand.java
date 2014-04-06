@@ -12,10 +12,6 @@ public class DNDCommand extends AbstractCommand {
 		super(sender, args);
 	}
 
-	public String getPermission() {
-		return "channels.dnd";
-	}
-
 	public void execute() {
 		if (!(sender instanceof ProxiedPlayer)) {
 			Channels.notify(sender, "channels.command.is-player-command");

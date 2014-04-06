@@ -14,13 +14,30 @@ public class ChannelSuffixCommand extends AbstractCommand {
 		super(sender, args);
 	}
 
-	public String getPermission() {
-		return "channels.suffix";
-	}
-
 	public void execute() {
 		String chatterUUID;
 		ProxiedPlayer player = Channels.getInstance().getProxy().getPlayer(args[1]);
+		
+		String value;
+		if (args.length < 3) {
+			value = "";
+		} else {
+			value = args[2];
+			if (value.startsWith("\"") || value.startsWith("'") || args.length > 3) {
+				for (int i=3; i<args.length; i++) {
+					value+=" "+args[i];
+				}
+				if ((value.startsWith("\"") || value.startsWith("\'")) && value.length() > 1) {
+					value = value.substring(1);
+				}
+				
+				if (value.endsWith("\"") || value.endsWith("\'")) {
+					value = value.substring(0, value.length()-1);
+				}
+			}
+		}
+		value = value.replaceAll("([&#]([a-fk-or0-9]))", "\u00A7$2");
+		
 		if (player == null) {
 			chatterUUID = UUIDDB.getInstance().getUUIDByName(args[1]);
 			if (chatterUUID == null) {
@@ -29,15 +46,15 @@ public class ChannelSuffixCommand extends AbstractCommand {
 			}
 			
 			ChatterConfig cfg = ChatterConfig.load(chatterUUID);
-			cfg.setSuffix(args[2]);
+			cfg.setSuffix(value);
 			cfg.save();
 			
-			Channels.notify(player, "channels.chatter.set-suffix", ImmutableMap.of("chatter", UUIDDB.getInstance().getNameByUUID(chatterUUID), "suffix", args[2]));
+			Channels.notify(player, "channels.chatter.set-suffix", ImmutableMap.of("chatter", UUIDDB.getInstance().getNameByUUID(chatterUUID), "suffix", value));
 		} else {
 			chatterUUID = player.getUUID();
-			Channels.getInstance().getChatter(chatterUUID).setSuffix(args[2]);
+			Channels.getInstance().getChatter(chatterUUID).setSuffix(value);
 			
-			Channels.notify(player, "channels.chatter.set-suffix", ImmutableMap.of("chatter", player.getName(), "suffix", args[2]));
+			Channels.notify(player, "channels.chatter.set-suffix", ImmutableMap.of("chatter", player.getName(), "suffix", value));
 		}
 	}
 

@@ -16,10 +16,6 @@ public class ChannelInfoCommand extends AbstractCommand {
 		super(sender, args);
 	}
 
-	public String getPermission() {
-		return "channel.info";
-	}
-
 	public void execute() {
 		boolean isConsoleCommand = (sender instanceof ConsoleCommandSender);
 		Chatter chatter = null;
@@ -34,7 +30,7 @@ public class ChannelInfoCommand extends AbstractCommand {
 		if (args.length == 2) {
 			channel = Channels.getInstance().getChannel(args[1]);
 		} else if (args.length == 1 && !isConsoleCommand) {
-			channel = Channels.getInstance().getChannel(chatter.getDefaultChannelUUID());
+			channel = Channels.getInstance().getChannel(chatter.getChannel());
 		} else if (!isConsoleCommand) {
 			Channels.notify(sender, "channels.chatter.has-no-channel");
 			return;
@@ -67,9 +63,9 @@ public class ChannelInfoCommand extends AbstractCommand {
 			Channels.notify(sender, "channels.command.channel-info-temp", ImmutableMap.of("temporary", channel.isTemporary() ? "true":"false"));
 			String moderators = "";
 			if (channel.getModerators().size() > 0) {
-				moderators = channel.getModerators().get(0);
+				moderators = UUIDDB.getInstance().getNameByUUID(channel.getModerators().get(0));
 				for (int i = 1; i<channel.getModerators().size(); i++) {
-					moderators+=", "+channel.getModerators().get(i);
+					moderators+=", "+UUIDDB.getInstance().getNameByUUID(channel.getModerators().get(i));
 				}
 			}
 			Channels.notify(sender, "channels.command.channel-info-moderators", ImmutableMap.of("moderators", moderators));

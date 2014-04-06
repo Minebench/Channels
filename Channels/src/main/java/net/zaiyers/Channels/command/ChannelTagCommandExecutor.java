@@ -48,7 +48,7 @@ public class ChannelTagCommandExecutor extends Command {
 			
 			if (args.length == 0) {
 				chatter.setDefaultChannelUUID(chan.getUUID());
-				Channels.notify(sender, "chatter.default-channel-set", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
+				Channels.notify(sender, "channels.chatter.default-channel-set", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
 				return;
 			} else {
 				msg = new ChannelMessage(chatter, chan, argsToMessage(args));
