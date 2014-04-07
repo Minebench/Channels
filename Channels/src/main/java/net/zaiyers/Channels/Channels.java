@@ -19,6 +19,7 @@ import net.zaiyers.Channels.config.LanguageConfig;
 import net.zaiyers.Channels.listener.MessageListener;
 import net.zaiyers.Channels.listener.PlayerJoinListener;
 import net.zaiyers.Channels.listener.PlayerQuitListener;
+import net.zaiyers.Channels.listener.ServerSwitchListener;
 
 public class Channels extends Plugin {
 	/**
@@ -50,7 +51,7 @@ public class Channels extends Plugin {
 	 * command executors for channel tags
 	 */
 	private HashMap<String, ChannelTagCommandExecutor> tagCommandExecutors = new HashMap<String, ChannelTagCommandExecutor>();
-	
+		
 	/**
 	 * executed on startup
 	 */
@@ -79,11 +80,13 @@ public class Channels extends Plugin {
 		MessageListener ml = new MessageListener();
 		PlayerJoinListener pjl = new PlayerJoinListener();
 		PlayerQuitListener pql = new PlayerQuitListener();
+		ServerSwitchListener swl = new ServerSwitchListener();
 		
 		// enable listeners
 		getProxy().getPluginManager().registerListener(this, ml);
 		getProxy().getPluginManager().registerListener(this, pjl);
 		getProxy().getPluginManager().registerListener(this, pql);
+		getProxy().getPluginManager().registerListener(this, swl);
 		
 		// register command executors
 		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("channel", "", new String[] {"ch"}));
@@ -323,25 +326,7 @@ public class Channels extends Plugin {
 			tagCommandExecutors.remove(tag);
 		}
 	}
-
-	/**
-	 * set default channel for server
-	 * @param serverName
-	 * @param channelUUID
-	 */
-	public void setServerDefaultChannel(String serverName, UUID channelUUID) {
-		config.setServerDefaultChannel(serverName, channelUUID); 
-	}
-	
-	/**
-	 * get default channel for server
-	 * @param serverName
-	 * @return UUID for servers default channel
-	 */
-	public UUID getServerDefaultChannel(String serverName) {
-		return config.getServerDefaultChannel(serverName);
-	}
-
+		
 	public HashMap<String, Chatter> getChatters() {
 		return chatters;
 	}
@@ -362,7 +347,7 @@ public class Channels extends Plugin {
 		
 		// check servers
 		for (ServerInfo server: getProxy().getServers().values()) {
-			Channel serverDef = channels.get(getServerDefaultChannel(server.getName()));
+			Channel serverDef = channels.get(config.getServerDefaultChannel(server.getName()));
 			if (serverDef != null) {
 				if (!serverDef.isGlobal() && !serverDef.getServers().contains(server.getName())) {
 					Channels.notify(sender, "channels.command.default-channel-unavailable", ImmutableMap.of("server", server.getName()));

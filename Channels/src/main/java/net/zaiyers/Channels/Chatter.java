@@ -82,10 +82,11 @@ public class Chatter {
 	public void subscribe(UUID uuid) {
 		// add subscription to config
 		List<UUID> subs = cfg.getSubscriptions();
-		subs.add(uuid);
-		
-		cfg.setSubscriptions(subs);
-		
+		if (!subs.contains(uuid)) {
+			subs.add(uuid);
+			
+			cfg.setSubscriptions(subs);
+		}	
 		// subscribe to channel
 		Channels.getInstance().getChannel(uuid).subscribe(this);
 	}

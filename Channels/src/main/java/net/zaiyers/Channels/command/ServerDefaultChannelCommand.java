@@ -23,7 +23,17 @@ public class ServerDefaultChannelCommand extends AbstractCommand {
 			return;
 		}
 		
-		Channels.getInstance().setServerDefaultChannel(args[1], chan.getUUID());
+		boolean force = false;
+		if (args.length > 3) {
+			try {
+				force = Boolean.parseBoolean(args[3]);
+			} catch (ClassCastException e) {
+				Channels.notify(sender, "channels.usage.ServerDefaultChannelCommand");
+				return;
+			}
+		}
+		
+		Channels.getConfig().setServerDefaultChannel(args[1], chan.getUUID(), force);
 		Channels.notify(sender, "channels.command.set-server-default-channel", ImmutableMap.of("server", args[1], "channel", chan.getName(), "channelColor", chan.getColor().toString()));
 		Channels.getInstance().checkSanity(sender, chan.getUUID());
 	}

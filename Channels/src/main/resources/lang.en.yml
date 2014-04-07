@@ -156,8 +156,8 @@ channels:
       explain-AFKCommand: toggles my afk state
       help-IgnoreCommand: " - §a/ignore [§6player§a]"
       explain-IgnoreCommand: toggles ignoring a player or lists ignores
-      help-ServerDefaultChannelCommand: " - §a/channel serverDefaultChannel <§6server§a> <§6channel§a>"
-      explain-ServerDefaultChannelCommand: sets a defaultchannel for a server
+      help-ServerDefaultChannelCommand: " - §a/channel serverDefaultChannel <§6server§a> <§6channel§a> [§6true§a|§6false§a]"
+      explain-ServerDefaultChannelCommand: sets a default channel for a server and enforces it if set to true
    permission:
       subscribe-channel: '§cYou are not allowed to subscribe to %channelColor%%channel%'
       unsubscribe-channel: '§cYou are not allowed to unsubscribe from %channelColor%%channel%'

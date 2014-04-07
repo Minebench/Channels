@@ -4,14 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
-import net.zaiyers.Channels.command.PMCommand;
 import net.zaiyers.Channels.message.PrivateMessage;
 import net.zaiyers.Channels.message.PrivateMessage.SenderRole;
 
@@ -126,16 +124,30 @@ public class ChannelsConfig extends AbstractConfig {
 	 * @param serverName
 	 * @param channelUUID
 	 */
-	public void setServerDefaultChannel(String serverName, UUID channelUUID) {
+	public void setServerDefaultChannel(String serverName, UUID channelUUID, boolean force) {
 		@SuppressWarnings("unchecked")
 		Map<String, String> serverDefaultChannels = (Map<String, String>) cfg.get("serverDefaultChannels");
 		serverDefaultChannels.put(serverName, channelUUID.toString());
 		cfg.set("serverDefaultChannels", serverDefaultChannels);
+		
+		// force default channel
+		List<String> serverList = cfg.getStringList("forceServerDefaultChannel");
+		serverList.remove(serverName);
+		if (force) {
+			serverList.add(serverName);
+		}
+		
+		cfg.set("forceServerDefaultChannel", serverName);
 	}
 
 	public UUID getServerDefaultChannel(String serverName) {
 		@SuppressWarnings("unchecked")
 		Map<String, String> serverDefaultChannels = (Map<String, String>) cfg.get("serverDefaultChannels");
 		return (serverDefaultChannels.get(serverName) != null) ? UUID.fromString(serverDefaultChannels.get(serverName)) : null;
+	}
+	
+	public boolean forceServerDefaultChannel(String serverName) {
+		List<String> serverList = cfg.getStringList("forceServerDefaultChannel");
+		return serverList.contains(serverName);
 	}
 }
