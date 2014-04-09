@@ -24,4 +24,12 @@ abstract public class AbstractMessage implements Message {
 	public TextComponent getProcessedMessage() {
 		return processedMessage;
 	}
+	
+	public String getRawMessage() {
+		return rawMessage;
+	}
+	
+	public long getTime() {
+		return time;
+	}
 }

@@ -12,4 +12,14 @@ public interface Message {
 	 * get the final message
 	 */
 	public TextComponent getProcessedMessage();
+	
+	/**
+	 * get the unprocessed message
+	 */
+	public String getRawMessage();
+	
+	/**
+	 * get the time the message was sent
+	 */
+	public long getTime();
 }
