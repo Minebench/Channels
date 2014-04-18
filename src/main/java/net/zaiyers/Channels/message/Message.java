@@ -1,5 +1,6 @@
 package net.zaiyers.Channels.message;
 
+import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 
 public interface Message {
@@ -22,4 +23,6 @@ public interface Message {
 	 * get the time the message was sent
 	 */
 	public long getTime();
+
+	public CommandSender getSender();
 }

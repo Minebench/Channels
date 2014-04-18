@@ -25,7 +25,7 @@ public class ChannelSubscribeCommand extends AbstractCommand {
 			
 			// no such channel
 			if (chan == null) {
-				Channels.notify(sender, "channels.chatter.channel-not-found", ImmutableMap.of("channel", args[1]));
+				Channels.notify(sender, "channels.command.channel-not-found", ImmutableMap.of("channel", args[1]));
 				return;
 			}
 			

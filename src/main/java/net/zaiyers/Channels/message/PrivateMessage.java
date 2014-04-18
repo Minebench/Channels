@@ -1,7 +1,10 @@
 package net.zaiyers.Channels.message;
 
+import java.util.regex.Matcher;
+
 import com.google.common.collect.ImmutableMap;
 
+import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.Chatter;
@@ -17,7 +20,7 @@ public class PrivateMessage extends AbstractMessage {
 	public PrivateMessage(Chatter sender, Chatter receiver, String message) {
 		this.sender = sender;
 		this.receiver = receiver;
-		rawMessage = message;
+		rawMessage = Matcher.quoteReplacement(message);
 	}
 
 	public void send() {		
@@ -56,5 +59,9 @@ public class PrivateMessage extends AbstractMessage {
 																.replaceAll("%receiver%", receiver.getName())
 																.replaceAll("%msg%", rawMessage)
 		);
+	}
+
+	public CommandSender getSender() {
+		return sender.getPlayer();
 	}
 }

@@ -177,7 +177,7 @@ public class Chatter {
 	 * @return
 	 */
 	public boolean hasPermission(Channel channel, String permission) {
-		return player.hasPermission("channels."+channel.getName()+"."+permission);
+		return player.hasPermission("channels."+permission+"."+channel.getTag());
 	}
 	
 	/**

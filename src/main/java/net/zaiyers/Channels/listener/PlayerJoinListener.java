@@ -26,9 +26,6 @@ public class PlayerJoinListener implements Listener {
 					} else if (channelUUID.equals(Channels.getConfig().getDefaultChannelUUID())) {
 						Channels.getInstance().getLogger().warning("Chatter '"+chatter.getName()+"' is not allowed to join the default channel");
 					}
-				} else {
-					//TODO: remove debugging
-					System.out.println("channel "+channelUUID+" is unknown");
 				}
 			}
 			

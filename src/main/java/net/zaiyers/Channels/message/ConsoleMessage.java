@@ -1,6 +1,10 @@
 package net.zaiyers.Channels.message;
 
+import java.util.regex.Matcher;
+
+import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.command.ConsoleCommandSender;
 import net.zaiyers.Channels.Channel;
 
 public class ConsoleMessage extends AbstractMessage {
@@ -18,7 +22,7 @@ public class ConsoleMessage extends AbstractMessage {
 	 */
 	public ConsoleMessage(Channel channel, String rawMessage) {
 		this.channel = channel;
-		this.rawMessage = rawMessage;
+		this.rawMessage = Matcher.quoteReplacement(rawMessage);
 	}
 	
 	/**
@@ -38,5 +42,9 @@ public class ConsoleMessage extends AbstractMessage {
 		processMessage();
 		
 		channel.send(this);	
+	}
+
+	public CommandSender getSender() {
+		return ConsoleCommandSender.getInstance();
 	}
 }

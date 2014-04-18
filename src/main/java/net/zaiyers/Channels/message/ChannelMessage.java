@@ -1,5 +1,8 @@
 package net.zaiyers.Channels.message;
 
+import java.util.regex.Matcher;
+
+import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
@@ -26,7 +29,7 @@ public class ChannelMessage extends AbstractMessage {
 	public ChannelMessage(Chatter chatter, Channel channel, String rawMessage) {
 		this.chatter = chatter;
 		this.channel = channel;
-		this.rawMessage = rawMessage;
+		this.rawMessage = Matcher.quoteReplacement(rawMessage);
 	}
 	
 	/**
@@ -60,5 +63,9 @@ public class ChannelMessage extends AbstractMessage {
 	 */
 	public Chatter getChatter() {
 		return chatter;
+	}
+
+	public CommandSender getSender() {
+		return chatter.getPlayer();
 	}
 }
