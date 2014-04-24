@@ -46,4 +46,11 @@ public abstract class AbstractConfig implements Config {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * deletes configuration file
+	 */
+	public void removeConfig() {
+		configFile.delete();
+	}
 }

@@ -392,4 +392,12 @@ public class Channel {
 	public List<String> getBans() {
 		return cfg.getBans();
 	}
+
+	public void removeChannel() {
+		ImmutableMap<String, String> replacements = ImmutableMap.of("channel", getName(), "channelColor", getColor().toString());
+		for (String subscriberUUID: getSubscribers()) {
+			Channels.notify(Channels.getInstance().getChatter(subscriberUUID).getPlayer(), "channels.command.channel-removed", replacements);
+		}
+		cfg.removeConfig();
+	}
 }

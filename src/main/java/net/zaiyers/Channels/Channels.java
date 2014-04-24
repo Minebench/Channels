@@ -43,11 +43,6 @@ public class Channels extends Plugin {
 	private HashMap<UUID, Channel> channels = new HashMap<UUID, Channel>();
 	
 	/**
-	 * maps channel names and tags to their uuids
-	 */
-	private HashMap<String, UUID> channelMappings = new HashMap<String, UUID>();
-	
-	/**
 	 * command executors for channel tags
 	 */
 	private HashMap<String, ChannelTagCommandExecutor> tagCommandExecutors = new HashMap<String, ChannelTagCommandExecutor>();
@@ -153,12 +148,8 @@ public class Channels extends Plugin {
 	public void removeChannel(UUID uuid) {
 		Channel chan = channels.get(uuid);
 		if (chan != null) {
-			ImmutableMap<String, String> replacements = ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString());
-			for (String subscriberUUID: chan.getSubscribers()) {
-				Channels.notify(chatters.get(subscriberUUID).getPlayer(), "channels.command.channel-removed", replacements);
-			}
+			chan.removeChannel();
 		}
-		
 		channels.remove(uuid);
 	}
 
@@ -209,18 +200,10 @@ public class Channels extends Plugin {
 	 * @return
 	 */
 	public Channel getChannel(String string) {
-		if (channelMappings.containsKey(string.toLowerCase())) {
-			return channels.get(channelMappings.get(string.toLowerCase()));
-		} else {
-			
-			// cycle through channels
-			for (Channel channel: channels.values()) {
-				if (channel.getTag().equalsIgnoreCase(string) || channel.getName().equalsIgnoreCase(string)) {
-					// remember result
-					channelMappings.put(string.toLowerCase(), channel.getUUID());
-					
-					return channel;
-				}
+		// cycle through channels
+		for (Channel channel: channels.values()) {
+			if (channel.getTag().equalsIgnoreCase(string) || channel.getName().equalsIgnoreCase(string)) {				
+				return channel;
 			}
 		}
 		
