@@ -9,6 +9,8 @@ import java.util.UUID;
 import com.google.common.collect.ImmutableMap;
 
 import net.md_5.bungee.api.ChatColor;
+import net.zaiyers.Channels.config.ChannelConfig;
+import net.zaiyers.Channels.config.ChannelMongoConfig;
 import net.zaiyers.Channels.config.ChannelYamlConfig;
 import net.zaiyers.Channels.message.ChannelMessage;
 import net.zaiyers.Channels.message.ConsoleMessage;
@@ -28,7 +30,7 @@ public class Channel {
 	/**
 	 * channel configuration
 	 */
-	private ChannelYamlConfig cfg;
+	private ChannelConfig cfg;
 		
 	/**
 	 * add subscriber
@@ -62,20 +64,15 @@ public class Channel {
 	 * @param name
 	 * @throws IOException 
 	 */
-	public Channel(UUID uuid) throws IOException {	
+	public Channel(UUID uuid) throws IOException {
 		String cfgFilePath = Channels.getInstance().getDataFolder().getAbsolutePath()+File.separatorChar+"channels"+File.separatorChar+uuid+".yml";
-		cfg = new ChannelYamlConfig(cfgFilePath);
+		if (Channels.getConfig().getMongoDBConnection().isAvilable()) {
+			cfg = new ChannelMongoConfig(Channels.getConfig().getMongoDBConnection().getChannels(), uuid);
+		} else {
+			cfg = new ChannelYamlConfig(cfgFilePath);
+		}
 	}
 	
-	/**
-	 * load channel by config file
-	 * @param filename
-	 * @throws IOException 
-	 */
-	public Channel(File cfgFile) throws IOException {	
-		cfg = new ChannelYamlConfig(cfgFile.getAbsolutePath());
-	}
-
 	/**
 	 * name of this channel
 	 * 

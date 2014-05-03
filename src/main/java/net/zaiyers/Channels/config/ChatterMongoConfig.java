@@ -1,46 +1,20 @@
 package net.zaiyers.Channels.config;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.mongodb.DBCollection;
+
 import net.zaiyers.Channels.Channels;
 
-public class ChatterYamlConfig extends YamlConfig implements ChatterConfig {
-
-	/**
-	 * load configuration from disk
-	 * 
-	 * @param configFilePath
-	 * @throws IOException
-	 */
-	public ChatterYamlConfig(String configFilePath) throws IOException {
-		super(configFilePath);
-	}
-
-	/**
-	 * load a config instance by player uuid
-	 * @param uuid
-	 * @return
-	 */
-	public static ChatterYamlConfig load(String uuid) {
-		String configFilePath = Channels.getInstance().getDataFolder()+("/chatters/"+uuid.substring(0,2)+"/"+uuid.substring(2,4)+"/"+uuid+".yml").toLowerCase();
-		File cfgFile = new File(configFilePath);
-		if (cfgFile.exists()) {
-			try {
-				return new ChatterYamlConfig(configFilePath);
-			} catch (IOException e) {
-				e.printStackTrace();
-				return null;
-			}
-		} else {
-			return null;
-		}
-	}
+public class ChatterMongoConfig extends MongoConfig implements ChatterConfig {
 	
+	protected ChatterMongoConfig(DBCollection c, UUID uuid) {
+		super(c, uuid);
+	}
+
 	public List<UUID> getSubscriptions() {
 		ArrayList<UUID> subs = new ArrayList<UUID>();
 		for (String sub: cfg.getStringList("subscriptions")) {
@@ -76,15 +50,6 @@ public class ChatterYamlConfig extends YamlConfig implements ChatterConfig {
 
 	public UUID getChannelUUID() {
 		return UUID.fromString(cfg.getString("channelUUID"));
-	}
-
-	public void save() {
-		try {
-			ymlCfg.save(cfg, configFile);
-		} catch (IOException e) {
-			Channels.getInstance().getLogger().severe("Unable to save chatter configuration '"+configFile.getAbsolutePath()+"'");
-			e.printStackTrace();
-		}
 	}
 
 	public void createDefaultConfig() {

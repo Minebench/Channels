@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import net.md_5.bungee.api.ChatColor;
 
-public interface ChannelConfig {
+public interface ChannelConfig extends Config {
 	/**
 	 * @return channelname
 	 */

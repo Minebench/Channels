@@ -3,3 +3,14 @@ privateMessageFormatSender: '§bTo %receiver%: %msg%'
 privateMessageFormatReceiver: '§dFrom %sender%: %msg%'
 language: 'en'
 serverDefaultChannels: {}
+
+mongo:
+   use: false
+   host: localhost
+   port: 27017
+   user:
+   pwd:
+   authdb: admin
+   db: channels
+   channelCollection: channels
+   chatterCollection: chatters

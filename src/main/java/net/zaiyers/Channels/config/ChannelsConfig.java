@@ -14,7 +14,11 @@ import net.zaiyers.Channels.message.PrivateMessage;
 import net.zaiyers.Channels.message.PrivateMessage.SenderRole;
 
 public class ChannelsConfig extends YamlConfig {
-	
+	/**
+	 * mongodb connection
+	 */
+	private MongoDBConnection mongo;
+
 	/**
 	 * load configuration from disk
 	 * 
@@ -23,6 +27,10 @@ public class ChannelsConfig extends YamlConfig {
 	 */
 	public ChannelsConfig(String configFilePath) throws IOException {
 		super(configFilePath);
+		
+		if (cfg.getBoolean("mongo.use")) {
+			mongo = new MongoDBConnection(cfg);
+		}
 	}
 	
 	/**
@@ -149,5 +157,13 @@ public class ChannelsConfig extends YamlConfig {
 	public boolean forceServerDefaultChannel(String serverName) {
 		List<String> serverList = cfg.getStringList("forceServerDefaultChannel");
 		return serverList.contains(serverName);
+	}
+	
+	public MongoDBConnection getMongoDBConnection() {
+		if (mongo.isAvilable()) {
+			return mongo;
+		}
+		
+		return null;
 	}
 }
