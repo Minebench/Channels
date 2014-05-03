@@ -9,7 +9,7 @@ import java.util.UUID;
 import com.google.common.collect.ImmutableMap;
 
 import net.md_5.bungee.api.ChatColor;
-import net.zaiyers.Channels.config.ChannelConfig;
+import net.zaiyers.Channels.config.ChannelYamlConfig;
 import net.zaiyers.Channels.message.ChannelMessage;
 import net.zaiyers.Channels.message.ConsoleMessage;
 import net.zaiyers.bungee.UUIDDB.UUIDDB;
@@ -28,7 +28,7 @@ public class Channel {
 	/**
 	 * channel configuration
 	 */
-	private ChannelConfig cfg;
+	private ChannelYamlConfig cfg;
 		
 	/**
 	 * add subscriber
@@ -64,7 +64,7 @@ public class Channel {
 	 */
 	public Channel(UUID uuid) throws IOException {	
 		String cfgFilePath = Channels.getInstance().getDataFolder().getAbsolutePath()+File.separatorChar+"channels"+File.separatorChar+uuid+".yml";
-		cfg = new ChannelConfig(cfgFilePath);
+		cfg = new ChannelYamlConfig(cfgFilePath);
 	}
 	
 	/**
@@ -73,7 +73,7 @@ public class Channel {
 	 * @throws IOException 
 	 */
 	public Channel(File cfgFile) throws IOException {	
-		cfg = new ChannelConfig(cfgFile.getAbsolutePath());
+		cfg = new ChannelYamlConfig(cfgFile.getAbsolutePath());
 	}
 
 	/**

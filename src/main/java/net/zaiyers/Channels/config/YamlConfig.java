@@ -8,7 +8,7 @@ import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 import net.zaiyers.Channels.Channels;
 
-public abstract class AbstractConfig implements Config {
+public abstract class YamlConfig implements Config {
 	protected Configuration cfg;
 	protected final static ConfigurationProvider ymlCfg = ConfigurationProvider.getProvider( YamlConfiguration.class );
 	
@@ -19,7 +19,7 @@ public abstract class AbstractConfig implements Config {
 	 * @param configFilePath
 	 * @throws IOException 
 	 */
-	public AbstractConfig(String configFilePath) throws IOException {
+	public YamlConfig(String configFilePath) throws IOException {
 			configFile = new File(configFilePath);
 			
 			if (!configFile.exists()) {

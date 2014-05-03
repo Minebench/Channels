@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.zaiyers.Channels.Channels;
-import net.zaiyers.Channels.config.ChatterConfig;
+import net.zaiyers.Channels.config.ChatterYamlConfig;
 import net.zaiyers.bungee.UUIDDB.UUIDDB;
 
 public class ChannelUnmuteCommand extends AbstractCommand {
@@ -24,7 +24,7 @@ public class ChannelUnmuteCommand extends AbstractCommand {
 				return;
 			}
 			
-			ChatterConfig cfg = ChatterConfig.load(chatterUUID);
+			ChatterYamlConfig cfg = ChatterYamlConfig.load(chatterUUID);
 			cfg.setMuted(false);
 			cfg.save();
 			

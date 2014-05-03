@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.zaiyers.Channels.Channels;
-import net.zaiyers.Channels.config.ChatterConfig;
+import net.zaiyers.Channels.config.ChatterYamlConfig;
 import net.zaiyers.bungee.UUIDDB.UUIDDB;
 
 public class ChannelPrefixCommand extends AbstractCommand {
@@ -45,7 +45,7 @@ public class ChannelPrefixCommand extends AbstractCommand {
 				return;
 			}
 			
-			ChatterConfig cfg = ChatterConfig.load(chatterUUID);
+			ChatterYamlConfig cfg = ChatterYamlConfig.load(chatterUUID);
 			cfg.setPrefix(value);
 			cfg.save();
 			

@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.zaiyers.Channels.config.ChatterConfig;
+import net.zaiyers.Channels.config.ChatterYamlConfig;
 import net.zaiyers.Channels.message.Message;
 
 public class Chatter {
@@ -38,7 +38,7 @@ public class Chatter {
 	/**
 	 * configuration for this guy
 	 */
-	private ChatterConfig cfg;
+	private ChatterYamlConfig cfg;
 	
 	/**
 	 * uuid of the recipient for private messages
@@ -57,7 +57,7 @@ public class Chatter {
 		String uuid = player.getUUID();
 		
 		String cfgPath = Channels.getInstance().getDataFolder()+("/chatters/"+uuid.substring(0,2)+"/"+uuid.substring(2,4)+"/"+uuid+".yml").toLowerCase();
-		cfg	= new ChatterConfig(cfgPath);
+		cfg	= new ChatterYamlConfig(cfgPath);
 	}
 	
 	/**

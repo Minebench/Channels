@@ -13,7 +13,7 @@ import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.message.PrivateMessage;
 import net.zaiyers.Channels.message.PrivateMessage.SenderRole;
 
-public class ChannelsConfig extends AbstractConfig {
+public class ChannelsConfig extends YamlConfig {
 	
 	/**
 	 * load configuration from disk
@@ -137,7 +137,7 @@ public class ChannelsConfig extends AbstractConfig {
 			serverList.add(serverName);
 		}
 		
-		cfg.set("forceServerDefaultChannel", serverName);
+		cfg.set("forceServerDefaultChannel", serverList);
 	}
 
 	public UUID getServerDefaultChannel(String serverName) {

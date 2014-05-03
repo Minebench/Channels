@@ -1,222 +1,152 @@
 package net.zaiyers.Channels.config;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.List;
 import java.util.UUID;
 
 import net.md_5.bungee.api.ChatColor;
-import net.zaiyers.Channels.Channels;
 
-public class ChannelConfig extends AbstractConfig {
+public interface ChannelConfig {
+	/**
+	 * @return channelname
+	 */
+	public String getName();
 	
 	/**
-	 * load configuration from disk
-	 * 
-	 * @param configFilePath
-	 * @throws IOException
+	 * @return channeltag
 	 */
-	public ChannelConfig(String configFilePath) throws IOException {
-		super(configFilePath);
-	}
+	public String getTag();
 	
 	/**
-	 * get channel name
+	 * @return messageformat
 	 */
-	public String getName() {
-		return cfg.getString("name");
-	}
+	public String getFormat();
 	
 	/**
-	 * get channel tag
+	 * @return channelcolor
 	 */
-	public String getTag() {
-		return cfg.getString("tag");
-	}
+	public ChatColor getColor();
 	
 	/**
-	 * get message format
+	 * @return channelpassword
 	 */
-	public String getFormat() {
-		return cfg.getString("format");
-	}
+	public String getPassword();
 	
 	/**
-	 * get channel color
+	 * servers this channel is distributed to
+	 * @return channelservers
 	 */
-	public ChatColor getColor() {
-		return ChatColor.valueOf(cfg.getString("color"));
-	}
+	public List<String> getServers();
 	
 	/**
-	 * get channel password
+	 * channel moderators uuids
+	 * @return list of uuids
 	 */
-	public String getPassword() {
-		return cfg.getString("password", "");
-	}
+	public List<String> getModerators();
 	
 	/**
-	 * get channel servers
+	 * banned players uuids
+	 * @return list of uuids
 	 */
-	public List<String> getServers() {
-		return cfg.getStringList("servers");
-	}
+	public List<String> getBans();
 	
-	/**
-	 * get channel moderators uuids
-	 */
-	public List<String> getModerators() {
-		return cfg.getStringList("moderators");
-	}
-	
-	/**
-	 * get banned players uuids
-	 */
-	public List<String> getBans() {
-		return cfg.getStringList("bans");
-	}
-
 	/**
 	 * set channel name
+	 * @param new name
 	 */
-	public void setName(String name) {
-		cfg.set("name", name);
-	}
+	public void setName(String name);
 	
 	/**
 	 * set channel tag
+	 * @param new tag
 	 */
-	public void setTag(String tag) {
-		cfg.set("tag", tag);
-	}
+	public void setTag(String tag);
 	
 	/**
 	 * set channel passwd
+	 * @param new password
 	 */
-	public void setPassword(String password) {
-		if (password == null) {
-			cfg.set("password", "");
-		} else {
-			cfg.set("password", password);
-		}
-	}
+	public void setPassword(String password);
 	
 	/**
 	 * get uuid
-	 * @return 
+	 * @return UUID of this channel
 	 */
-	public UUID getUUID() {
-		return UUID.fromString(configFile.getName().substring(0, 36));
-	}
+	public UUID getUUID();
 	
 	/**
 	 * create a new config
 	 */
-	public void createDefaultConfig() {
-		cfg = ymlCfg.load(new InputStreamReader(Channels.getInstance().getResourceAsStream("channel.yml")));
-				
-		save();
-	}
-
-	/**
-	 * get format for console messages
-	 * @return
-	 */
-	public String getConsoleFormat() {
-		return cfg.getString("consoleFormat");
-	}
-
+	public void createDefaultConfig();
+	
 	/**
 	 * add server to distribute list
 	 * @param servername
 	 */
-	public void addServer(String servername) {
-		List<String> servers = getServers();
-		servers.add(servername);
-		
-		cfg.set("servers", servers);
-	}
-
+	public void addServer(String servername);
+	
+	/**
+	 * get format for console messages
+	 * @return console format
+	 */
+	public String getConsoleFormat();
+	
 	/**
 	 * remove server from distribute list
 	 * @param servername
 	 */
-	public void removeServer(String servername) {
-		List<String> servers = getServers();
-		servers.remove(servername);
-		
-		cfg.set("servers", servers);
-	}
-
+	public void removeServer(String servername);
+	
 	/**
 	 * add moderator
-	 * @param uuid
+	 * @param moderators uuid
 	 */
-	public void addModerator(String uuid) {
-		List<String> moderators = getModerators();
-		moderators.add(uuid);
-		
-		cfg.set("moderators", moderators);
-	}
+	public void addModerator(String uuid);
+	
 
 	/**
 	 * remove moderator
-	 * @param modUUID
+	 * @param moderators uuid
 	 */
-	public void removeModerator(String modUUID) {
-		List<String> moderators = getModerators();
-		moderators.remove(modUUID);
-		
-		cfg.set("moderators", moderators);
-	}
-
+	public void removeModerator(String modUUID);
+	
 	/**
 	 * set autojoin behavior
-	 * @param b
+	 * @param autojoin
 	 */
-	public void setAutojoin(boolean b) {
-		cfg.set("autojoin", b);
-	}
-
+	public void setAutojoin(boolean autojoin);
+	
 	/**
 	 * get autojoin behavior
-	 * @return
+	 * @return true if autojoin is enabled
 	 */
-	public boolean doAutojoin() {
-		return cfg.getBoolean("autojoin", false);
-	}
-
+	public boolean doAutojoin();
+	
 	/**
 	 * add uuid to bans
 	 * @param chatterUUID
 	 */
-	public void addBan(String chatterUUID) {
-		List<String> bans = getBans();
-		bans.add(chatterUUID);
-		
-		cfg.set("bans", bans);
-	}
-
+	public void addBan(String chatterUUID);
+	
 	/**
 	 * remove uuid from banlist
 	 * @param chatterUUID
 	 */
-	public void removeBan(String chatterUUID) {
-		List<String> bans = getBans();
-		bans.remove(chatterUUID);
-		
-		cfg.set("bans", bans);
-	}
-
-	public void setColor(ChatColor color) {
-		cfg.set("color", color.name());
-	}
-
-	public void setGlobal(boolean global) {
-		cfg.set("global", global);
-	}
-
-	public boolean isGlobal() {
-		return cfg.getBoolean("global");
-	}
+	public void removeBan(String chatterUUID);
+	
+	/**
+	 * set channel color
+	 * @param new color
+	 */
+	public void setColor(ChatColor color);
+	
+	/**
+	 * make channel global
+	 * @param global
+	 */
+	public void setGlobal(boolean global);
+	
+	/**
+	 * @return true if channel is global
+	 */
+	public boolean isGlobal();
 }

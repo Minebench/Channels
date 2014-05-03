@@ -9,7 +9,7 @@ import java.util.UUID;
 
 import net.zaiyers.Channels.Channels;
 
-public class ChatterConfig extends AbstractConfig {
+public class ChatterYamlConfig extends YamlConfig {
 
 	/**
 	 * load configuration from disk
@@ -17,7 +17,7 @@ public class ChatterConfig extends AbstractConfig {
 	 * @param configFilePath
 	 * @throws IOException
 	 */
-	public ChatterConfig(String configFilePath) throws IOException {
+	public ChatterYamlConfig(String configFilePath) throws IOException {
 		super(configFilePath);
 	}
 
@@ -26,12 +26,12 @@ public class ChatterConfig extends AbstractConfig {
 	 * @param uuid
 	 * @return
 	 */
-	public static ChatterConfig load(String uuid) {
+	public static ChatterYamlConfig load(String uuid) {
 		String configFilePath = Channels.getInstance().getDataFolder()+("/chatters/"+uuid.substring(0,2)+"/"+uuid.substring(2,4)+"/"+uuid+".yml").toLowerCase();
 		File cfgFile = new File(configFilePath);
 		if (cfgFile.exists()) {
 			try {
-				return new ChatterConfig(configFilePath);
+				return new ChatterYamlConfig(configFilePath);
 			} catch (IOException e) {
 				e.printStackTrace();
 				return null;

@@ -21,6 +21,11 @@ public class ChannelRemoveCommand extends AbstractCommand {
 				return;
 			}
 			
+			if (Channels.getConfig().getDefaultChannelUUID().equals(channel.getUUID())) {
+				Channels.notify(sender, "channels.command.remove-default-channel");
+				return;
+			}
+			
 			Channels.getInstance().removeChannel(channel.getUUID());
 			Channels.getInstance().unregisterTag(channel.getTag());
 			

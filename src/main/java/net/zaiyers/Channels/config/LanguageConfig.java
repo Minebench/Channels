@@ -5,7 +5,7 @@ import java.io.InputStreamReader;
 
 import net.zaiyers.Channels.Channels;
 
-public class LanguageConfig extends AbstractConfig {
+public class LanguageConfig extends YamlConfig {
 	public LanguageConfig(String configFilePath) throws IOException {
 		super(configFilePath);
 	}

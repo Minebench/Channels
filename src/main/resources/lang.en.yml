@@ -76,6 +76,7 @@ channels:
       default-no-defchannel-available: "§eWARNING: No defaultchannel for server §6%server% §eis available."
       default-channel-unavailable: "§eWARNING: Defaultchannel for server §6%server% §eis not available."
       default-channel-no-autojoin: "§eWARNING: %channelColor%%channel% §eis a defaultchannel and has autojoin = false."
+      remove-default-channel: "§cYou can not remove the default channel."
    usage:
       ChannelAddModCommand: 'Usage: /channel addMod <channel> <chatter>'
       ChannelAddServerCommand: 'Usage: /channel addServer <channel> <server>'
