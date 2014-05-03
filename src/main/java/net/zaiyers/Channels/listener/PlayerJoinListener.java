@@ -1,7 +1,6 @@
 package net.zaiyers.Channels.listener;
 
 import java.io.IOException;
-import java.util.UUID;
 
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -17,7 +16,7 @@ public class PlayerJoinListener implements Listener {
 		try {
 			Chatter chatter = new Chatter(event.getPlayer());
 			
-			for (UUID channelUUID: chatter.getSubscriptions()) {
+			for (String channelUUID: chatter.getSubscriptions()) {
 				// channel exists
 				if (Channels.getInstance().getChannel(channelUUID) != null) {
 					// I'm allowed to join

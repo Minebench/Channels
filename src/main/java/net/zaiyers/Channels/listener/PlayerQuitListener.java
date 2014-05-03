@@ -1,7 +1,5 @@
 package net.zaiyers.Channels.listener;
 
-import java.util.UUID;
-
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
@@ -17,7 +15,7 @@ public class PlayerQuitListener implements Listener {
 		chatter.save();
 		
 		// unsubscribe from channels
-		for (UUID channelUUID: chatter.getSubscriptions()) {
+		for (String channelUUID: chatter.getSubscriptions()) {
 			Channels.getInstance().getChannel(channelUUID).unsubscribe(chatter);
 		}
 		

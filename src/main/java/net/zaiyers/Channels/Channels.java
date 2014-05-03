@@ -40,7 +40,7 @@ public class Channels extends Plugin {
 	/**
 	 * list of channels
 	 */
-	private HashMap<UUID, Channel> channels = new HashMap<UUID, Channel>();
+	private HashMap<String, Channel> channels = new HashMap<String, Channel>();
 	
 	/**
 	 * command executors for channel tags
@@ -92,7 +92,7 @@ public class Channels extends Plugin {
 		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("ignore", "", new String[] {}));
 		
 		// load and register channels
-		for (UUID channelUUID: config.getChannels()) {
+		for (String channelUUID: config.getChannels()) {
 			Channel channel;
 			try {
 				channel = new Channel(channelUUID);
@@ -145,7 +145,7 @@ public class Channels extends Plugin {
 	 * remove channel from memory
 	 * @param id
 	 */
-	public void removeChannel(UUID uuid) {
+	public void removeChannel(String uuid) {
 		Channel chan = channels.get(uuid);
 		if (chan != null) {
 			chan.removeChannel();
@@ -183,16 +183,7 @@ public class Channels extends Plugin {
 	public void addChannel(Channel channel) {
 		channels.put(channel.getUUID(), channel);
 	}
-	
-	/**
-	 * get channel object
-	 * @param channel
-	 * @return
-	 */
-	public Channel getChannel(UUID channelUUID) {
-		return channels.get(channelUUID);
-	}
-	
+		
 	/**
 	 * get channel by name or tag
 	 * 
@@ -200,6 +191,10 @@ public class Channels extends Plugin {
 	 * @return
 	 */
 	public Channel getChannel(String string) {
+		if (channels.containsKey(string)) {
+			return channels.get(string);
+		}
+		
 		// cycle through channels
 		for (Channel channel: channels.values()) {
 			if (channel.getTag().equalsIgnoreCase(string) || channel.getName().equalsIgnoreCase(string)) {				
@@ -215,7 +210,7 @@ public class Channels extends Plugin {
 	 * get a list of all channels
 	 * @return
 	 */
-	public HashMap<UUID, Channel> getChannels() {
+	public HashMap<String, Channel> getChannels() {
 		return channels;
 	}
 
@@ -317,10 +312,10 @@ public class Channels extends Plugin {
 	/**
 	 * check if users will be able to talk in a chanenl
 	 * @param sender
-	 * @param uuid
+	 * @param string
 	 */
-	public void checkSanity(CommandSender sender, UUID uuid) {
-		Channel chan = channels.get(uuid);
+	public void checkSanity(CommandSender sender, String string) {
+		Channel chan = channels.get(string);
 		Channel def = channels.get(config.getDefaultChannelUUID());
 		
 		// check channel
@@ -338,7 +333,7 @@ public class Channels extends Plugin {
 				if (!serverDef.doAutojoin()) {
 					Channels.notify(sender, "channels.command.default-channel-no-autojoin", ImmutableMap.of("channel", serverDef.getName(), "channelColor", serverDef.getColor().toString()));
 				}
-			} else if (!def.isGlobal() && !def.getServers().contains(server.getName())) {
+			} else if (def == null || !def.isGlobal() && !def.getServers().contains(server.getName())) {
 				Channels.notify(sender, "channels.command.default-no-defchannel-available", ImmutableMap.of("server", server.getName()));
 			}
 		}

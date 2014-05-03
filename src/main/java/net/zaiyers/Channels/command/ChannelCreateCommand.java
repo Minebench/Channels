@@ -46,9 +46,9 @@ public class ChannelCreateCommand extends AbstractCommand implements ChannelsCom
 		
 		try {
 			// generate new uuid
-			UUID chanUUID = UUID.randomUUID();
+			String chanUUID = UUID.randomUUID().toString();
 			while (Channels.getConfig().getChannels().contains(chanUUID)) {
-				chanUUID = UUID.randomUUID();
+				chanUUID = UUID.randomUUID().toString();
 			}
 			
 			// create new channel

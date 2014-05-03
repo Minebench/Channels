@@ -1,7 +1,5 @@
 package net.zaiyers.Channels.listener;
 
-import java.util.UUID;
-
 import com.google.common.collect.ImmutableMap;
 
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -57,7 +55,7 @@ public class MessageListener implements Listener {
 				Channel chan = Channels.getInstance().getChannel(chatter.getChannel());
 				if (!chan.isGlobal() && !chan.getServers().contains(chatter.getPlayer().getServer().getInfo().getName())) {
 					// channel is not available on this server
-					UUID serverDefaultChannel = Channels.getConfig().getServerDefaultChannel(chatter.getPlayer().getServer().getInfo().getName());
+					String serverDefaultChannel = Channels.getConfig().getServerDefaultChannel(chatter.getPlayer().getServer().getInfo().getName());
 					if (serverDefaultChannel != null) {
 						// use server default channel
 						chan = Channels.getInstance().getChannel(serverDefaultChannel);

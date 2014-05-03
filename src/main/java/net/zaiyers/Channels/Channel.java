@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -64,9 +63,9 @@ public class Channel {
 	 * @param name
 	 * @throws IOException 
 	 */
-	public Channel(UUID uuid) throws IOException {
+	public Channel(String uuid) throws IOException {
 		String cfgFilePath = Channels.getInstance().getDataFolder().getAbsolutePath()+File.separatorChar+"channels"+File.separatorChar+uuid+".yml";
-		if (Channels.getConfig().getMongoDBConnection().isAvilable()) {
+		if (Channels.getConfig().getMongoDBConnection() != null && Channels.getConfig().getMongoDBConnection().isAvilable()) {
 			cfg = new ChannelMongoConfig(Channels.getConfig().getMongoDBConnection().getChannels(), uuid);
 		} else {
 			cfg = new ChannelYamlConfig(cfgFilePath);
@@ -86,7 +85,7 @@ public class Channel {
 	 * return channel id
 	 * @return
 	 */
-	public UUID getUUID() {
+	public String getUUID() {
 		return cfg.getUUID();
 	}
 	

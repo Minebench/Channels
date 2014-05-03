@@ -1,7 +1,6 @@
 package net.zaiyers.Channels.config;
 
 import java.util.List;
-import java.util.UUID;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -71,7 +70,7 @@ public interface ChannelConfig extends Config {
 	 * get uuid
 	 * @return UUID of this channel
 	 */
-	public UUID getUUID();
+	public String getUUID();
 	
 	/**
 	 * create a new config

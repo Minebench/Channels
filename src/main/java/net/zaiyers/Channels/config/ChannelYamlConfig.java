@@ -3,7 +3,6 @@ package net.zaiyers.Channels.config;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
-import java.util.UUID;
 
 import net.md_5.bungee.api.ChatColor;
 import net.zaiyers.Channels.Channels;
@@ -68,8 +67,8 @@ public class ChannelYamlConfig extends YamlConfig implements ChannelConfig {
 		}
 	}
 	
-	public UUID getUUID() {
-		return UUID.fromString(configFile.getName().substring(0, 36));
+	public String getUUID() {
+		return configFile.getName().substring(0, 36);
 	}
 	
 	public void createDefaultConfig() {

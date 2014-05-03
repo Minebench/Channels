@@ -1,14 +1,13 @@
 package net.zaiyers.Channels.config;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface ChatterConfig extends Config {
 	/**
 	 * read subscriptions from configuration
 	 * @return
 	 */
-	public List<UUID> getSubscriptions();
+	public List<String> getSubscriptions();
 	
 	/**
 	 * I was a bad boy
@@ -43,13 +42,13 @@ public interface ChatterConfig extends Config {
 	/**
 	 * I have many friends
 	 */
-	public UUID getChannelUUID();
+	public String getChannelUUID();
 	
 	/**
 	 * override list of subscriptions
 	 * @param subs
 	 */
-	public void setSubscriptions(List<UUID> subs);
+	public void setSubscriptions(List<String> subs);
 	
 	/**
 	 * set muted status
@@ -84,7 +83,7 @@ public interface ChatterConfig extends Config {
 	/**
 	 * set players default channel
 	 */
-	public void setDefaultChannel(UUID uuid);
+	public void setDefaultChannel(String uuid);
 	
 	/**
 	 * set person who last wrote

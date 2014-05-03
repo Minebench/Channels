@@ -3,7 +3,6 @@ package net.zaiyers.Channels.config;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
-import java.util.UUID;
 
 import com.mongodb.DBCollection;
 
@@ -11,7 +10,7 @@ import net.md_5.bungee.api.ChatColor;
 import net.zaiyers.Channels.Channels;
 
 public class ChannelMongoConfig extends MongoConfig implements ChannelConfig {
-	public ChannelMongoConfig(DBCollection col, UUID uuid) throws IOException {
+	public ChannelMongoConfig(DBCollection col, String uuid) throws IOException {
 		super(col, uuid);
 	}
 	public String getName() {
@@ -62,13 +61,15 @@ public class ChannelMongoConfig extends MongoConfig implements ChannelConfig {
 		}
 	}
 	
-	public UUID getUUID() {
-		return UUID.fromString(cfg.getString("uuid"));
+	public String getUUID() {
+		return cfg.getString("uuid");
 	}
 	
-	public void createDefaultConfig() {
-		cfg = ymlCfg.load(new InputStreamReader(Channels.getInstance().getResourceAsStream("channel.yml")));
-				
+	public void createDefaultConfig() {				
+		cfg = new MongoConfiguration(Channels.getConfig().getMongoDBConnection().getChannels(), null);
+		cfg.load(new InputStreamReader(Channels.getInstance().getResourceAsStream("channel.yml")));
+		cfg.set("uuid", uuid.toString());
+		
 		save();
 	}
 

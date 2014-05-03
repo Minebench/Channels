@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import net.zaiyers.Channels.Channels;
 
@@ -41,10 +40,10 @@ public class ChatterYamlConfig extends YamlConfig implements ChatterConfig {
 		}
 	}
 	
-	public List<UUID> getSubscriptions() {
-		ArrayList<UUID> subs = new ArrayList<UUID>();
+	public List<String> getSubscriptions() {
+		ArrayList<String> subs = new ArrayList<String>();
 		for (String sub: cfg.getStringList("subscriptions")) {
-			subs.add(UUID.fromString(sub));
+			subs.add(sub);
 		};
 		
 		return subs;
@@ -74,8 +73,8 @@ public class ChatterYamlConfig extends YamlConfig implements ChatterConfig {
 		return cfg.getString("lastRecipient", null);
 	}
 
-	public UUID getChannelUUID() {
-		return UUID.fromString(cfg.getString("channelUUID"));
+	public String getChannelUUID() {
+		return cfg.getString("channelUUID");
 	}
 
 	public void save() {
@@ -96,16 +95,16 @@ public class ChatterYamlConfig extends YamlConfig implements ChatterConfig {
 		cfg.set("channelUUID", Channels.getConfig().getDefaultChannelUUID().toString());
 		
 		// subscribe to default channel
-		ArrayList<UUID> subs = new ArrayList<UUID>();
+		ArrayList<String> subs = new ArrayList<String>();
 		subs.add(Channels.getConfig().getDefaultChannelUUID());
 		setSubscriptions(subs);
 		
 		save();
 	}
 
-	public void setSubscriptions(List<UUID> subs) {
+	public void setSubscriptions(List<String> subs) {
 		List<String> subscriptions = new ArrayList<String>();
-		for (UUID u: subs) {
+		for (String u: subs) {
 			subscriptions.add(u.toString());
 		}
 		
@@ -138,7 +137,7 @@ public class ChatterYamlConfig extends YamlConfig implements ChatterConfig {
 		cfg.set("ignores", ignores);
 	}
 
-	public void setDefaultChannel(UUID uuid) {
+	public void setDefaultChannel(String uuid) {
 		cfg.set("channelUUID", uuid.toString());
 	}
 

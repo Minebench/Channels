@@ -2,10 +2,11 @@ package net.zaiyers.Channels;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.zaiyers.Channels.config.ChatterConfig;
+import net.zaiyers.Channels.config.ChatterMongoConfig;
 import net.zaiyers.Channels.config.ChatterYamlConfig;
 import net.zaiyers.Channels.message.Message;
 
@@ -38,7 +39,7 @@ public class Chatter {
 	/**
 	 * configuration for this guy
 	 */
-	private ChatterYamlConfig cfg;
+	private ChatterConfig cfg;
 	
 	/**
 	 * uuid of the recipient for private messages
@@ -55,17 +56,20 @@ public class Chatter {
 		
 		// load my preferences
 		String uuid = player.getUUID();
-		
-		String cfgPath = Channels.getInstance().getDataFolder()+("/chatters/"+uuid.substring(0,2)+"/"+uuid.substring(2,4)+"/"+uuid+".yml").toLowerCase();
-		cfg	= new ChatterYamlConfig(cfgPath);
+		if (Channels.getConfig().getMongoDBConnection() != null && Channels.getConfig().getMongoDBConnection().isAvilable()) {
+			cfg = new ChatterMongoConfig(Channels.getConfig().getMongoDBConnection().getChatters(), player.getUUID());
+		} else {
+			String cfgPath = Channels.getInstance().getDataFolder()+("/chatters/"+uuid.substring(0,2)+"/"+uuid.substring(2,4)+"/"+uuid+".yml").toLowerCase();
+			cfg	= new ChatterYamlConfig(cfgPath);
+		}
 	}
 	
 	/**
 	 * return my subscriptions
 	 * @return
 	 */
-	public List<UUID> getSubscriptions() {
-		List<UUID> subscriptions = cfg.getSubscriptions();
+	public List<String> getSubscriptions() {
+		List<String> subscriptions = cfg.getSubscriptions();
 		
 		if (subscriptions.size() == 0) {
 			// lets add this poor guy to the default channel
@@ -79,9 +83,9 @@ public class Chatter {
 	 * subscribes to a channel
 	 * @param uuid
 	 */
-	public void subscribe(UUID uuid) {
+	public void subscribe(String uuid) {
 		// add subscription to config
-		List<UUID> subs = cfg.getSubscriptions();
+		List<String> subs = cfg.getSubscriptions();
 		if (!subs.contains(uuid)) {
 			subs.add(uuid);
 			
@@ -96,9 +100,9 @@ public class Chatter {
 	 * 
 	 * @param uuid
 	 */
-	public void unsubscribe(UUID uuid) {
+	public void unsubscribe(String uuid) {
 		// remove subscription from config
-		List<UUID> subs = cfg.getSubscriptions();
+		List<String> subs = cfg.getSubscriptions();
 		subs.remove(uuid);
 		
 		cfg.setSubscriptions(subs);
@@ -155,8 +159,8 @@ public class Chatter {
 	/**
 	 * channel I'm writing in
 	 */
-	public UUID getChannel() {
-		UUID channelUUID = cfg.getChannelUUID();
+	public String getChannel() {
+		String channelUUID = cfg.getChannelUUID();
 		if (Channels.getInstance().getChannel(channelUUID) == null) { channelUUID = Channels.getConfig().getDefaultChannelUUID(); } // channel was removed
 		
 		return channelUUID;
@@ -214,10 +218,10 @@ public class Chatter {
 
 	/**
 	 * set default channel to speak in
-	 * @param uuid
+	 * @param string
 	 */
-	public void setDefaultChannelUUID(UUID uuid) {
-		cfg.setDefaultChannel(uuid);		
+	public void setDefaultChannelUUID(String string) {
+		cfg.setDefaultChannel(string);		
 	}
 
 	/**

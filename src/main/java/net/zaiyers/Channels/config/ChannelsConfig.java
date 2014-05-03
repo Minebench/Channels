@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.message.PrivateMessage;
@@ -36,31 +39,38 @@ public class ChannelsConfig extends YamlConfig {
 	/**
 	 * get configured channels
 	 */
-	public List<UUID> getChannels() {
-		ArrayList<UUID> chans = new ArrayList<UUID>(); 
+	public List<String> getChannels() {
+		ArrayList<String> chans = new ArrayList<String>(); 
 		
-		File channelConfigDir = new File(configFile.getParentFile()+File.separator+"channels");
-		if (!channelConfigDir.exists()) {
-			// inital run, create default configuration
-			try {
-				channelConfigDir.mkdirs();
-				
-				Channel def;
-				
-				def = new Channel(getDefaultChannelUUID());
-				def.setName("default");
-				def.setTag("D");
-				def.save();
-				
-				chans.add(def.getUUID());
-			} catch (IOException e) {
-				Channels.getInstance().getLogger().severe("Could not create default channel!");
-				e.printStackTrace();
+		if (mongo != null && mongo.isAvilable()) {
+			DBCursor cursor = mongo.getChannels().find();
+			
+			if (!cursor.hasNext()) {
+				Channel def = makeDefaultChannel();
+				if (def != null) {
+					chans.add(def.getUUID());
+				}
+			} else {
+				while (cursor.hasNext()) {
+					DBObject channelConfig = cursor.next();
+					chans.add((String) channelConfig.get("uuid"));
+				}
 			}
 		} else {
-			for (File channelConfigFile: channelConfigDir.listFiles()) {
-				if (channelConfigFile.getName().endsWith(".yml")) {
-					chans.add(UUID.fromString(channelConfigFile.getName().substring(0, 36)));
+			File channelConfigDir = new File(configFile.getParentFile()+File.separator+"channels");
+			if (!channelConfigDir.exists()) {
+				channelConfigDir.mkdirs();
+				Channel def = makeDefaultChannel();
+				if (def == null) {
+					channelConfigDir.delete();
+				} else {
+					chans.add(def.getUUID());
+				}
+			} else {
+				for (File channelConfigFile: channelConfigDir.listFiles()) {
+					if (channelConfigFile.getName().endsWith(".yml")) {
+						chans.add(channelConfigFile.getName().substring(0, 36));
+					}
 				}
 			}
 		}
@@ -84,8 +94,8 @@ public class ChannelsConfig extends YamlConfig {
 	 * return name of default channel
 	 * @return
 	 */
-	public UUID getDefaultChannelUUID() {
-		return UUID.fromString(cfg.getString("defaultChannelUUID"));
+	public String getDefaultChannelUUID() {
+		return cfg.getString("defaultChannelUUID");
 	}
 	
 	/**
@@ -130,12 +140,12 @@ public class ChannelsConfig extends YamlConfig {
 	/**
 	 * set server default channel
 	 * @param serverName
-	 * @param channelUUID
+	 * @param string
 	 */
-	public void setServerDefaultChannel(String serverName, UUID channelUUID, boolean force) {
+	public void setServerDefaultChannel(String serverName, String string, boolean force) {
 		@SuppressWarnings("unchecked")
 		Map<String, String> serverDefaultChannels = (Map<String, String>) cfg.get("serverDefaultChannels");
-		serverDefaultChannels.put(serverName, channelUUID.toString());
+		serverDefaultChannels.put(serverName, string);
 		cfg.set("serverDefaultChannels", serverDefaultChannels);
 		
 		// force default channel
@@ -148,10 +158,10 @@ public class ChannelsConfig extends YamlConfig {
 		cfg.set("forceServerDefaultChannel", serverList);
 	}
 
-	public UUID getServerDefaultChannel(String serverName) {
+	public String getServerDefaultChannel(String serverName) {
 		@SuppressWarnings("unchecked")
 		Map<String, String> serverDefaultChannels = (Map<String, String>) cfg.get("serverDefaultChannels");
-		return (serverDefaultChannels.get(serverName) != null) ? UUID.fromString(serverDefaultChannels.get(serverName)) : null;
+		return (serverDefaultChannels.get(serverName) != null) ? serverDefaultChannels.get(serverName) : null;
 	}
 	
 	public boolean forceServerDefaultChannel(String serverName) {
@@ -160,8 +170,27 @@ public class ChannelsConfig extends YamlConfig {
 	}
 	
 	public MongoDBConnection getMongoDBConnection() {
-		if (mongo.isAvilable()) {
+		if (mongo != null && mongo.isAvilable()) {
 			return mongo;
+		}
+		
+		return null;
+	}
+	
+	private Channel makeDefaultChannel() {
+		// inital run, create default configuration
+		try {			
+			Channel def;
+			
+			def = new Channel(getDefaultChannelUUID());
+			def.setName("default");
+			def.setTag("D");
+			def.save();
+			
+			return def;
+		} catch (IOException e) {
+			Channels.getInstance().getLogger().severe("Could not create default channel!");
+			e.printStackTrace();
 		}
 		
 		return null;

@@ -11,6 +11,7 @@ import net.zaiyers.Channels.Channels;
 
 public class MongoDBConnection {
 	private MongoClient mongo;
+	private DB db;
 	private DBCollection channels;
 	private DBCollection chatters;
 	
@@ -36,10 +37,11 @@ public class MongoDBConnection {
 				if (!authdb.authenticate(cfg.getString("mongo.user"), cfg.getString("mongo.pwd").toCharArray())) {
 					Channels.getInstance().getLogger().severe("MongoDB failed authentication"); return false;
 				}
-				DB db = mongo.getDB(cfg.getString("mongo.db"));
-				channels = db.getCollection(cfg.getString("mongo.channelCollection"));
-				chatters = db.getCollection(cfg.getString("mongo.chatterCollection"));
 			}
+			db = mongo.getDB(cfg.getString("mongo.db"));
+			
+			channels = db.getCollection(cfg.getString("mongo.channelCollection"));
+			chatters = db.getCollection(cfg.getString("mongo.chatterCollection"));
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 			return false;

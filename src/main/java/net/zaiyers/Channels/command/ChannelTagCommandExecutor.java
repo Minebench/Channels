@@ -1,7 +1,5 @@
 package net.zaiyers.Channels.command;
 
-import java.util.UUID;
-
 import com.google.common.collect.ImmutableMap;
 
 import net.md_5.bungee.api.CommandSender;
@@ -19,7 +17,7 @@ public class ChannelTagCommandExecutor extends Command {
 	/**
 	 * uuid of the channel
 	 */
-	private UUID channelUUID;
+	private String channelUUID;
 
 	public ChannelTagCommandExecutor(String name) {
 		super(name);

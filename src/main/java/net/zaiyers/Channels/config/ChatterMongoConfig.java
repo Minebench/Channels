@@ -3,7 +3,6 @@ package net.zaiyers.Channels.config;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import com.mongodb.DBCollection;
 
@@ -11,14 +10,14 @@ import net.zaiyers.Channels.Channels;
 
 public class ChatterMongoConfig extends MongoConfig implements ChatterConfig {
 	
-	protected ChatterMongoConfig(DBCollection c, UUID uuid) {
-		super(c, uuid);
+	public ChatterMongoConfig(DBCollection c, String string) {
+		super(c, string);
 	}
 
-	public List<UUID> getSubscriptions() {
-		ArrayList<UUID> subs = new ArrayList<UUID>();
+	public List<String> getSubscriptions() {
+		ArrayList<String> subs = new ArrayList<String>();
 		for (String sub: cfg.getStringList("subscriptions")) {
-			subs.add(UUID.fromString(sub));
+			subs.add(sub);
 		};
 		
 		return subs;
@@ -48,29 +47,29 @@ public class ChatterMongoConfig extends MongoConfig implements ChatterConfig {
 		return cfg.getString("lastRecipient", null);
 	}
 
-	public UUID getChannelUUID() {
-		return UUID.fromString(cfg.getString("channelUUID"));
+	public String getChannelUUID() {
+		return cfg.getString("channelUUID");
 	}
 
 	public void createDefaultConfig() {
-		cfg = ymlCfg.load(
-			new InputStreamReader(Channels.getInstance().getResourceAsStream("chatter.yml"))
-		);
+		cfg = new MongoConfiguration(Channels.getConfig().getMongoDBConnection().getChatters(), null);
+		cfg.load(new InputStreamReader(Channels.getInstance().getResourceAsStream("chatter.yml")));
+		cfg.set("uuid", uuid.toString());
 		
 		// set default channel
 		cfg.set("channelUUID", Channels.getConfig().getDefaultChannelUUID().toString());
 		
 		// subscribe to default channel
-		ArrayList<UUID> subs = new ArrayList<UUID>();
+		ArrayList<String> subs = new ArrayList<String>();
 		subs.add(Channels.getConfig().getDefaultChannelUUID());
 		setSubscriptions(subs);
 		
 		save();
 	}
 
-	public void setSubscriptions(List<UUID> subs) {
+	public void setSubscriptions(List<String> subs) {
 		List<String> subscriptions = new ArrayList<String>();
-		for (UUID u: subs) {
+		for (String u: subs) {
 			subscriptions.add(u.toString());
 		}
 		
@@ -103,8 +102,8 @@ public class ChatterMongoConfig extends MongoConfig implements ChatterConfig {
 		cfg.set("ignores", ignores);
 	}
 
-	public void setDefaultChannel(UUID uuid) {
-		cfg.set("channelUUID", uuid.toString());
+	public void setDefaultChannel(String uuid) {
+		cfg.set("channelUUID", uuid);
 	}
 
 	public void setLastSender(String uuid) {
