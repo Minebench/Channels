@@ -8,10 +8,12 @@ import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.command.ConsoleCommandSender;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
+import net.zaiyers.Channels.ChannelsChatEvent;
 import net.zaiyers.Channels.Chatter;
 import net.zaiyers.Channels.message.ChannelMessage;
 import net.zaiyers.Channels.message.ConsoleMessage;
 import net.zaiyers.Channels.message.Message;
+import net.zaiyers.Channels.message.PrivateMessage;
 
 public class ChannelTagCommandExecutor extends Command {
 	/**
@@ -53,7 +55,10 @@ public class ChannelTagCommandExecutor extends Command {
 			}
 		}
 		
-		msg.send();
+		ChannelsChatEvent chatEvent = new ChannelsChatEvent(msg);
+		if (!Channels.getInstance().getProxy().getPluginManager().callEvent( chatEvent ).isCancelled()) {
+			msg.send();
+		}
 	}
 	
 	private String argsToMessage(String[] args) {
