@@ -102,7 +102,7 @@ public class Channel {
 			return;
 		}
 		String serverName = sender.getPlayer().getServer().getInfo().getName();
-		if (!sender.hasPermission(this, "globalread") && !cfg.getServers().contains(serverName)) {
+		if (!cfg.isGlobal() && !sender.hasPermission(this, "globalread") && !cfg.getServers().contains(serverName)) {
 			Channels.notify(sender.getPlayer(), "channels.command.channel-not-available", ImmutableMap.of("channelColor", getColor().toString(), "channel", getName(), "server", serverName));
 			return;
 		}
