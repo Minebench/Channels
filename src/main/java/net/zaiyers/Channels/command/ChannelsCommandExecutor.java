@@ -70,7 +70,9 @@ public class ChannelsCommandExecutor extends Command {
 					cmd = new ChannelListCommand(sender, args);
 				} else if (cmdName.equals("info")) {
 					cmd = new ChannelInfoCommand(sender, args);
-				}else if (cmdName.equals("help")) {
+				} else if (cmdName.equals("rename")) {
+					cmd = new ChannelRenameCommand(sender, args);
+				} else if (cmdName.equals("help")) {
 					cmd = new ChannelHelpCommand(sender, args);
 				} else if (Channels.getInstance().getChannel(args[0]) != null) {
 					String[] shiftedArgs = new String[args.length + 1];

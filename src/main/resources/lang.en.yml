@@ -92,6 +92,7 @@ channels:
       ChannelRemoveCommand: 'Usage: /channel remove <channel>'
       ChannelRemoveModCommand: 'Usage: /channel removeMod <channel> <moderator>'
       ChannelRemoveServerCommand: 'Usage: /channel removeServer <channel> <server>'
+      ChannelRenameCommand: 'Usage: /channel rename <channel> <new name> <new tag>'
       ChannelSpeakCommand: 'Usage: /channel speak <channel> [message]'
       ChannelSubscribeCommand: 'Usage: /channel subscribe <channel> [password]'
       ChannelUnbanCommand: 'Usage: /channel unban <channel> <player>'
@@ -135,6 +136,8 @@ channels:
       explain-ChannelRemoveModCommand: removes a moderator from a channel
       help-ChannelRemoveServerCommand: " - §a/channel removeServer <§6channel§a> <§6server§a>"
       explain-ChannelRemoveServerCommand: stops a channel from being distributed to a server
+      help-ChannelRenameCommand: " - §a/channel rename <§6channel§a> <§6new name§a> <§6new tag§a>"
+      explain-ChannelRenameCommand: renames a channel
       help-ChannelSpeakCommand: " - §a/channel speak <§6channel§a> [§6message§a]"
       explain-ChannelSpeakCommand: sends a message to a channel or sets channel
       help-ChannelSubscribeCommand: " - §a/channel subscribe <§6channel§a>"

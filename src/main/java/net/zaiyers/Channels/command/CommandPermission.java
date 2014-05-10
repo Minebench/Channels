@@ -18,6 +18,7 @@ public enum CommandPermission {
 		ChannelRemoveCommand("channels.remove"),
 		ChannelRemoveModCommand("channels.removemod"),
 		ChannelRemoveServerCommand("channels.removeserver"),
+		ChannelRenameCommand("channels.rename"),
 		ChannelSpeakCommand("channels.speak"),
 		ChannelSubscribeCommand("channels.subscribe"),
 		ChannelSuffixCommand("channels.suffix"),

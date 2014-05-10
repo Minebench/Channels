@@ -80,6 +80,9 @@ public class ChannelHelpCommand extends AbstractCommand implements ChannelsComma
 				if (sender.hasPermission(CommandPermission.ChannelRemoveModCommand.toString())) {
 					modCommands.add("ChannelRemoveModCommand");
 				}
+				if (sender.hasPermission(CommandPermission.ChannelRenameCommand.toString())) {
+					modCommands.add("ChannelRenameCommand");
+				}
 				if (sender.hasPermission(CommandPermission.ChannelUnbanCommand.toString())) {
 					modCommands.add("ChannelUnbanCommand");
 				}
