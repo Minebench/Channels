@@ -77,6 +77,8 @@ channels:
       default-channel-unavailable: "§eWARNING: Defaultchannel for server §6%server% §eis not available."
       default-channel-no-autojoin: "§eWARNING: %channelColor%%channel% §eis a defaultchannel and has autojoin = false."
       remove-default-channel: "§cYou can not remove the default channel."
+      password-removed: "§aPassword removed."
+      password-set: "§aPassword changed."
    usage:
       ChannelAddModCommand: 'Usage: /channel addMod <channel> <chatter>'
       ChannelAddServerCommand: 'Usage: /channel addServer <channel> <server>'
@@ -88,6 +90,7 @@ channels:
       ChannelKickCommand: 'Usage: /channel kick <channel> <chatter>'
       ChannelMuteCommand: 'Usage: /channel mute <chatter>'
       ChannelOpenCommand: 'Usage: /channel open <channel> <tag> [password]'
+      ChannelPasswordCommand: 'Usage: /channel password <channel> [password]'
       ChannelPrefixCommand: 'Usage: /channel prefix <chatter> "[prefix]"'
       ChannelRemoveCommand: 'Usage: /channel remove <channel>'
       ChannelRemoveModCommand: 'Usage: /channel removeMod <channel> <moderator>'
@@ -128,6 +131,8 @@ channels:
       explain-ChannelMuteCommand: mutes a player
       help-ChannelOpenCommand: " - §a/channel open <§6name§a> <§6tag§a> [§6password§a]"
       explain-ChannelOpenCommand: creates a new temporary channel
+      help-ChannelPasswordCommand: " - §a/channel password <§6channel§a> [§6password§a]"
+      explain-ChannelPasswordCommand: sets or removes a channels password
       help-ChannelPrefixCommand: " - §a/channel prefix <§6player§a> <§6prefix§a>"
       explain-ChannelPrefixCommand: sets a prefix for a player
       help-ChannelRemoveCommand: " - §a/channel remove <§6channel§a>"

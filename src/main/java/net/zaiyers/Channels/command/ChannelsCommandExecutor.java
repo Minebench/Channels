@@ -72,6 +72,8 @@ public class ChannelsCommandExecutor extends Command {
 					cmd = new ChannelInfoCommand(sender, args);
 				} else if (cmdName.equals("rename")) {
 					cmd = new ChannelRenameCommand(sender, args);
+				} else if (cmdName.equals("password")) {
+					cmd = new ChannelPasswordCommand(sender, args);
 				} else if (cmdName.equals("help")) {
 					cmd = new ChannelHelpCommand(sender, args);
 				} else if (Channels.getInstance().getChannel(args[0]) != null) {
