@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import net.zaiyers.Channels.Channels;
+
 import org.yaml.snakeyaml.Yaml;
 
 import com.mongodb.BasicDBList;
@@ -47,10 +49,10 @@ public class MongoConfiguration {
         return stringList;
 	}
 	
-	private BasicDBList getList(String path) {
-		if (settings.get(path) instanceof BasicDBList) {
+	private BasicDBList getList(String path) {	
+		if (settings.get(path) instanceof List) {
 			return (BasicDBList) settings.get(path);
-		} else if (settings.get(path) instanceof BasicDBObject) {
+		} else if (settings.get(path) != null) {
 			BasicDBList list = new BasicDBList();
 			list.add(settings.get(path));
 			return list;
@@ -88,7 +90,14 @@ public class MongoConfiguration {
 	}
 	
 	public void set(String key, Object value) {
-		settings.put(key, value);
+		if (value instanceof ArrayList<?>) {
+			BasicDBList save = new BasicDBList();
+			save.addAll(((ArrayList<?>) value));
+			
+			settings.put(key, save);
+		} else {
+			settings.put(key, value);
+		}
 	}
 	
 	public void load(InputStreamReader io) {
