@@ -2,20 +2,19 @@ package net.zaiyers.Channels.config;
 
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.yaml.snakeyaml.Yaml;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 
 public class MongoConfiguration {
-	private Map<String, Object> settings;
+	private DBObject settings;
 	
 	public MongoConfiguration(DBCollection col, String uuid) {
 		if (uuid != null) {
@@ -23,13 +22,8 @@ public class MongoConfiguration {
 			
 			DBCursor cursor = col.find(search);
 			while (cursor.hasNext()) {
-				DBObject setting = cursor.next();
-				settings.putAll(setting.toMap());
+				settings = cursor.next();
 			}
-		} 
-		
-		if (settings == null) {
-			settings = Collections.emptyMap();
 		}
 	}
 
@@ -42,16 +36,27 @@ public class MongoConfiguration {
 	}
 	
 	public List<String> getStringList(String path) {
-		List<Object> list = getList(path);
         List<String> stringList = new ArrayList<String>();
 
-        for (Object object: list) {
+        for (Object object: getList(path)) {
             if (object instanceof String) {
             	stringList.add((String) object);
             }
         }
 
         return stringList;
+	}
+	
+	private BasicDBList getList(String path) {
+		if (settings.get(path) instanceof BasicDBList) {
+			return (BasicDBList) settings.get(path);
+		} else if (settings.get(path) instanceof BasicDBObject) {
+			BasicDBList list = new BasicDBList();
+			list.add(settings.get(path));
+			return list;
+		}
+		
+		return null;
 	}
 	
 	public Boolean getBoolean(String key) {
@@ -86,12 +91,13 @@ public class MongoConfiguration {
 		settings.put(key, value);
 	}
 	
-	private List<Object> getList(String path) {
-		return (List<Object>) settings.get(path);
-	}
-
 	public void load(InputStreamReader io) {
 		Yaml yaml = new Yaml();
-		settings = yaml.loadAs(io, LinkedHashMap.class);
+		settings = new BasicDBObject();
+		settings.putAll(yaml.loadAs(io, LinkedHashMap.class));
+	}
+	
+	public boolean loaded() {
+		return settings != null;
 	}
 }

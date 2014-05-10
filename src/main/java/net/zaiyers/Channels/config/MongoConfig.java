@@ -37,7 +37,7 @@ public abstract class MongoConfig implements Config {
 		col = c;
 		cfg = new MongoConfiguration(c, this.uuid);
 		
-		if (cfg.getString("uuid") == null) {
+		if (!cfg.loaded()) {
 			createDefaultConfig();
 		}
 	}
