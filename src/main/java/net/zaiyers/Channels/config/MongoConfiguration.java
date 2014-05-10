@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import net.zaiyers.Channels.Channels;
-
 import org.yaml.snakeyaml.Yaml;
 
 import com.mongodb.BasicDBList;
