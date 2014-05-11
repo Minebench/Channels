@@ -20,7 +20,7 @@ public class ChannelSubscribeCommand extends AbstractCommand {
 			return;
 		} else if (sender instanceof ProxiedPlayer) {
 						
-			Chatter chatter = Channels.getInstance().getChatter( ((ProxiedPlayer)sender).getUUID() );
+			Chatter chatter = Channels.getInstance().getChatter( ((ProxiedPlayer) sender).getUniqueId().toString() );
 			Channel chan = Channels.getInstance().getChannel(args[1]);
 			
 			// no such channel

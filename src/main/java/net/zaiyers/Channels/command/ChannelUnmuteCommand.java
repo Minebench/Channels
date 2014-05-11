@@ -30,7 +30,7 @@ public class ChannelUnmuteCommand extends AbstractCommand {
 			
 			Channels.notify(sender, "channels.command.chatter-unmuted", ImmutableMap.of("chatter", UUIDDB.getInstance().getNameByUUID(chatterUUID)));
 		} else {
-			chatterUUID = player.getUUID();
+			chatterUUID = player.getUniqueId().toString();
 			Channels.getInstance().getChatter(chatterUUID).setMuted(false);
 			
 			Channels.notify(sender, "channels.command.chatter-unmuted", ImmutableMap.of("chatter", player.getName()));

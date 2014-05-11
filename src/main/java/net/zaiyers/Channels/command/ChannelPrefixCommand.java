@@ -51,7 +51,7 @@ public class ChannelPrefixCommand extends AbstractCommand {
 			
 			Channels.notify(player, "channels.chatter.set-prefix", ImmutableMap.of("chatter", UUIDDB.getInstance().getNameByUUID(chatterUUID), "prefix", value));
 		} else {
-			chatterUUID = player.getUUID();
+			chatterUUID = player.getUniqueId().toString();
 			Channels.getInstance().getChatter(chatterUUID).setPrefix(value);
 			
 			Channels.notify(sender, "channels.chatter.set-prefix", ImmutableMap.of("chatter", player.getName(), "prefix", value));

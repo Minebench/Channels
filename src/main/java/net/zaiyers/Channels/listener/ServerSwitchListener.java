@@ -16,7 +16,7 @@ public class ServerSwitchListener implements Listener {
 		
 		if (Channels.getConfig().forceServerDefaultChannel(serverName)) {
 			Channel channel = Channels.getInstance().getChannel(Channels.getConfig().getServerDefaultChannel(serverName));
-			Chatter chatter = Channels.getInstance().getChatter(e.getPlayer().getUUID());
+			Chatter chatter = Channels.getInstance().getChatter(e.getPlayer().getUniqueId().toString());
 			
 			if (channel != null && !chatter.getChannel().equals(channel.getUUID())) {
 				chatter.subscribe(channel.getUUID());

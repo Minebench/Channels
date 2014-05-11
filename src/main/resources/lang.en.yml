@@ -10,6 +10,7 @@ channels:
       set-suffix: '§aSet suffix of §6%chatter% §ato §r%suffix%§a.'
       recipient-offline: '§cRecipient went offline.'
       recipient-set: "&aYou are now talking to &e%recipient%&a."
+      recipient-unset: "&aYou are no longer talking privatly."
       nobody-wrote: "&cNobody has written."
       has-no-channel: '§cYou have not set a default channel.'
       is-afk: '§6%chatter%§c is AFK and may not read your message.'
@@ -104,7 +105,7 @@ channels:
       PMCommand: 'Usage: /pm <player> [message]'
       ServerDefaultChannelCommand: 'Usage: /channel serverDefaultChannel <server> <channel>'
       unknown-command: '§cUnknown command: §6%command%'
-      ChannelHelpCommand: "§aHelp - §a/channel help <§6admin§a|§6mod§a|§6user>"
+      ChannelHelpCommand: "§aHelp - §a/channel help <§6admin§a|§6mod§a|§6user§a>"
       help-adminCommands: "§aAdmin commands:"
       help-modCommands: "§aModerator commands:"
       help-userCommands: "§aUser commands:"
@@ -112,7 +113,7 @@ channels:
       explain-ChannelAddModCommand: adds a new moderator to your channel
       help-ChannelAddServerCommand: " - §a/channel addServer <§6channel§a> <§6server§a>"
       explain-ChannelAddServerCommand: starts distributing a channel to another server
-      help-ChannelAutojoinCommand: " - §a/channel autojoin <§6true§a|§6false§a>"
+      help-ChannelAutojoinCommand: " - §a/channel autojoin <§6channel§a> <§6true§a|§6false§a>"
       explain-ChannelAutojoinCommand: make players automatically join a channel
       help-ChannelBanCommand: " - §a/channel ban <§6channel§a> <§6player§a>"
       explain-ChannelBanCommand: bans a player from a channel
@@ -120,7 +121,7 @@ channels:
       explain-ChannelColorCommand: changes a channels color
       help-ChannelCreateCommand: " - §a/channel create <§6name§a> <§6tag§a> [§6password§a]"
       explain-ChannelCreateCommand: creates a new channel
-      help-ChannelGlobalCommand: " - §a/channel global <§6channel§a> <§6true§a|false§6>"
+      help-ChannelGlobalCommand: " - §a/channel global <§6channel§a> <§6true§a|§6false§6>"
       explain-ChannelGlobalCommand: distributes a channel to all servers
       help-ChannelInfoCommand: " - §a/channel info <§6channel§a>"
       explain-ChannelInfoCommand: displays a channels configuration

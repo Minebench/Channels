@@ -38,7 +38,7 @@ public class IgnoreCommand extends AbstractCommand {
 			
 			Chatter ignore = Channels.getInstance().getChatterByName(ignoreName);
 			if (ignore != null) {
-				ignoreUUID = ignore.getPlayer().getUUID();
+				ignoreUUID = ignore.getPlayer().getUniqueId().toString();
 				ignoreName = ignore.getName();
 			} else {
 				// try uuiddb
@@ -48,7 +48,7 @@ public class IgnoreCommand extends AbstractCommand {
 					return; // i don't know a player by that name
 				}
 			}
-			Chatter chatter = Channels.getInstance().getChatter( ((ProxiedPlayer) sender).getUUID() );
+			Chatter chatter = Channels.getInstance().getChatter( ((ProxiedPlayer) sender).getUniqueId().toString() );
 			// toggle ignore
 			if (chatter.getIgnores().contains(ignoreUUID)) {
 				chatter.removeIgnore(ignoreUUID);
@@ -59,7 +59,7 @@ public class IgnoreCommand extends AbstractCommand {
 			}
 		} else {
 			// list ignores
-			Chatter chatter = Channels.getInstance().getChatter( ((ProxiedPlayer) sender).getUUID() );
+			Chatter chatter = Channels.getInstance().getChatter( ((ProxiedPlayer) sender).getUniqueId().toString() );
 			List<String> ignores = chatter.getIgnores();
 			if (ignores.size() > 0) {
 				String ignoreList = UUIDDB.getInstance().getNameByUUID(ignores.get(0));

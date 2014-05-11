@@ -25,7 +25,7 @@ public class ChannelPasswordCommand extends AbstractCommand implements ChannelsC
 		}
 		
 		// check perms
-		if (!(sender instanceof ConsoleCommandSender) && !chan.isMod(((ProxiedPlayer) sender).getUUID()) && !sender.hasPermission("channels.password.foreign")) {
+		if (!(sender instanceof ConsoleCommandSender) && !chan.isMod(((ProxiedPlayer) sender).getUniqueId().toString()) && !sender.hasPermission("channels.password.foreign")) {
 			Channels.notify(sender, "channels.command.channel-no-permission");
 			return;
 		}

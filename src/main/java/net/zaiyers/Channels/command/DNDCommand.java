@@ -18,7 +18,7 @@ public class DNDCommand extends AbstractCommand {
 			return;
 		}
 		
-		Chatter chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUUID());
+		Chatter chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUniqueId().toString());
 		if (chatter.isDND() && args.length == 0) {
 			chatter.setDND(false, null);
 			Channels.notify(sender, "channels.chatter.no-longer-dnd");

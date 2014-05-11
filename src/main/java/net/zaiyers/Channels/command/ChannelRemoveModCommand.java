@@ -21,7 +21,7 @@ public class ChannelRemoveModCommand extends AbstractCommand {
 			return;
 		}
 		
-		if (!(sender instanceof ConsoleCommandSender) && !chan.isMod(((ProxiedPlayer) sender).getUUID()) && !sender.hasPermission("channels.removemod.foreign")) {
+		if (!(sender instanceof ConsoleCommandSender) && !chan.isMod(((ProxiedPlayer) sender).getUniqueId().toString()) && !sender.hasPermission("channels.removemod.foreign")) {
 			Channels.notify(sender, "channels.command.channel-no-permission");
 			return;
 		}
@@ -35,7 +35,7 @@ public class ChannelRemoveModCommand extends AbstractCommand {
 				return;
 			}
 		} else {
-			modUUID = player.getUUID();
+			modUUID = player.getUniqueId().toString();
 		}
 		
 		if (!chan.isMod(modUUID)) {

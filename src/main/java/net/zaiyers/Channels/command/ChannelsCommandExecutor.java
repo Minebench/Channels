@@ -1,12 +1,26 @@
 package net.zaiyers.Channels.command;
 
-import com.google.common.collect.ImmutableMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Iterables;
+
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.config.ServerInfo;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import net.md_5.bungee.api.plugin.TabExecutor;
+import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 
-public class ChannelsCommandExecutor extends Command {
+public class ChannelsCommandExecutor extends Command implements TabExecutor {
 	String command;
 	
 	public ChannelsCommandExecutor(String name, String permission,	String[] aliases) {
@@ -112,5 +126,267 @@ public class ChannelsCommandExecutor extends Command {
 		} else {
 			Channels.notify(sender, "channels.permission.insufficient-permission", ImmutableMap.of("permission", CommandPermission.valueOf(cmd.getClass().getSimpleName()).toString()));
 		}
+	}
+
+	public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
+		if (args.length <= 1) {
+			return matchingCommands(sender, (args.length > 0) ? args[0] : "");
+		} else if (args.length == 2) {
+			if (args[0].toLowerCase().matches("^addserver|global|remove|removeserver|addmod|ban|color|info|kick|password|removemod|rename|unban|speak|list|who|subscribe|unsubscribe$")) {
+				return matchingChannels(args[1]);
+			} else if (args[0].toLowerCase().matches("^mute|prefix|suffix$")) {
+				return matchingPlayers(args[1]);
+			} else if (args[0].toLowerCase().matches("^serverdefaultchannel$")) {
+				return matchingServers(args[1]);
+			}
+		} else if (args.length == 3) {
+			if (args[0].toLowerCase().matches("^addserver|removeserver$")) {
+				return matchingServers(args[2]);
+			} else if (args[0].toLowerCase().matches("^autojoin|global$")) {
+				return matchingBoolean(args[2]);
+			} else if (args[0].toLowerCase().matches("^serverdefaultchannel$")) {
+				return matchingChannels(args[2]);
+			} else if (args[0].toLowerCase().matches("^addmod|ban|kick|removemod|unban$")) {
+				return matchingPlayers(args[2]);
+			} else if (args[0].toLowerCase().matches("^color$")) {
+				return matchingColors(args[2]);
+			}
+		} else if (args.length == 4) {
+			 if (args[0].toLowerCase().matches("^serverdefaultchannel$")) {
+				return matchingBoolean(args[3]);
+			}
+		}
+		
+		return matchingPlayers(args[args.length-1]);
+	}
+	
+	/**
+	 * tab completion / list of matching commands
+	 * @param s
+	 * @return
+	 */
+	private Iterable<String> matchingCommands(CommandSender sender, String s) {
+		List<String> commands = new ArrayList<String>();
+		if ("ignore".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.IgnoreCommand.toString())) {
+			commands.add("ignore");
+		}
+		
+		if ("subscribe".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelSubscribeCommand.toString())) {
+			commands.add("subscribe");
+		}
+		if ("join".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelSubscribeCommand.toString())) {
+			commands.add("join");
+		}
+		
+		if ("unsubscribe".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelUnsubscribeCommand.toString())) {
+			commands.add("unsubscribe");
+		}
+		if ("quit".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelUnsubscribeCommand.toString())) {
+			commands.add("quit");
+		}
+		if ("leave".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelUnsubscribeCommand.toString())) {
+			commands.add("leave");
+		}
+		
+		if ("speak".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelSpeakCommand.toString())) {
+			commands.add("leave");
+		}
+		if ("say".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelSpeakCommand.toString())) {
+			commands.add("say");
+		}
+		
+		if ("global".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelGlobalCommand.toString())) {
+			commands.add("global");
+		}
+		
+		if ("addServer".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelAddServerCommand.toString())) {
+			commands.add("addServer");
+		}
+		
+		if ("removeServer".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelRemoveServerCommand.toString())) {
+			commands.add("removeServer");
+		}
+		
+		if ("create".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelCreateCommand.toString())) {
+			commands.add("create");
+		}
+		
+		if ("open".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelOpenCommand.toString())) {
+			commands.add("open");
+		}
+		
+		if ("remove".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelRemoveCommand.toString())) {
+			commands.add("remove");
+		}
+		if ("close".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelRemoveCommand.toString())) {
+			commands.add("close");
+		}
+		
+		if ("addMod".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelAddModCommand.toString())) {
+			commands.add("addMod");
+		}
+		
+		if ("removeMod".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelRemoveModCommand.toString())) {
+			commands.add("removeMod");
+		}
+		
+		if ("autojoin".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelAutojoinCommand.toString())) {
+			commands.add("autojoin");
+		}
+		
+		if ("ban".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelBanCommand.toString())) {
+			commands.add("ban");
+		}
+		
+		if ("kick".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelKickCommand.toString())) {
+			commands.add("kick");
+		}
+		
+		if ("unban".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelUnbanCommand.toString())) {
+			commands.add("unban");
+		}
+		
+		if ("color".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelColorCommand.toString())) {
+			commands.add("color");
+		}
+		
+		if ("mute".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelMuteCommand.toString())) {
+			commands.add("mute");
+		}
+		
+		if ("unmute".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelUnmuteCommand.toString())) {
+			commands.add("unmute");
+		}
+		
+		if ("prefix".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelPrefixCommand.toString())) {
+			commands.add("prefix");
+		}
+		
+		if ("suffix".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelSuffixCommand.toString())) {
+			commands.add("suffix");
+		}
+		
+		if ("serverDefaultChannel".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ServerDefaultChannelCommand.toString())) {
+			commands.add("serverDefaultChannel");
+		}
+		
+		if ("list".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelListCommand.toString())) {
+			commands.add("list");
+		}
+		if ("who".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelListCommand.toString())) {
+			commands.add("who");
+		}
+		
+		if ("info".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelInfoCommand.toString())) {
+			commands.add("info");
+		}
+		
+		if ("rename".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelRenameCommand.toString())) {
+			commands.add("rename");
+		}
+		
+		if ("password".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelPasswordCommand.toString())) {
+			commands.add("password");
+		}
+		
+		if ("help".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelHelpCommand.toString())) {
+			commands.add("help");
+		}
+		return commands;
+	}
+	
+	/**
+	 * tab completion / list of matching players
+	 * @param s
+	 * @return
+	 */
+	public static Iterable<String> matchingPlayers(final String s) {
+		return Iterables.transform( Iterables.filter(ProxyServer.getInstance().getPlayers(),
+			new Predicate<ProxiedPlayer>() {
+				public boolean apply(ProxiedPlayer player) {
+					return player.getName().toLowerCase().startsWith(s.toLowerCase());
+				}
+			}),	
+			new Function<ProxiedPlayer, String>() {
+				public String apply(ProxiedPlayer player) {
+					return player.getName();
+				}
+			}
+		);
+	}
+	
+	/**
+	 * tab completion / get a list of matching channels
+	 * @param s
+	 * @return
+	 */
+	private static Iterable<String> matchingChannels(final String s) {
+		return Iterables.transform( Iterables.filter(Channels.getInstance().getChannels().values(),
+			new Predicate<Channel>() {
+				public boolean apply(Channel channel) {
+					return channel.getName().toLowerCase().startsWith(s.toLowerCase());
+				}
+			}),	
+			new Function<Channel, String>() {
+				public String apply(Channel channel) {
+					return channel.getName();
+				}
+			}
+		);
+	}
+	
+	/**
+	 * tab completion / get a list of matching servers
+	 * @param s
+	 * @return
+	 */
+	private static Iterable<String> matchingServers(final String s) {
+		return Iterables.transform( Iterables.filter(ProxyServer.getInstance().getServers().values(), new Predicate<ServerInfo>() {
+				public boolean apply(ServerInfo info) {
+					return info.getName().toLowerCase().startsWith(s.toLowerCase());
+				}
+			
+			}) , new Function<ServerInfo, String>() {
+				public String apply(ServerInfo info) {
+					return info.getName();
+				}
+			}
+		);
+	}
+	
+	/**
+	 * tab completion / auto complete boolean
+	 * @param s
+	 * @return
+	 */
+	private static Iterable<String> matchingBoolean(final String s) {
+		if ("true".startsWith(s.toLowerCase())) {
+			return Arrays.asList((new String[] {"true"}));
+		} else if ("false".startsWith(s.toLowerCase())) {
+			return Arrays.asList((new String[] {"false"}));
+		}
+		
+		return Collections.emptyList();
+	}
+	
+	/**
+	 * tab completion / list of matching colors
+	 * @param s
+	 * @return
+	 */
+	private static Iterable<String> matchingColors(final String s) {
+		return Iterables.transform(Iterables.filter(Arrays.asList( ChatColor.values() ),
+			new Predicate<ChatColor>() {
+				public boolean apply(ChatColor color) {
+					return color.toString().toLowerCase().startsWith(s.toLowerCase());
+				}
+			
+			}),
+			new Function<ChatColor, String>() {
+				public String apply(ChatColor color) {
+					return color.toString();
+				}
+			}
+		);
 	}
 }

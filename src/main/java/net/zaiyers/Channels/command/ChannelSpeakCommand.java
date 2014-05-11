@@ -35,7 +35,7 @@ public class ChannelSpeakCommand extends AbstractCommand {
 		if (sender instanceof ConsoleCommandSender) {
 			msg = new ConsoleMessage(chan, argsToMessage(args));
 		} else {
-			Chatter chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUUID());
+			Chatter chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUniqueId().toString());
 			
 			if (!chatter.getSubscriptions().contains(chan.getUUID())) {
 				Channels.notify(sender, "channels.chatter.channel-not-subscribed", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));

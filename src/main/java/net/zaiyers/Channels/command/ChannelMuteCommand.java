@@ -19,7 +19,7 @@ public class ChannelMuteCommand extends AbstractCommand {
 			Channels.notify(sender, "channels.command.chatter-not-found", ImmutableMap.of("chatter", args[1]));
 			return;
 		} else {
-			Chatter chatter = Channels.getInstance().getChatter(player.getUUID());
+			Chatter chatter = Channels.getInstance().getChatter(player.getUniqueId().toString());
 			chatter.setMuted(true);
 			Channels.notify(player, "channels.command.chatter-muted", ImmutableMap.of("chatter", chatter.getName()));
 		}

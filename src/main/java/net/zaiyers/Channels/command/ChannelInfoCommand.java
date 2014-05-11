@@ -20,7 +20,7 @@ public class ChannelInfoCommand extends AbstractCommand {
 		boolean isConsoleCommand = (sender instanceof ConsoleCommandSender);
 		Chatter chatter = null;
 		if (!isConsoleCommand && sender instanceof ProxiedPlayer) {
-			chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUUID());
+			chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUniqueId().toString());
 		} else {
 			// possible? don't care then ...
 			return;

@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import net.md_5.bungee.api.plugin.TabExecutor;
 import net.md_5.bungee.command.ConsoleCommandSender;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
@@ -13,9 +14,8 @@ import net.zaiyers.Channels.Chatter;
 import net.zaiyers.Channels.message.ChannelMessage;
 import net.zaiyers.Channels.message.ConsoleMessage;
 import net.zaiyers.Channels.message.Message;
-import net.zaiyers.Channels.message.PrivateMessage;
 
-public class ChannelTagCommandExecutor extends Command {
+public class ChannelTagCommandExecutor extends Command implements TabExecutor {
 	/**
 	 * uuid of the channel
 	 */
@@ -35,7 +35,7 @@ public class ChannelTagCommandExecutor extends Command {
 		if (sender instanceof ConsoleCommandSender) {
 			msg = new ConsoleMessage(chan, argsToMessage(args));
 		} else {
-			Chatter chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUUID());
+			Chatter chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUniqueId().toString());
 			
 			if (!chatter.getSubscriptions().contains(chan.getUUID())) {
 				Channels.notify(sender, "channels.chatter.channel-not-subscribed", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
@@ -67,5 +67,9 @@ public class ChannelTagCommandExecutor extends Command {
 			message+=" "+args[i];
 		}
 		return message;
+	}
+
+	public Iterable<String> onTabComplete(CommandSender arg0, String[] args) {
+		return ChannelsCommandExecutor.matchingPlayers((args.length > 0) ? args[args.length-1] : "");
 	}
 }

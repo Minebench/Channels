@@ -7,9 +7,9 @@
   <description>A multichannel Chatplugin for BungeeCord</description>
   <dependencies>
   	<dependency>
-  		<groupId>bungee</groupId>
+  		<groupId>net.md_5</groupId>
   		<artifactId>bungee</artifactId>
-  		<version>872</version>
+  		<version>b908</version>
   	</dependency>
   	<dependency>
   		<groupId>net.zaiyers.bungee</groupId>

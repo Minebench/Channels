@@ -20,7 +20,7 @@ public class ChannelListCommand extends AbstractCommand {
 		boolean isConsoleCommand = (sender instanceof ConsoleCommandSender);
 		Chatter chatter = null;
 		if (!isConsoleCommand && sender instanceof ProxiedPlayer) {
-			chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUUID());
+			chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUniqueId().toString());
 		} else {
 			// possible? don't care then ...
 			return;
@@ -63,7 +63,7 @@ public class ChannelListCommand extends AbstractCommand {
 				return;
 			}
 			
-			if (isConsoleCommand || chatter.hasPermission(channel, "list") || (channel.isTemporary() && channel.getSubscribers().contains(chatter.getPlayer().getUUID()))) {
+			if (isConsoleCommand || chatter.hasPermission(channel, "list") || (channel.isTemporary() && channel.getSubscribers().contains(chatter.getPlayer().getUniqueId().toString()))) {
 				String[] uuids = channel.getSubscribers().toArray(new String[channel.getSubscribers().size()]);
 				Channels.notify(sender, "channels.chatter.channel-list-chatters", ImmutableMap.of("channel", channel.getName(), "channelColor", channel.getColor().toString()));
 				

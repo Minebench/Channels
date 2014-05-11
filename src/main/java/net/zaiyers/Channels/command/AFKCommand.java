@@ -19,7 +19,7 @@ public class AFKCommand extends AbstractCommand {
 			return;
 		}
 		
-		Chatter chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUUID());
+		Chatter chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUniqueId().toString());
 		
 		if (chatter.isAFK() && args.length == 0) {
 			chatter.setAFK(false, null);

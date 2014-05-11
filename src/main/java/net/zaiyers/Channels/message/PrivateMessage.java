@@ -42,7 +42,7 @@ public class PrivateMessage extends AbstractMessage {
 		processMessage(SenderRole.SENDER);
 		sender.sendMessage(this);
 		
-		if (!receiver.getIgnores().contains(sender.getPlayer().getUUID())) {
+		if (!receiver.getIgnores().contains(sender.getPlayer().getUniqueId().toString())) {
 			processMessage(SenderRole.RECEIVER);
 			receiver.sendMessage(this);
 			receiver.setLastPrivateSender(sender);

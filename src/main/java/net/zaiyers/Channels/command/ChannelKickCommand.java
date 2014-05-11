@@ -21,7 +21,7 @@ public class ChannelKickCommand extends AbstractCommand {
 			return;
 		}
 		
-		if (!(sender instanceof ConsoleCommandSender) && !chan.isMod(((ProxiedPlayer) sender).getUUID()) && !sender.hasPermission("channels.kick.foreign")) {
+		if (!(sender instanceof ConsoleCommandSender) && !chan.isMod(((ProxiedPlayer) sender).getUniqueId().toString()) && !sender.hasPermission("channels.kick.foreign")) {
 			Channels.notify(sender, "channels.command.channel-no-permission");
 			return;
 		}
@@ -32,7 +32,7 @@ public class ChannelKickCommand extends AbstractCommand {
 			Channels.notify(sender, "channels.command.chatter-not-found", ImmutableMap.of("chatter", args[2]));
 			return;
 		} else {
-			chatterUUID = player.getUUID();
+			chatterUUID = player.getUniqueId().toString();
 		}
 		
 		chan.kickChatter(chatterUUID);

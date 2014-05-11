@@ -3,7 +3,6 @@ package net.zaiyers.Channels;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -219,7 +218,7 @@ public class Channels extends Plugin {
 	 * @param chatter
 	 */
 	public void addChatter(Chatter chatter) {
-		chatters.put(chatter.getPlayer().getUUID(), chatter);
+		chatters.put(chatter.getPlayer().getUniqueId().toString(), chatter);
 	}
 
 	/**
@@ -227,7 +226,7 @@ public class Channels extends Plugin {
 	 * @param chatter
 	 */
 	public void removeChatter(Chatter chatter) {
-		chatters.remove(chatter.getPlayer().getUUID());
+		chatters.remove(chatter.getPlayer().getUniqueId().toString());
 	}
 
 	/**

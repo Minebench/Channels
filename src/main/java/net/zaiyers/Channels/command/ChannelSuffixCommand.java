@@ -51,7 +51,7 @@ public class ChannelSuffixCommand extends AbstractCommand {
 			
 			Channels.notify(player, "channels.chatter.set-suffix", ImmutableMap.of("chatter", UUIDDB.getInstance().getNameByUUID(chatterUUID), "suffix", value));
 		} else {
-			chatterUUID = player.getUUID();
+			chatterUUID = player.getUniqueId().toString();
 			Channels.getInstance().getChatter(chatterUUID).setSuffix(value);
 			
 			Channels.notify(player, "channels.chatter.set-suffix", ImmutableMap.of("chatter", player.getName(), "suffix", value));

@@ -55,9 +55,9 @@ public class Chatter {
 		this.player = player;
 		
 		// load my preferences
-		String uuid = player.getUUID();
+		String uuid = player.getUniqueId().toString();
 		if (Channels.getConfig().getMongoDBConnection() != null && Channels.getConfig().getMongoDBConnection().isAvilable()) {
-			cfg = new ChatterMongoConfig(Channels.getConfig().getMongoDBConnection().getChatters(), player.getUUID());
+			cfg = new ChatterMongoConfig(Channels.getConfig().getMongoDBConnection().getChatters(), uuid);
 		} else {
 			String cfgPath = Channels.getInstance().getDataFolder()+("/chatters/"+uuid.substring(0,2)+"/"+uuid.substring(2,4)+"/"+uuid+".yml").toLowerCase();
 			cfg	= new ChatterYamlConfig(cfgPath);
@@ -261,7 +261,7 @@ public class Chatter {
 	 * @param chatter
 	 */
 	public void setLastPrivateSender(Chatter chatter) {
-		cfg.setLastSender(chatter.getPlayer().getUUID());
+		cfg.setLastSender(chatter.getPlayer().getUniqueId().toString());
 	}
 
 	/**

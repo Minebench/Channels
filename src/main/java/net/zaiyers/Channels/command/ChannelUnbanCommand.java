@@ -22,7 +22,7 @@ public class ChannelUnbanCommand extends AbstractCommand {
 			return;
 		}
 		
-		if (!(sender instanceof ConsoleCommandSender) && !chan.isMod(((ProxiedPlayer) sender).getUUID()) && !sender.hasPermission("channels.unban.foreign")) {
+		if (!(sender instanceof ConsoleCommandSender) && !chan.isMod(((ProxiedPlayer) sender).getUniqueId().toString()) && !sender.hasPermission("channels.unban.foreign")) {
 			Channels.notify(sender, "channels.command.channel-no-permission");
 			return;
 		}
@@ -36,7 +36,7 @@ public class ChannelUnbanCommand extends AbstractCommand {
 				return;
 			}
 		} else {
-			chatterUUID = player.getUUID();
+			chatterUUID = player.getUniqueId().toString();
 		}
 		
 		chan.unbanChatter(chatterUUID);

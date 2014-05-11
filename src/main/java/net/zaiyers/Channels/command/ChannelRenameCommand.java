@@ -25,7 +25,7 @@ public class ChannelRenameCommand extends AbstractCommand implements ChannelsCom
 		}
 		
 		// check perms
-		if (!(sender instanceof ConsoleCommandSender) && !chan.isMod(((ProxiedPlayer) sender).getUUID()) && !sender.hasPermission("channels.rename.foreign")) {
+		if (!(sender instanceof ConsoleCommandSender) && !chan.isMod(((ProxiedPlayer) sender).getUniqueId().toString()) && !sender.hasPermission("channels.rename.foreign")) {
 			Channels.notify(sender, "channels.command.channel-no-permission");
 			return;
 		}

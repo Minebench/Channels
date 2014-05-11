@@ -21,7 +21,7 @@ public class PMCommand extends AbstractCommand {
 			return;
 		}
 		
-		Chatter chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUUID());
+		Chatter chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUniqueId().toString());
 		
 		if (args.length == 0) {
 			chatter.setPrivateRecipient(null);
@@ -38,7 +38,7 @@ public class PMCommand extends AbstractCommand {
 			//set recipient
 			Chatter recipient = Channels.getInstance().getChatterByName(args[0]);
 			if (recipient != null && args.length == 1) {
-				chatter.setPrivateRecipient(recipient.getPlayer().getUUID());
+				chatter.setPrivateRecipient(recipient.getPlayer().getUniqueId().toString());
 				Channels.notify(sender, "channels.chatter.recipient-set", ImmutableMap.of("recipient", recipient.getName()));
 			} else if (chatter == null) {
 				//nobody matched

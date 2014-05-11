@@ -35,14 +35,14 @@ public class Channel {
 	 * add subscriber
 	 */
 	public void subscribe(Chatter chatter) {
-		if (cfg.getBans().contains(chatter.getPlayer().getUUID())) {
+		if (cfg.getBans().contains(chatter.getPlayer().getUniqueId().toString())) {
 			Channels.notify(chatter.getPlayer(), "banned-from-channel", ImmutableMap.of("channel", getName(), "channelColor", getColor().toString()));
 			chatter.unsubscribe(getUUID());
 			return;
 		}
 		
-		if (!subscribers.contains(chatter.getPlayer().getUUID())) {
-			subscribers.add(chatter.getPlayer().getUUID());
+		if (!subscribers.contains(chatter.getPlayer().getUniqueId().toString())) {
+			subscribers.add(chatter.getPlayer().getUniqueId().toString());
 		}
 	}
 	
@@ -50,7 +50,7 @@ public class Channel {
 	 * remove subscriber
 	 */
 	public void unsubscribe(Chatter chatter) {
-		subscribers.remove(chatter.getPlayer().getUUID());
+		subscribers.remove(chatter.getPlayer().getUniqueId().toString());
 		
 		// delete empty and temporary channels
 		if (temporary && subscribers.size() == 0) {
@@ -109,7 +109,7 @@ public class Channel {
 		
 		for (String uuid: subscribers) {
 			Chatter reciever = Channels.getInstance().getChatter(uuid);
-			if (reciever.getIgnores().contains(sender.getPlayer().getUUID())) {
+			if (reciever.getIgnores().contains(sender.getPlayer().getUniqueId().toString())) {
 				// I don't want to read this message
 				continue;
 			} else if (!cfg.isGlobal() && !reciever.hasPermission(this, "globalread") && !cfg.getServers().contains(reciever.getPlayer().getServer().getInfo().getName())) {

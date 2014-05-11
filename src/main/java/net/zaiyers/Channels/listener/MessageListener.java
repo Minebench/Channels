@@ -37,7 +37,7 @@ public class MessageListener implements Listener {
 			cmd.execute();
 		} else {
 			// message in default channel
-			Chatter chatter = Channels.getInstance().getChatter(player.getUUID());
+			Chatter chatter = Channels.getInstance().getChatter(player.getUniqueId().toString());
 			if (chatter.getLastRecipient() != null) {
 				Chatter recipient = Channels.getInstance().getChatter(chatter.getLastRecipient());
 				if (recipient == null) {
