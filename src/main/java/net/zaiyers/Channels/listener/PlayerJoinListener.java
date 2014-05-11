@@ -25,6 +25,9 @@ public class PlayerJoinListener implements Listener {
 					} else if (channelUUID.equals(Channels.getConfig().getDefaultChannelUUID())) {
 						Channels.getInstance().getLogger().warning("Chatter '"+chatter.getName()+"' is not allowed to join the default channel");
 					}
+				} else {
+					// channel has been removed - remove from player config
+					chatter.unsubscribe(channelUUID);
 				}
 			}
 			
@@ -32,7 +35,7 @@ public class PlayerJoinListener implements Listener {
 			for (Channel channel: Channels.getInstance().getChannels().values()) {
 				if (channel.doAutojoin() && chatter.hasPermission(channel, "subscribe")) {
 					// joining twice doesn't matter, caught elsewhere
-					Channels.getInstance().getChannel(channel.getUUID()).subscribe(chatter);
+					chatter.subscribe(channel.getUUID());
 				}
 			}
 			

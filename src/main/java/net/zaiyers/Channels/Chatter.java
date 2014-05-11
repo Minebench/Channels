@@ -108,7 +108,9 @@ public class Chatter {
 		cfg.setSubscriptions(subs);
 		
 		// unsubscribe from channel
-		Channels.getInstance().getChannel(uuid).unsubscribe(this);
+		if (Channels.getInstance().getChannel(uuid) != null) {
+			Channels.getInstance().getChannel(uuid).unsubscribe(this);
+		}
 	}
 	
 	/**

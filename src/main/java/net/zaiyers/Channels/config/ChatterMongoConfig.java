@@ -15,12 +15,7 @@ public class ChatterMongoConfig extends MongoConfig implements ChatterConfig {
 	}
 
 	public List<String> getSubscriptions() {
-		ArrayList<String> subs = new ArrayList<String>();
-		for (String sub: cfg.getStringList("subscriptions")) {
-			subs.add(sub);
-		};
-		
-		return subs;
+		return cfg.getStringList("subscriptions");
 	}
 	
 	public boolean isMuted() {

@@ -10,14 +10,19 @@ public class PlayerQuitListener implements Listener {
 	@EventHandler
 	public void onPlayerQuit(PlayerDisconnectEvent event) {
 		Chatter chatter = Channels.getInstance().getChatter(event.getPlayer().getUniqueId().toString());
+				
+		// unsubscribe from channels
+		for (String channelUUID: chatter.getSubscriptions()) {
+			if (Channels.getInstance().getChannel(channelUUID) != null) {
+				Channels.getInstance().getChannel(channelUUID).unsubscribe(chatter);
+			} else {
+				// channel has been removed
+				chatter.unsubscribe(channelUUID);
+			}
+		}
 		
 		// save configuration
 		chatter.save();
-		
-		// unsubscribe from channels
-		for (String channelUUID: chatter.getSubscriptions()) {
-			Channels.getInstance().getChannel(channelUUID).unsubscribe(chatter);
-		}
 		
 		// remove chatter
 		Channels.getInstance().removeChatter(chatter);
