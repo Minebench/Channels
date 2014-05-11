@@ -54,11 +54,11 @@ public class PrivateMessage extends AbstractMessage {
 	 * @return
 	 */
 	private void processMessage(SenderRole role) {
-		processedMessage = new TextComponent(
+		processedMessage = new TextComponent( TextComponent.fromLegacyText(
 			Channels.getConfig().getPrivateMessageFormat(role)	.replaceAll("%sender%", sender.getName())
 																.replaceAll("%receiver%", receiver.getName())
 																.replaceAll("%msg%", rawMessage)
-		);
+		) );
 	}
 
 	public CommandSender getSender() {

@@ -29,13 +29,13 @@ public class ConsoleMessage extends AbstractMessage {
 	 * generate message and format it
 	 */
 	public void processMessage() {
-		processedMessage = new TextComponent( 
+		processedMessage = new TextComponent( TextComponent.fromLegacyText(
 				channel.getConsoleFormat()
 									.replaceAll("%channelColor%",	channel.getColor().toString())
 									.replaceAll("%channelTag%",		channel.getTag())
 									.replaceAll("%channelName%",	channel.getName())
 									.replaceAll("%msg%", rawMessage)
-		);
+		) );
 	}
 	
 	public void send() {
