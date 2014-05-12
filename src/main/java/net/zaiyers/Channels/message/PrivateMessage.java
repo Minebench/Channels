@@ -64,4 +64,12 @@ public class PrivateMessage extends AbstractMessage {
 	public CommandSender getSender() {
 		return sender.getPlayer();
 	}
+	
+	public Chatter getChatter() {
+		return sender;
+	}
+	
+	public Chatter getReceiver() {
+		return receiver;
+	}
 }

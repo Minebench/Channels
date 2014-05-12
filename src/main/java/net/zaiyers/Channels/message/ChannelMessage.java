@@ -1,13 +1,8 @@
 package net.zaiyers.Channels.message;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
@@ -72,5 +67,9 @@ public class ChannelMessage extends AbstractMessage {
 
 	public CommandSender getSender() {
 		return chatter.getPlayer();
+	}
+	
+	public Channel getChannel() {
+		return channel;
 	}
 }

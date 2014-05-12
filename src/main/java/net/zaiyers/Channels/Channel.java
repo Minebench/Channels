@@ -36,7 +36,7 @@ public class Channel {
 	 */
 	public void subscribe(Chatter chatter) {
 		if (cfg.getBans().contains(chatter.getPlayer().getUniqueId().toString())) {
-			Channels.notify(chatter.getPlayer(), "banned-from-channel", ImmutableMap.of("channel", getName(), "channelColor", getColor().toString()));
+			Channels.notify(chatter.getPlayer(), "channels.chatter.banned-from-channel", ImmutableMap.of("channel", getName(), "channelColor", getColor().toString()));
 			chatter.unsubscribe(getUUID());
 			return;
 		}

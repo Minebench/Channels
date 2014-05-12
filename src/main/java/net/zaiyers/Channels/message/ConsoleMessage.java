@@ -6,6 +6,8 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.command.ConsoleCommandSender;
 import net.zaiyers.Channels.Channel;
+import net.zaiyers.Channels.Channels;
+import net.zaiyers.Channels.ChannelsChatEvent;
 
 public class ConsoleMessage extends AbstractMessage {
 	/**
@@ -40,11 +42,17 @@ public class ConsoleMessage extends AbstractMessage {
 	
 	public void send() {
 		processMessage();
-		
-		channel.send(this);	
+		ChannelsChatEvent chatEvent = new ChannelsChatEvent(this);
+		if (!Channels.getInstance().getProxy().getPluginManager().callEvent( chatEvent ).isCancelled()) {
+			channel.send(this);
+		}	
 	}
 
 	public CommandSender getSender() {
 		return ConsoleCommandSender.getInstance();
+	}
+	
+	public Channel getChannel() {
+		return channel;
 	}
 }

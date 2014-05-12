@@ -48,6 +48,7 @@ public class ChannelSpeakCommand extends AbstractCommand {
 			
 			if (args.length == 2) {
 				chatter.setDefaultChannelUUID(chan.getUUID());
+				chatter.setPrivateRecipient(null);
 				Channels.notify(sender, "channels.chatter.default-channel-set", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
 				return;
 			} else {

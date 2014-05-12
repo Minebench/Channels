@@ -65,4 +65,8 @@ public class MongoDBConnection {
 	public DBCollection getChannels() {
 		return channels;
 	}
+	
+	public DB getDB() {
+		return db;
+	}
 }

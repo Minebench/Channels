@@ -40,7 +40,7 @@ public class PMCommand extends AbstractCommand {
 			if (recipient != null && args.length == 1) {
 				chatter.setPrivateRecipient(recipient.getPlayer().getUniqueId().toString());
 				Channels.notify(sender, "channels.chatter.recipient-set", ImmutableMap.of("recipient", recipient.getName()));
-			} else if (chatter == null) {
+			} else if (recipient == null) {
 				//nobody matched
 				Channels.notify(sender, "channels.command.chatter-not-found", ImmutableMap.of("chatter", args[0]));
 				return;
