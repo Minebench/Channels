@@ -268,7 +268,7 @@ public class Channels extends Plugin {
 		// add colors
 		string = addSpecialChars(string);
 		
-		sender.sendMessage(new TextComponent(string));
+		sender.sendMessage(TextComponent.fromLegacyText(string));
 	}
 	
 

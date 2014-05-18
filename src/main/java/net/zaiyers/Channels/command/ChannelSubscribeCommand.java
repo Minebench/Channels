@@ -30,7 +30,7 @@ public class ChannelSubscribeCommand extends AbstractCommand {
 			}
 			
 			// check channel specific permissions
-			if (!chatter.hasPermission(chan, "subscribe")) {
+			if (!chatter.hasPermission(chan, "subscribe") && !chan.isTemporary()) {
 				Channels.notify(sender, "channels.permission.subscribe-channel", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
 				return;
 			}
