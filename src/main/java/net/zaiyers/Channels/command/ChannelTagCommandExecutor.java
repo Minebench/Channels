@@ -42,7 +42,7 @@ public class ChannelTagCommandExecutor extends Command implements TabExecutor {
 				return;
 			}
 			
-			if (!chatter.hasPermission(chan, "speak") && chan.isTemporary()) {
+			if (!chatter.hasPermission(chan, "speak")) {
 				Channels.notify(sender, "channels.permission.channel-no-speak", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
 			}
 			
