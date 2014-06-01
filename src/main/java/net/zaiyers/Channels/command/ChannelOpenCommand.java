@@ -23,6 +23,7 @@ public class ChannelOpenCommand extends ChannelCreateCommand {
 		if (channel != null) {
 			// make channel temporary
 			channel.setTemporary(true);
+			Channels.getInstance().unregisterTag(channel.getTag());
 			
 			// add sender to moderators
 			channel.addModerator(((ProxiedPlayer) sender).getUniqueId().toString());
