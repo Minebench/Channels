@@ -108,17 +108,19 @@ public class Channel {
 		}
 		
 		for (String uuid: subscribers) {
-			Chatter reciever = Channels.getInstance().getChatter(uuid);
-			if (reciever.getIgnores().contains(sender.getPlayer().getUniqueId().toString())) {
-				// I don't want to read this message
-				continue;
-			} else if (!cfg.isGlobal() && !reciever.hasPermission(this, "globalread") && !cfg.getServers().contains(reciever.getPlayer().getServer().getInfo().getName())) {
-				// channel is not distributed to this players server
-				continue;
+			Chatter receiver = Channels.getInstance().getChatter(uuid);
+			if (receiver != null) {
+				if (receiver.getIgnores().contains(sender.getPlayer().getUniqueId().toString())) {
+					// I don't want to read this message
+					continue;
+				} else if (!cfg.isGlobal() && !receiver.hasPermission(this, "globalread") && !cfg.getServers().contains(receiver.getPlayer().getServer().getInfo().getName())) {
+					// channel is not distributed to this players server
+					continue;
+				}
 			}
 			
 			// send the message
-			reciever.sendMessage(message);
+			receiver.sendMessage(message);
 		}
 	}
 	

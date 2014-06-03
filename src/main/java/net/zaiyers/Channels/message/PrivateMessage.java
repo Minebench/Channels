@@ -24,13 +24,13 @@ public class PrivateMessage extends AbstractMessage {
 	}
 
 	public void send() {		
-		if (receiver.isAFK()) {
+		if (receiver != null && receiver.isAFK()) {
 			if (receiver.getAFKMessage() != null) {
 				Channels.notify(sender.getPlayer(), "channels.chatter.is-afk-with-msg", ImmutableMap.of("chatter", receiver.getName(), "msg", receiver.getAFKMessage()));
 			} else {
 				Channels.notify(sender.getPlayer(), "channels.chatter.is-afk", ImmutableMap.of("chatter", receiver.getName()));
 			}
-		} else if (receiver.isDND()) {
+		} else if (receiver != null && receiver.isDND()) {
 			if (receiver.getDNDMessage() != null) {
 				Channels.notify(sender.getPlayer(), "channels.chatter.is-dnd-with-msg", ImmutableMap.of("chatter", receiver.getName(), "msg", receiver.getDNDMessage()));
 			} else {
