@@ -117,10 +117,10 @@ public class Channel {
 					// channel is not distributed to this players server
 					continue;
 				}
+				
+				// send the message
+				receiver.sendMessage(message);
 			}
-			
-			// send the message
-			receiver.sendMessage(message);
 		}
 	}
 	
