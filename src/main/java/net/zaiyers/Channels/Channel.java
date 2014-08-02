@@ -109,7 +109,7 @@ public class Channel {
 		
 		for (String uuid: subscribers) {
 			Chatter receiver = Channels.getInstance().getChatter(uuid);
-			if (receiver != null) {
+			if (receiver != null && receiver.getPlayer() != null) {
 				if (receiver.getIgnores().contains(sender.getPlayer().getUniqueId().toString())) {
 					// I don't want to read this message
 					continue;
