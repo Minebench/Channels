@@ -44,6 +44,7 @@ public class ChannelSpeakCommand extends AbstractCommand {
 			
 			if (!chatter.hasPermission(chan, "speak") && !chan.isTemporary()) {
 				Channels.notify(sender, "channels.permission.channel-no-speak", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
+				return;
 			}
 			
 			if (args.length == 2) {

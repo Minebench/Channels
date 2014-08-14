@@ -44,6 +44,7 @@ public class ChannelTagCommandExecutor extends Command implements TabExecutor {
 			
 			if (!chatter.hasPermission(chan, "speak")) {
 				Channels.notify(sender, "channels.permission.channel-no-speak", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
+				return;
 			}
 			
 			if (args.length == 0) {
