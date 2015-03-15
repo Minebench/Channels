@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.zaiyers</groupId>
   <artifactId>Channels</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.1-SNAPSHOT</version>
   <name>Channels</name>
   <description>A multichannel Chatplugin for BungeeCord</description>
   <repositories>
