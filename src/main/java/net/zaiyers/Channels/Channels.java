@@ -6,8 +6,8 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 
-import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -137,7 +137,7 @@ public class Channels extends Plugin {
 	 * @return
 	 */
 	public static Channels getInstance() {
-		return (Channels) BungeeCord.getInstance().getPluginManager().getPlugin("Channels");
+		return (Channels) ProxyServer.getInstance().getPluginManager().getPlugin("Channels");
 	}
 
 	/**
