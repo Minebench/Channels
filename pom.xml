@@ -15,8 +15,8 @@
     <dependencies>
         <dependency>
             <groupId>net.md-5</groupId>
-            <artifactId>bungee</artifactId>
-            <version>b908</version>
+            <artifactId>bungeecord</artifactId>
+            <version>b1052</version>
         </dependency>
         <dependency>
             <groupId>net.zaiyers</groupId>
