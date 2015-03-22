@@ -21,6 +21,7 @@ public class MessageListener implements Listener {
 	public void onMessageRecieve(ChatEvent event) {
 		if (!(event.getSender() instanceof ProxiedPlayer) || event.isCommand()) { return; }
 		
+        boolean canceled = true;
 		ProxiedPlayer player = (ProxiedPlayer) event.getSender();
 		
 		if (event.getMessage().charAt(0) == '@' && event.getMessage().length() > 0) {
@@ -74,13 +75,17 @@ public class MessageListener implements Listener {
 				Message msg = new ChannelMessage(chatter, Channels.getInstance().getChannel(chatter.getChannel()), event.getMessage());
 				ChannelsChatEvent chatEvent = new ChannelsChatEvent(msg);
 				if (!Channels.getInstance().getProxy().getPluginManager().callEvent( chatEvent ).isCancelled()) {
-					msg.send();
+                    if(Channels.getInstance().getChannel(chatter.getChannel()).isBackend()) {
+                        canceled = false;
+                    } else {
+                        msg.send();
+                    }
 				}
 			}
 		}
 		
 
 		// do not pass to server
-		event.setCancelled(true);
+		event.setCancelled(canceled);
 	}
 }

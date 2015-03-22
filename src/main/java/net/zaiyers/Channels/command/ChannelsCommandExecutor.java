@@ -44,6 +44,8 @@ public class ChannelsCommandExecutor extends Command implements TabExecutor {
 					cmd = new ChannelUnsubscribeCommand(sender, args);
 				} else if (cmdName.matches("^speak|say$")) {
 					cmd = new ChannelSpeakCommand(sender, args);
+                } else if (cmdName.equals("backend")) {
+                    cmd = new ChannelBackendCommand(sender, args);
 				} else if (cmdName.equals("global")) {
 					cmd = new ChannelGlobalCommand(sender, args);
 				} else if (cmdName.equals("addserver")) {
@@ -132,7 +134,7 @@ public class ChannelsCommandExecutor extends Command implements TabExecutor {
 		if (args.length <= 1) {
 			return matchingCommands(sender, (args.length > 0) ? args[0] : "");
 		} else if (args.length == 2) {
-			if (args[0].toLowerCase().matches("^addserver|global|remove|removeserver|addmod|ban|color|info|kick|password|removemod|rename|unban|speak|list|who|subscribe|unsubscribe$")) {
+			if (args[0].toLowerCase().matches("^addserver|global|backend|remove|removeserver|addmod|ban|color|info|kick|password|removemod|rename|unban|speak|list|who|subscribe|unsubscribe$")) {
 				return matchingChannels(args[1]);
 			} else if (args[0].toLowerCase().matches("^mute|prefix|suffix$")) {
 				return matchingPlayers(args[1]);
@@ -142,7 +144,7 @@ public class ChannelsCommandExecutor extends Command implements TabExecutor {
 		} else if (args.length == 3) {
 			if (args[0].toLowerCase().matches("^addserver|removeserver$")) {
 				return matchingServers(args[2]);
-			} else if (args[0].toLowerCase().matches("^autojoin|global$")) {
+			} else if (args[0].toLowerCase().matches("^autojoin|global|backend$")) {
 				return matchingBoolean(args[2]);
 			} else if (args[0].toLowerCase().matches("^serverdefaultchannel$")) {
 				return matchingChannels(args[2]);
@@ -198,6 +200,10 @@ public class ChannelsCommandExecutor extends Command implements TabExecutor {
 		if ("global".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelGlobalCommand.toString())) {
 			commands.add("global");
 		}
+
+        if ("backend".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelBackendCommand.toString())) {
+            commands.add("backend");
+        }
 		
 		if ("addServer".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelAddServerCommand.toString())) {
 			commands.add("addServer");

@@ -148,4 +148,15 @@ public interface ChannelConfig extends Config {
 	 * @return true if channel is global
 	 */
 	public boolean isGlobal();
+
+    /**
+     * @return true if channel sends to a backend server
+     */
+    boolean isBackend();
+
+    /**
+     * make channel send to the backend server
+     * @param backend
+     */
+    void setBackend(boolean backend);
 }

@@ -233,6 +233,14 @@ public class Channel {
 	public void setGlobal(boolean global) {
 		cfg.setGlobal(global);
 	}
+
+    /**
+     * toggle backend status
+     * @param backend
+     */
+    public void setBackend(boolean backend) {
+        cfg.setBackend(backend);
+    }
 	
 	/**
 	 * add server to distribute to
@@ -381,6 +389,14 @@ public class Channel {
 		return cfg.isGlobal();
 	}
 
+    /**
+     * Check if this channel should send to the Server behind the bungee rather then to a Channels channel
+     * @return True if we should send there, false if not
+     */
+    public boolean isBackend() {
+        return cfg.isBackend();
+    }
+    
 	public List<String> getServers() {
 		return cfg.getServers();
 	}
@@ -404,4 +420,5 @@ public class Channel {
 		}
 		cfg.removeConfig();
 	}
+
 }

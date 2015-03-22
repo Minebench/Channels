@@ -8,6 +8,7 @@ public enum CommandPermission {
 		ChannelColorCommand("channels.color"),
 		ChannelCreateCommand("channels.create"),
 		ChannelGlobalCommand("channels.global"),
+        ChannelBackendCommand("channels.backend"),
 		ChannelHelpCommand("channels.help"),
 		ChannelInfoCommand("channels.info"),
 		ChannelKickCommand("channels.kick"),
