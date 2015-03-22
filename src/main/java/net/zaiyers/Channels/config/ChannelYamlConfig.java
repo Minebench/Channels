@@ -142,4 +142,13 @@ public class ChannelYamlConfig extends YamlConfig implements ChannelConfig {
 	public boolean isGlobal() {
 		return cfg.getBoolean("global");
 	}
+
+    public void setBackend(boolean backend) {
+        cfg.set("backend", backend);
+    }
+
+    public boolean isBackend() {
+        return cfg.getBoolean("backend");
+    }
+
 }
