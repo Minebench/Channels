@@ -136,7 +136,7 @@ public class ChannelMongoConfig extends MongoConfig implements ChannelConfig {
 	}
 
 	public boolean isGlobal() {
-		return cfg.getBoolean("global");
+		return cfg.getBoolean("global", true);
 	}
 
     public void setBackend(boolean backend) {
@@ -144,6 +144,6 @@ public class ChannelMongoConfig extends MongoConfig implements ChannelConfig {
     }
     
     public boolean isBackend() {
-        return cfg.getBoolean("backend");
+        return cfg.getBoolean("backend", false);
     }
 }
