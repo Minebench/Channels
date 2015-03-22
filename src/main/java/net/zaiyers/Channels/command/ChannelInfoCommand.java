@@ -52,6 +52,7 @@ public class ChannelInfoCommand extends AbstractCommand {
 			Channels.notify(sender, "channels.command.channel-info-autojoin", ImmutableMap.of("autojoin", channel.doAutojoin() ? "true":"false"));
 			Channels.notify(sender, "channels.command.channel-info-msgFormat", ImmutableMap.of("format", (channel.getFormat() == null) ? "(none)":channel.getFormat()));
 			Channels.notify(sender, "channels.command.channel-info-global", ImmutableMap.of("global", channel.isGlobal() ? "true":"false"));
+            Channels.notify(sender, "channels.command.channel-info-backend", ImmutableMap.of("backend", channel.isBackend() ? "true":"false"));
 			String servers = "";
 			if (channel.getServers().size() > 0) {
 				servers = channel.getServers().get(0);
