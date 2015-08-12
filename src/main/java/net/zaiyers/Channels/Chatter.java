@@ -326,6 +326,14 @@ public class Chatter {
 		player.sendMessage(new TextComponent(string));
 	}
 
+    /**
+     * Send a text component
+     * @param textComponent
+     */
+    public void sendMessage(TextComponent textComponent) {
+        player.sendMessage(textComponent);
+    }
+
 	public void removeIgnore(String ignoreUUID) {
 		cfg.removeIgnore(ignoreUUID);
 	}
