@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import com.google.common.collect.ImmutableMap;
 
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.zaiyers.Channels.Channels;
@@ -65,14 +66,34 @@ public class PrivateMessage extends AbstractMessage {
                         .replaceAll("%date%", dateFormat.format(date))
                         .replaceAll("%time%", timeFormat.format(date))
         ));
-        
-        processedMessage = new TextComponent(TextComponent.fromLegacyText(
-                        Channels.getConfig().getPrivateMessageFormat(role)
-                                .replaceAll("%sender%", sender.getName())
-                                .replaceAll("%receiver%", receiver.getName())
-                                .replaceAll("%msg%", rawMessage)
-        ));
-        processedMessage.setHoverEvent(hoverTime);
+        String pmFormat = Channels.getConfig().getPrivateMessageFormat(role);
+        if(pmFormat.indexOf("%msg%") > -1) {
+            TextComponent timeComponent = new TextComponent(TextComponent.fromLegacyText(
+                    pmFormat.substring(0, pmFormat.indexOf("%receiver%") + "%receiver%".length())
+                            .replaceAll("%sender%", sender.getName())
+                            .replaceAll("%receiver%", receiver.getName())
+                            .replaceAll("%msg%", rawMessage)
+            ));
+            TextComponent msgComponent = new TextComponent(TextComponent.fromLegacyText(
+                    pmFormat.substring(pmFormat.indexOf("%receiver%") + "%receiver%".length())
+                            .replaceAll("%sender%", sender.getName())
+                            .replaceAll("%receiver%", receiver.getName())
+                            .replaceAll("%msg%", rawMessage)
+            ));
+            timeComponent.setHoverEvent(hoverTime);
+            TextComponent processedMessage = new TextComponent("");
+            processedMessage.addExtra(timeComponent);
+            processedMessage.addExtra(msgComponent);
+
+        } else {
+            processedMessage = new TextComponent(TextComponent.fromLegacyText(
+                    pmFormat
+                            .replaceAll("%sender%", sender.getName())
+                            .replaceAll("%receiver%", receiver.getName())
+                            .replaceAll("%msg%", rawMessage)
+            ));
+            processedMessage.setHoverEvent(hoverTime);
+        }
 	}
 
 	public CommandSender getSender() {
