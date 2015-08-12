@@ -40,30 +40,25 @@ public class ChannelMessage extends AbstractMessage {
 	 * generate message and format it
 	 */
 	public void processMessage() {
-        String text = channel.getFormat()
-                .replaceAll("%prefix%", 	    chatter.getPrefix())
-                .replaceAll("%sender%", 	    chatter.getName())
-                .replaceAll("%suffix%",         chatter.getSuffix())
-                .replaceAll("%msg%",            chatter.hasPermission(channel, "color") ?
-                        Channels.addSpecialChars(rawMessage) : rawMessage)
-                .replaceAll("%channelColor%",   channel.getColor().toString())
-                .replaceAll("%channelTag%",     channel.getTag())
-                .replaceAll("%channelName%",    channel.getName());
+        BaseComponent[] baseComponents = TextComponent.fromLegacyText(
+                channel.getFormat()
+                        .replaceAll("%prefix%", chatter.getPrefix())
+                        .replaceAll("%sender%", chatter.getName())
+                        .replaceAll("%suffix%", chatter.getSuffix())
+                        .replaceAll("%msg%", chatter.hasPermission(channel, "color") ?
+                                Channels.addSpecialChars(rawMessage) : rawMessage)
+                        .replaceAll("%channelColor%", channel.getColor().toString())
+                        .replaceAll("%channelTag%", channel.getTag())
+                        .replaceAll("%channelName%", channel.getName())
+        );
 
-        Date date = new Date(getTime());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        HoverEvent hoverTime = new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(dateFormat.format(date)));
-
-        if(text.indexOf(' ') != -1) {
-            BaseComponent bc = new TextComponent(TextComponent.fromLegacyText(text.substring(0, text.indexOf(' ')))).duplicate();
-            bc.setHoverEvent(hoverTime);
-            bc.addExtra(new TextComponent(TextComponent.fromLegacyText(text.substring(text.indexOf(' ')))));
-            processedMessage = new TextComponent(bc);
-        } else {
-            BaseComponent bc = new TextComponent(TextComponent.fromLegacyText(text)).duplicate();
-            bc.setHoverEvent(hoverTime);
-            processedMessage = new TextComponent(bc);
+        if(baseComponents.length > 0) {
+            Date date = new Date(getTime());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            HoverEvent hoverTime = new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(dateFormat.format(date)));
+            baseComponents[0].setHoverEvent(hoverTime);
         }
+        processedMessage = new TextComponent(baseComponents);
 	}
 	
 	/**
