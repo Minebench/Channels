@@ -81,14 +81,14 @@ public class ChannelListCommand extends AbstractCommand {
                         if (subscriber.isAFK()) {
                             TextComponent afkComponent = new TextComponent(TextComponent.fromLegacyText(ChatColor.GRAY + " (AFK)"));
                             if (subscriber.getAFKMessage() != null) {
-                                afkComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(subscriber.getAFKMessage())));
+                                afkComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(ChatColor.GRAY + "AFK: " + ChatColor.ITALIC + subscriber.getAFKMessage())));
                             }
                             chatterList.addExtra(afkComponent);
                         }
                         if (subscriber.isDND()) {
                             TextComponent dndComponent = new TextComponent(TextComponent.fromLegacyText(ChatColor.GRAY + " (DND)"));
                             if (subscriber.getDNDMessage() != null) {
-                                dndComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(subscriber.getDNDMessage())));
+                                dndComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(ChatColor.GRAY + "DND: " + ChatColor.ITALIC + subscriber.getDNDMessage())));
                             }
                             chatterList.addExtra(dndComponent);
                         }
