@@ -68,11 +68,19 @@ public class ChannelListCommand extends AbstractCommand {
 				Channels.notify(sender, "channels.chatter.channel-list-chatters", ImmutableMap.of("channel", channel.getName(), "channelColor", channel.getColor().toString()));
 				
 				if (uuids.length > 0) {
-					Chatter subscriber = Channels.getInstance().getChatter(uuids[0]);
-					String chatterList = subscriber.getPrefix()+ChatColor.WHITE+subscriber.getName()+subscriber.getSuffix()+ChatColor.WHITE;
-					for (int i=1; i<uuids.length; i++) {
-						subscriber = Channels.getInstance().getChatter(uuids[i]);
-						chatterList += ", "+subscriber.getPrefix()+ChatColor.WHITE+subscriber.getName()+subscriber.getSuffix()+ChatColor.WHITE;
+                    String chatterList = "";
+					for (int i=0; i<uuids.length; i++) {
+                        Chatter subscriber = Channels.getInstance().getChatter(uuids[i]);
+                        if (i > 0) {
+                            chatterList += ChatColor.WHITE + ", ";
+                        }
+                        chatterList += subscriber.getPrefix()+ChatColor.WHITE+subscriber.getName()+subscriber.getSuffix();
+                        if (subscriber.isAFK()) {
+                            chatterList += ChatColor.GRAY + " (AFK)";
+                        }
+                        if (subscriber.isDND()) {
+                            chatterList += ChatColor.GRAY + " (DND)";
+                        }
 					}
 					chatter.sendMessage(chatterList);
 				}
