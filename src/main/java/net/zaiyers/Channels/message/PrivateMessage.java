@@ -66,6 +66,7 @@ public class PrivateMessage extends AbstractMessage {
                         .replaceAll("%date%", dateFormat.format(date))
                         .replaceAll("%time%", timeFormat.format(date))
         ));
+        String message = (getChatter().hasPermission("channels.color")) ? Channels.addSpecialChars(rawMessage) : rawMessage;
         String pmFormat = Channels.getConfig().getPrivateMessageFormat(role);
         int offset = (pmFormat.contains("%receiver%")) ? pmFormat.indexOf("%receiver%") + "%receiver%".length() : pmFormat.indexOf("%sender%") + "%sender%".length();
         if(offset > -1) {
@@ -73,7 +74,7 @@ public class PrivateMessage extends AbstractMessage {
                     pmFormat.substring(0, offset)
                             .replaceAll("%sender%", sender.getName())
                             .replaceAll("%receiver%", receiver.getName())
-                            .replaceAll("%msg%", rawMessage)
+                            .replaceAll("%msg%", message)
             ));
             timeComponent.setHoverEvent(hoverTime);
             processedMessage = new TextComponent("");
@@ -83,7 +84,7 @@ public class PrivateMessage extends AbstractMessage {
                     pmFormat.substring(offset)
                             .replaceAll("%sender%", sender.getName())
                             .replaceAll("%receiver%", receiver.getName())
-                            .replaceAll("%msg%", rawMessage)
+                            .replaceAll("%msg%", message)
             ));
             msgComponent.setColor(timeComponent.getColor());
             processedMessage.addExtra(msgComponent);
@@ -92,7 +93,7 @@ public class PrivateMessage extends AbstractMessage {
                     pmFormat
                             .replaceAll("%sender%", sender.getName())
                             .replaceAll("%receiver%", receiver.getName())
-                            .replaceAll("%msg%", rawMessage)
+                            .replaceAll("%msg%", message)
             ));
             processedMessage.setHoverEvent(hoverTime);
         }
