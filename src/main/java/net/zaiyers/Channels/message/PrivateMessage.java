@@ -82,10 +82,9 @@ public class PrivateMessage extends AbstractMessage {
                             .replaceAll("%msg%", rawMessage)
             ));
             timeComponent.setHoverEvent(hoverTime);
-            TextComponent processedMessage = new TextComponent("");
+            processedMessage = new TextComponent("");
             processedMessage.addExtra(timeComponent);
             processedMessage.addExtra(msgComponent);
-
         } else {
             processedMessage = new TextComponent(TextComponent.fromLegacyText(
                     pmFormat
