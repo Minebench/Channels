@@ -67,15 +67,16 @@ public class PrivateMessage extends AbstractMessage {
                         .replaceAll("%time%", timeFormat.format(date))
         ));
         String pmFormat = Channels.getConfig().getPrivateMessageFormat(role);
-        if(pmFormat.indexOf("%msg%") > -1) {
+        int offset = (pmFormat.contains("%receiver%")) ? pmFormat.indexOf("%receiver%") + "%receiver%".length() : pmFormat.indexOf("%sender%") + "%sender%".length();
+        if(offset > -1) {
             TextComponent timeComponent = new TextComponent(TextComponent.fromLegacyText(
-                    pmFormat.substring(0, pmFormat.indexOf("%receiver%") + "%receiver%".length())
+                    pmFormat.substring(0, offset)
                             .replaceAll("%sender%", sender.getName())
                             .replaceAll("%receiver%", receiver.getName())
                             .replaceAll("%msg%", rawMessage)
             ));
             TextComponent msgComponent = new TextComponent(TextComponent.fromLegacyText(
-                    pmFormat.substring(pmFormat.indexOf("%receiver%") + "%receiver%".length())
+                    pmFormat.substring(offset)
                             .replaceAll("%sender%", sender.getName())
                             .replaceAll("%receiver%", receiver.getName())
                             .replaceAll("%msg%", rawMessage)
