@@ -4,6 +4,9 @@ import com.google.common.collect.ImmutableMap;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.command.ConsoleCommandSender;
 import net.zaiyers.Channels.Channel;
@@ -68,18 +71,26 @@ public class ChannelListCommand extends AbstractCommand {
 				Channels.notify(sender, "channels.chatter.channel-list-chatters", ImmutableMap.of("channel", channel.getName(), "channelColor", channel.getColor().toString()));
 				
 				if (uuids.length > 0) {
-                    String chatterList = "";
+                    TextComponent chatterList = new TextComponent();
 					for (int i=0; i<uuids.length; i++) {
                         Chatter subscriber = Channels.getInstance().getChatter(uuids[i]);
                         if (i > 0) {
-                            chatterList += ChatColor.WHITE + ", ";
+                            chatterList.addExtra(new TextComponent(TextComponent.fromLegacyText(ChatColor.WHITE + ", ")));
                         }
-                        chatterList += subscriber.getPrefix()+ChatColor.WHITE+subscriber.getName()+subscriber.getSuffix();
+                        chatterList.addExtra(new TextComponent(TextComponent.fromLegacyText(subscriber.getPrefix()+ChatColor.WHITE+subscriber.getName()+subscriber.getSuffix())));
                         if (subscriber.isAFK()) {
-                            chatterList += ChatColor.GRAY + " (AFK)";
+                            TextComponent afkComponent = new TextComponent(TextComponent.fromLegacyText(ChatColor.GRAY + " (AFK)"));
+                            if (subscriber.getAFKMessage() != null) {
+                                afkComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(subscriber.getAFKMessage())));
+                            }
+                            chatterList.addExtra(afkComponent);
                         }
                         if (subscriber.isDND()) {
-                            chatterList += ChatColor.GRAY + " (DND)";
+                            TextComponent dndComponent = new TextComponent(TextComponent.fromLegacyText(ChatColor.GRAY + " (DND)"));
+                            if (subscriber.getDNDMessage() != null) {
+                                dndComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(subscriber.getDNDMessage())));
+                            }
+                            chatterList.addExtra(dndComponent);
                         }
 					}
 					chatter.sendMessage(chatterList);
