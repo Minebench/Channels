@@ -54,8 +54,13 @@ public class ChannelMessage extends AbstractMessage {
 
         if(baseComponents.length > 0) {
             Date date = new Date(getTime());
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            HoverEvent hoverTime = new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(dateFormat.format(date)));
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+            HoverEvent hoverTime = new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(
+                    Channels.getConfig().getTimeHoverFormat()
+                            .replaceAll("%date%", dateFormat.format(date))
+                            .replaceAll("%time%", timeFormat.format(date))
+            ));
             baseComponents[0].setHoverEvent(hoverTime);
         }
         processedMessage = new TextComponent(baseComponents);

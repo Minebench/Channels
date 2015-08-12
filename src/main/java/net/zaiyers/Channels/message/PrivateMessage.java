@@ -7,8 +7,6 @@ import java.util.regex.Matcher;
 import com.google.common.collect.ImmutableMap;
 
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.zaiyers.Channels.Channels;
@@ -60,8 +58,13 @@ public class PrivateMessage extends AbstractMessage {
 	 */
 	private void processMessage(SenderRole role) {
         Date date = new Date(getTime());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        HoverEvent hoverTime = new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(dateFormat.format(date)));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+        HoverEvent hoverTime = new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(
+                Channels.getConfig().getTimeHoverFormat()
+                        .replaceAll("%date%", dateFormat.format(date))
+                        .replaceAll("%time%", timeFormat.format(date))
+        ));
         
         processedMessage = new TextComponent(TextComponent.fromLegacyText(
                         Channels.getConfig().getPrivateMessageFormat(role)
