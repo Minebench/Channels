@@ -7,7 +7,6 @@ import java.util.regex.Matcher;
 import com.google.common.collect.ImmutableMap;
 
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.zaiyers.Channels.Channels;
@@ -86,7 +85,6 @@ public class PrivateMessage extends AbstractMessage {
                             .replaceAll("%receiver%", receiver.getName())
                             .replaceAll("%msg%", message)
             ));
-            msgComponent.setColor(timeComponent.getColor());
             processedMessage.addExtra(msgComponent);
         } else {
             processedMessage = new TextComponent(TextComponent.fromLegacyText(
