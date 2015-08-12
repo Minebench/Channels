@@ -1,10 +1,13 @@
 package net.zaiyers.Channels.message;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 
 import com.google.common.collect.ImmutableMap;
 
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.Chatter;
@@ -54,11 +57,44 @@ public class PrivateMessage extends AbstractMessage {
 	 * @return
 	 */
 	private void processMessage(SenderRole role) {
-		processedMessage = new TextComponent( TextComponent.fromLegacyText(
-			Channels.getConfig().getPrivateMessageFormat(role)	.replaceAll("%sender%", sender.getName())
-																.replaceAll("%receiver%", receiver.getName())
-																.replaceAll("%msg%", rawMessage)
-		) );
+        Date date = new Date(getTime());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+        HoverEvent hoverTime = new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(
+                Channels.getConfig().getTimeHoverFormat()
+                        .replaceAll("%date%", dateFormat.format(date))
+                        .replaceAll("%time%", timeFormat.format(date))
+        ));
+        String message = (getChatter().hasPermission("channels.color")) ? Channels.addSpecialChars(rawMessage) : rawMessage;
+        String pmFormat = Channels.getConfig().getPrivateMessageFormat(role);
+        int offset = (pmFormat.contains("%receiver%")) ? pmFormat.indexOf("%receiver%") + "%receiver%".length() : pmFormat.indexOf("%sender%") + "%sender%".length();
+        if(offset > -1) {
+            TextComponent timeComponent = new TextComponent(TextComponent.fromLegacyText(
+                    pmFormat.substring(0, offset)
+                            .replaceAll("%sender%", sender.getName())
+                            .replaceAll("%receiver%", receiver.getName())
+                            .replaceAll("%msg%", message)
+            ));
+            timeComponent.setHoverEvent(hoverTime);
+            processedMessage = new TextComponent("");
+            processedMessage.addExtra(timeComponent);
+
+            TextComponent msgComponent = new TextComponent(TextComponent.fromLegacyText(
+                    pmFormat.substring(offset)
+                            .replaceAll("%sender%", sender.getName())
+                            .replaceAll("%receiver%", receiver.getName())
+                            .replaceAll("%msg%", message)
+            ));
+            processedMessage.addExtra(msgComponent);
+        } else {
+            processedMessage = new TextComponent(TextComponent.fromLegacyText(
+                    pmFormat
+                            .replaceAll("%sender%", sender.getName())
+                            .replaceAll("%receiver%", receiver.getName())
+                            .replaceAll("%msg%", message)
+            ));
+            processedMessage.setHoverEvent(hoverTime);
+        }
 	}
 
 	public CommandSender getSender() {

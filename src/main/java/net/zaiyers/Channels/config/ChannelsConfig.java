@@ -119,6 +119,14 @@ public class ChannelsConfig extends YamlConfig {
 		} else return null;
 	}
 
+    /**
+     * format for time hover
+     * @return
+     */
+    public String getTimeHoverFormat() {
+        return cfg.getString("timeHoverFormat", "§7%date% %time%");
+    }
+
 	/**
 	 * create default configuration
 	 */
