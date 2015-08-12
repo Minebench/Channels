@@ -75,15 +75,17 @@ public class PrivateMessage extends AbstractMessage {
                             .replaceAll("%receiver%", receiver.getName())
                             .replaceAll("%msg%", rawMessage)
             ));
+            timeComponent.setHoverEvent(hoverTime);
+            processedMessage = new TextComponent("");
+            processedMessage.addExtra(timeComponent);
+
             TextComponent msgComponent = new TextComponent(TextComponent.fromLegacyText(
                     pmFormat.substring(offset)
                             .replaceAll("%sender%", sender.getName())
                             .replaceAll("%receiver%", receiver.getName())
                             .replaceAll("%msg%", rawMessage)
             ));
-            timeComponent.setHoverEvent(hoverTime);
-            processedMessage = new TextComponent("");
-            processedMessage.addExtra(timeComponent);
+            msgComponent.setColor(timeComponent.getColor());
             processedMessage.addExtra(msgComponent);
         } else {
             processedMessage = new TextComponent(TextComponent.fromLegacyText(
