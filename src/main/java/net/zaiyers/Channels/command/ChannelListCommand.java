@@ -71,7 +71,7 @@ public class ChannelListCommand extends AbstractCommand {
 				Channels.notify(sender, "channels.chatter.channel-list-chatters", ImmutableMap.of("channel", channel.getName(), "channelColor", channel.getColor().toString()));
 				
 				if (uuids.length > 0) {
-                    TextComponent chatterList = new TextComponent();
+                    TextComponent chatterList = new TextComponent("");
 					for (int i=0; i<uuids.length; i++) {
                         Chatter subscriber = Channels.getInstance().getChatter(uuids[i]);
                         if (i > 0) {
