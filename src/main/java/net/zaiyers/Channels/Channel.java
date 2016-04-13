@@ -106,15 +106,16 @@ public class Channel {
 			Channels.notify(sender.getPlayer(), "channels.command.channel-not-available", ImmutableMap.of("channelColor", getColor().toString(), "channel", getName(), "server", serverName));
 			return;
 		}
-		
-		for (String uuid: subscribers) {
+
+		List<String> subCur = new ArrayList<String>(subscribers);
+		for (String uuid: subCur) {
 			Chatter receiver = Channels.getInstance().getChatter(uuid);
 			if (receiver != null && receiver.getPlayer() != null) {
 				if (receiver.getIgnores().contains(sender.getPlayer().getUniqueId().toString())) {
 					// I don't want to read this message
 					continue;
 				} else if (!cfg.isGlobal() && !receiver.hasPermission(this, "globalread") && !cfg.getServers().contains(receiver.getPlayer().getServer().getInfo().getName())) {
-					// channel is not distributed to this players server
+					// channel is not distributed to this player's server
 					continue;
 				}
 				
