@@ -114,7 +114,7 @@ public class Channel {
 				if (receiver.getIgnores().contains(sender.getPlayer().getUniqueId().toString())) {
 					// I don't want to read this message
 					continue;
-				} else if (!cfg.isGlobal() && !receiver.hasPermission(this, "globalread") && !cfg.getServers().contains(receiver.getPlayer().getServer().getInfo().getName())) {
+				} else if (!cfg.isGlobal() && !receiver.hasPermission(this, "globalread") && receiver.getPlayer().getServer() != null && !cfg.getServers().contains(receiver.getPlayer().getServer().getInfo().getName())) {
 					// channel is not distributed to this player's server
 					continue;
 				}
