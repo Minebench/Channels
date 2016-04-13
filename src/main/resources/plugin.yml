@@ -1,4 +1,4 @@
 name: Channels
 main: net.zaiyers.Channels.Channels
-version: 1.1
+version: '${minecraft.plugin.version}'
 author: zaiyers
