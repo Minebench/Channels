@@ -5,7 +5,7 @@ public enum CommandPermission {
 		ChannelAddServerCommand("channels.addserver"),
 		ChannelAutojoinCommand("channels.autojoin"),
 		ChannelBanCommand("channels.ban"),
-		ChannelColorCommand("channels.color"),
+		ChannelColorCommand("channels.setcolor"),
 		ChannelCreateCommand("channels.create"),
 		ChannelGlobalCommand("channels.global"),
         ChannelBackendCommand("channels.backend"),

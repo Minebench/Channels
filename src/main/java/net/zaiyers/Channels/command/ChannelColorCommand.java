@@ -36,7 +36,7 @@ public class ChannelColorCommand extends AbstractCommand {
 			return;
 		}
 		
-		if (!(sender instanceof ConsoleCommandSender) && !chan.isMod(((ProxiedPlayer) sender).getUniqueId().toString()) && !sender.hasPermission("channels.color.foreign")) {
+		if (!(sender instanceof ConsoleCommandSender) && !chan.isMod(((ProxiedPlayer) sender).getUniqueId().toString()) && !sender.hasPermission("channels.setcolor.foreign")) {
 			Channels.notify(sender, "channels.command.channel-no-permission");
 			return;
 		}
