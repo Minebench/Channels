@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import com.mongodb.DBCursor;
@@ -100,7 +99,7 @@ public class ChannelsConfig extends YamlConfig {
 	
 	/**
 	 * save name of default channel
-	 * @param name
+	 * @param id
 	 */
 	public void setDefaultChannelId(int id) {
 		cfg.set("defaultChannelUUID", id);
@@ -151,10 +150,7 @@ public class ChannelsConfig extends YamlConfig {
 	 * @param string
 	 */
 	public void setServerDefaultChannel(String serverName, String string, boolean force) {
-		@SuppressWarnings("unchecked")
-		Map<String, String> serverDefaultChannels = (Map<String, String>) cfg.get("serverDefaultChannels");
-		serverDefaultChannels.put(serverName, string);
-		cfg.set("serverDefaultChannels", serverDefaultChannels);
+		cfg.set("serverDefaultChannels." + serverName, string);
 		
 		// force default channel
 		List<String> serverList = cfg.getStringList("forceServerDefaultChannel");
@@ -167,9 +163,7 @@ public class ChannelsConfig extends YamlConfig {
 	}
 
 	public String getServerDefaultChannel(String serverName) {
-		@SuppressWarnings("unchecked")
-		Map<String, String> serverDefaultChannels = (Map<String, String>) cfg.get("serverDefaultChannels");
-		return (serverDefaultChannels.get(serverName) != null) ? serverDefaultChannels.get(serverName) : null;
+		return cfg.getString("serverDefaultChannels." + serverName);
 	}
 	
 	public boolean forceServerDefaultChannel(String serverName) {
