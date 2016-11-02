@@ -13,7 +13,6 @@ import net.zaiyers.Channels.config.ChannelMongoConfig;
 import net.zaiyers.Channels.config.ChannelYamlConfig;
 import net.zaiyers.Channels.message.ChannelMessage;
 import net.zaiyers.Channels.message.ConsoleMessage;
-import net.zaiyers.bungee.UUIDDB.UUIDDB;
 
 public class Channel {
 	/**
@@ -329,7 +328,7 @@ public class Channel {
 		}
 		
 		// announce
-		String banned = UUIDDB.getInstance().getNameByUUID(chatterUUID);
+		String banned = Channels.getPlayerName(chatterUUID);
 		for (String subscriber: subscribers) {
 			Channels.notify(Channels.getInstance().getChatter(subscriber).getPlayer(), "channels.chatter.banned-from-channel", ImmutableMap.of(
 					"chatter", banned,
@@ -353,7 +352,7 @@ public class Channel {
 		// announce
 		for (String subscriber: subscribers) {
 			Channels.notify(Channels.getInstance().getChatter(subscriber).getPlayer(), "channels.chatter.kicked-from-channel", ImmutableMap.of(
-					"chatter", UUIDDB.getInstance().getNameByUUID(chatterUUID),
+					"chatter", Channels.getPlayerName(chatterUUID),
 					"channelColor", getColor().toString(),
 					"channel", getName()
 			));
@@ -368,7 +367,7 @@ public class Channel {
 		cfg.removeBan(chatterUUID);
 		
 		// announce
-		String banned = UUIDDB.getInstance().getNameByUUID(chatterUUID);
+		String banned = Channels.getPlayerName(chatterUUID);
 		for (String subscriber: subscribers) {
 			Channels.notify(Channels.getInstance().getChatter(subscriber).getPlayer(), "channels.chatter.unbanned-from-channel", ImmutableMap.of(
 					"chatter", banned,

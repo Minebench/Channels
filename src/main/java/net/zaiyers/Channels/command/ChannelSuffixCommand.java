@@ -6,7 +6,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.config.ChatterYamlConfig;
-import net.zaiyers.bungee.UUIDDB.UUIDDB;
+
 
 public class ChannelSuffixCommand extends AbstractCommand {
 
@@ -39,7 +39,7 @@ public class ChannelSuffixCommand extends AbstractCommand {
 		value = value.replaceAll("([&#]([a-fk-or0-9]))", "\u00A7$2");
 		
 		if (player == null) {
-			chatterUUID = UUIDDB.getInstance().getUUIDByName(args[1]);
+			chatterUUID = Channels.getPlayerId(args[1]);
 			if (chatterUUID == null) {
 				Channels.notify(sender, "channels.command.chatter-not-found", ImmutableMap.of("chatter", args[1]));
 				return;
@@ -49,7 +49,7 @@ public class ChannelSuffixCommand extends AbstractCommand {
 			cfg.setSuffix(value);
 			cfg.save();
 			
-			Channels.notify(player, "channels.chatter.set-suffix", ImmutableMap.of("chatter", UUIDDB.getInstance().getNameByUUID(chatterUUID), "suffix", value));
+			Channels.notify(player, "channels.chatter.set-suffix", ImmutableMap.of("chatter", Channels.getPlayerName(chatterUUID), "suffix", value));
 		} else {
 			chatterUUID = player.getUniqueId().toString();
 			Channels.getInstance().getChatter(chatterUUID).setSuffix(value);

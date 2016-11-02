@@ -8,7 +8,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.Chatter;
-import net.zaiyers.bungee.UUIDDB.UUIDDB;
+
 
 public class IgnoreCommand extends AbstractCommand {
 
@@ -42,7 +42,7 @@ public class IgnoreCommand extends AbstractCommand {
 				ignoreName = ignore.getName();
 			} else {
 				// try uuiddb
-				ignoreUUID = UUIDDB.getInstance().getUUIDByName(ignoreName);
+				ignoreUUID = Channels.getPlayerId(ignoreName);
 				if (ignoreUUID == null) {
 					Channels.notify(sender, "channels.command.chatter-not-found", ImmutableMap.of("chatter", ignoreName));
 					return; // i don't know a player by that name
@@ -62,9 +62,9 @@ public class IgnoreCommand extends AbstractCommand {
 			Chatter chatter = Channels.getInstance().getChatter( ((ProxiedPlayer) sender).getUniqueId().toString() );
 			List<String> ignores = chatter.getIgnores();
 			if (ignores.size() > 0) {
-				String ignoreList = UUIDDB.getInstance().getNameByUUID(ignores.get(0));
+				String ignoreList = Channels.getPlayerName(ignores.get(0));
 				for (int i=1; i<ignores.size(); i++) {
-					ignoreList+=", "+UUIDDB.getInstance().getNameByUUID(ignores.get(i));
+					ignoreList+=", "+Channels.getPlayerName(ignores.get(i));
 				}
 				
 				Channels.notify(sender, "channels.command.ignore-list-head");

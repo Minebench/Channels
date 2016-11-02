@@ -8,7 +8,6 @@ import net.md_5.bungee.command.ConsoleCommandSender;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.Chatter;
-import net.zaiyers.bungee.UUIDDB.UUIDDB;
 
 public class ChannelInfoCommand extends AbstractCommand {
 
@@ -64,17 +63,17 @@ public class ChannelInfoCommand extends AbstractCommand {
 			Channels.notify(sender, "channels.command.channel-info-temp", ImmutableMap.of("temporary", channel.isTemporary() ? "true":"false"));
 			String moderators = "";
 			if (channel.getModerators().size() > 0) {
-				moderators = UUIDDB.getInstance().getNameByUUID(channel.getModerators().get(0));
+				moderators = Channels.getPlayerName(channel.getModerators().get(0));
 				for (int i = 1; i<channel.getModerators().size(); i++) {
-					moderators+=", "+UUIDDB.getInstance().getNameByUUID(channel.getModerators().get(i));
+					moderators+=", "+Channels.getPlayerName(channel.getModerators().get(i));
 				}
 			}
 			Channels.notify(sender, "channels.command.channel-info-moderators", ImmutableMap.of("moderators", moderators));
 			String bans = "";
 			if (channel.getBans().size() > 0) {
-				bans = UUIDDB.getInstance().getNameByUUID(channel.getBans().get(0));
+				bans = Channels.getPlayerName(channel.getBans().get(0));
 				for (int i = 1; i<channel.getBans().size(); i++) {
-					bans+=", "+UUIDDB.getInstance().getNameByUUID(channel.getBans().get(i));
+					bans+=", "+Channels.getPlayerName(channel.getBans().get(i));
 				}
 			}
 			Channels.notify(sender, "channels.command.channel-info-bans", ImmutableMap.of("bans", bans));

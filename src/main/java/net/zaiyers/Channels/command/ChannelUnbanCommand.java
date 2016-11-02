@@ -7,7 +7,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.command.ConsoleCommandSender;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
-import net.zaiyers.bungee.UUIDDB.UUIDDB;
+
 
 public class ChannelUnbanCommand extends AbstractCommand {
 
@@ -27,16 +27,10 @@ public class ChannelUnbanCommand extends AbstractCommand {
 			return;
 		}
 		
-		String chatterUUID;
-		ProxiedPlayer player = Channels.getInstance().getProxy().getPlayer(args[2]);
-		if (player == null) {
-			chatterUUID = UUIDDB.getInstance().getUUIDByName(args[2]);
-			if (chatterUUID == null) {
-				Channels.notify(sender, "channels.command.chatter-not-found", ImmutableMap.of("chatter", args[2]));
-				return;
-			}
-		} else {
-			chatterUUID = player.getUniqueId().toString();
+		String chatterUUID = Channels.getPlayerId(args[2]);
+		if (chatterUUID == null) {
+			Channels.notify(sender, "channels.command.chatter-not-found", ImmutableMap.of("chatter", args[2]));
+			return;
 		}
 		
 		chan.unbanChatter(chatterUUID);
