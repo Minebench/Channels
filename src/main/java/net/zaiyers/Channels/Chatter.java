@@ -2,7 +2,13 @@ package net.zaiyers.Channels;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
+import me.lucko.luckperms.api.Contexts;
+import me.lucko.luckperms.api.User;
+import me.lucko.luckperms.api.caching.MetaData;
+import me.lucko.luckperms.api.caching.UserData;
+import me.lucko.luckperms.api.context.MutableContextSet;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.zaiyers.Channels.config.ChatterConfig;
@@ -132,6 +138,19 @@ public class Chatter {
 	 * get my prefix
 	 */
 	public String getPrefix() {
+		if (Channels.getLuckPermsApi() != null) {
+			User lpUser = Channels.getLuckPermsApi().getUser(player.getUniqueId());
+            if (lpUser != null) {
+                Optional<UserData> userData = lpUser.getUserDataCache();
+                if (userData.isPresent()) {
+                    MetaData metaData = userData.get().getMetaData(makeContexts());
+                    String prefix = metaData.getPrefix();
+                    if (prefix != null) {
+                        return prefix;
+                    }
+                }
+            }
+		}
 		return cfg.getPrefix();
 	}
 	
@@ -139,9 +158,28 @@ public class Chatter {
 	 * get my suffix
 	 */
 	public String getSuffix() {
-		return cfg.getSuffix();
+        if (Channels.getLuckPermsApi() != null) {
+            User lpUser = Channels.getLuckPermsApi().getUser(player.getUniqueId());
+            if (lpUser != null) {
+                Optional<UserData> userData = lpUser.getUserDataCache();
+                if (userData.isPresent()) {
+                    MetaData metaData = userData.get().getMetaData(makeContexts());
+                    String suffix = metaData.getSuffix();
+                    if (suffix != null) {
+                        return suffix;
+                    }
+                }
+            }
+        }
+        return cfg.getSuffix();
 	}
-	
+
+    private Contexts makeContexts() {
+        MutableContextSet contextSet = new MutableContextSet();
+        contextSet.add("server", player.getServer().getInfo().getName());
+        return Contexts.of(contextSet.makeImmutable(), true, true, true, true, true, false);
+    }
+
 	/**
 	 * person who last wrote me
 	 */

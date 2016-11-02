@@ -6,6 +6,8 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 
+import me.lucko.luckperms.LuckPerms;
+import me.lucko.luckperms.api.LuckPermsApi;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
@@ -46,8 +48,13 @@ public class Channels extends Plugin {
 	 * command executors for channel tags
 	 */
 	private HashMap<String, ChannelTagCommandExecutor> tagCommandExecutors = new HashMap<String, ChannelTagCommandExecutor>();
-		
-	/**
+
+    /**
+     * Soft depend on LuckPerms
+     */
+    private static LuckPermsApi luckPermsApi = null;
+
+    /**
 	 * executed on startup
 	 */
 	public void onEnable() {
@@ -70,6 +77,10 @@ public class Channels extends Plugin {
 			
 			return;
 		}
+
+		if (getProxy().getPluginManager().getPlugin("LuckPerms") != null) {
+            luckPermsApi = LuckPerms.getApi();
+        }
 		
 		// load listeners
 		MessageListener ml = new MessageListener();
@@ -338,4 +349,8 @@ public class Channels extends Plugin {
 			}
 		}
 	}
+
+    public static LuckPermsApi getLuckPermsApi() {
+        return luckPermsApi;
+    }
 }
