@@ -29,7 +29,9 @@ import net.zaiyers.UUIDDB.bungee.UUIDDB;
 import net.zaiyers.UUIDDB.core.UUIDDBPlugin;
 
 public class Channels extends Plugin {
-	/**
+    private static Channels instance;
+
+    /**
 	 * List of Chatters
 	 */
 	private Map<String, Chatter> chatters = new HashMap<>();
@@ -65,6 +67,8 @@ public class Channels extends Plugin {
 	 * executed on startup
 	 */
 	public void onEnable() {
+        instance = this;
+
 		// load configuration
 		try {
 			config = new ChannelsConfig(getDataFolder()+"/config.yml");
@@ -165,7 +169,7 @@ public class Channels extends Plugin {
 	 * @return
 	 */
 	public static Channels getInstance() {
-		return (Channels) ProxyServer.getInstance().getPluginManager().getPlugin("Channels");
+        return instance;
 	}
 
 	/**
@@ -195,7 +199,7 @@ public class Channels extends Plugin {
 	 */
 	public Chatter getChatterByName(String name) {
 		name = name.toLowerCase();
-		for (Chatter onlinechatter: chatters.values().toArray(new Chatter[Channels.getInstance().getChatters().size()])) {
+		for (Chatter onlinechatter: chatters.values().toArray(new Chatter[getChatters().size()])) {
 			if (onlinechatter != null && onlinechatter.getName().toLowerCase().startsWith(name)) {
 				return onlinechatter;
 			}
