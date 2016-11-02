@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
@@ -307,18 +309,11 @@ public class ChannelsCommandExecutor extends Command implements TabExecutor {
 	 * @return
 	 */
 	public static Iterable<String> matchingPlayers(final String s) {
-		return Iterables.transform( Iterables.filter(ProxyServer.getInstance().getPlayers(),
-			new Predicate<ProxiedPlayer>() {
-				public boolean apply(ProxiedPlayer player) {
-					return player.getName().toLowerCase().startsWith(s.toLowerCase());
-				}
-			}),	
-			new Function<ProxiedPlayer, String>() {
-				public String apply(ProxiedPlayer player) {
-					return player.getName();
-				}
-			}
-		);
+		return ProxyServer.getInstance().getPlayers().stream().filter(
+		        player -> player.getName().toLowerCase().startsWith(s.toLowerCase())
+        ).collect(Collectors.toList()).stream().map(
+                CommandSender::getName
+        ).collect(Collectors.toList());
 	}
 	
 	/**
@@ -327,18 +322,11 @@ public class ChannelsCommandExecutor extends Command implements TabExecutor {
 	 * @return
 	 */
 	private static Iterable<String> matchingChannels(final String s) {
-		return Iterables.transform( Iterables.filter(Channels.getInstance().getChannels().values(),
-			new Predicate<Channel>() {
-				public boolean apply(Channel channel) {
-					return channel.getName().toLowerCase().startsWith(s.toLowerCase());
-				}
-			}),	
-			new Function<Channel, String>() {
-				public String apply(Channel channel) {
-					return channel.getName();
-				}
-			}
-		);
+		return Channels.getInstance().getChannels().values().stream().filter(
+				channel -> channel.getName().toLowerCase().startsWith(s.toLowerCase())
+		).collect(Collectors.toList()).stream().map(
+				Channel::getName
+		).collect(Collectors.toList());
 	}
 	
 	/**
@@ -347,17 +335,11 @@ public class ChannelsCommandExecutor extends Command implements TabExecutor {
 	 * @return
 	 */
 	private static Iterable<String> matchingServers(final String s) {
-		return Iterables.transform( Iterables.filter(ProxyServer.getInstance().getServers().values(), new Predicate<ServerInfo>() {
-				public boolean apply(ServerInfo info) {
-					return info.getName().toLowerCase().startsWith(s.toLowerCase());
-				}
-			
-			}) , new Function<ServerInfo, String>() {
-				public String apply(ServerInfo info) {
-					return info.getName();
-				}
-			}
-		);
+		return StreamSupport.stream(ProxyServer.getInstance().getServers().values().stream().filter(
+				info -> info.getName().toLowerCase().startsWith(s.toLowerCase())
+		).collect(Collectors.toList()).spliterator(), false).map(
+				ServerInfo::getName
+		).collect(Collectors.toList());
 	}
 	
 	/**
@@ -381,18 +363,10 @@ public class ChannelsCommandExecutor extends Command implements TabExecutor {
 	 * @return
 	 */
 	private static Iterable<String> matchingColors(final String s) {
-		return Iterables.transform(Iterables.filter(Arrays.asList( ChatColor.values() ),
-			new Predicate<ChatColor>() {
-				public boolean apply(ChatColor color) {
-					return color.toString().toLowerCase().startsWith(s.toLowerCase());
-				}
-			
-			}),
-			new Function<ChatColor, String>() {
-				public String apply(ChatColor color) {
-					return color.toString();
-				}
-			}
-		);
+		return Arrays.stream(ChatColor.values()).filter(
+				color -> color.toString().toLowerCase().startsWith(s.toLowerCase())
+		).collect(Collectors.toList()).stream().map(
+				ChatColor::toString
+		).collect(Collectors.toList());
 	}
 }
