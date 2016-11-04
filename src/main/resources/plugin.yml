@@ -2,4 +2,4 @@ name: Channels
 main: net.zaiyers.Channels.Channels
 version: '${minecraft.plugin.version}'
 author: zaiyers
-softdepend: [UUIDDB, LuckPerms]
+softDepends: [UUIDDB, LuckPerms]
