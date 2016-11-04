@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.command.ConsoleCommandSender;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.Chatter;
@@ -32,7 +31,7 @@ public class ChannelSpeakCommand extends AbstractCommand {
 			return;
 		}
 		
-		if (sender instanceof ConsoleCommandSender) {
+		if (!(sender instanceof ProxiedPlayer)) {
 			msg = new ConsoleMessage(chan, argsToMessage(args));
 		} else {
 			Chatter chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUniqueId().toString());

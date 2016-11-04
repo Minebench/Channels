@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.command.ConsoleCommandSender;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.Chatter;
@@ -16,13 +15,10 @@ public class ChannelInfoCommand extends AbstractCommand {
 	}
 
 	public void execute() {
-		boolean isConsoleCommand = (sender instanceof ConsoleCommandSender);
+		boolean isConsoleCommand = !(sender instanceof ProxiedPlayer);
 		Chatter chatter = null;
-		if (!isConsoleCommand && sender instanceof ProxiedPlayer) {
+		if (!isConsoleCommand) {
 			chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUniqueId().toString());
-		} else {
-			// possible? don't care then ...
-			return;
 		}
 		
 		Channel channel = null;
@@ -30,7 +26,7 @@ public class ChannelInfoCommand extends AbstractCommand {
 			channel = Channels.getInstance().getChannel(args[1]);
 		} else if (args.length == 1 && !isConsoleCommand) {
 			channel = Channels.getInstance().getChannel(chatter.getChannel());
-		} else if (!isConsoleCommand) {
+		} else {
 			Channels.notify(sender, "channels.chatter.has-no-channel");
 			return;
 		}

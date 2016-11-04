@@ -6,7 +6,6 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.TabExecutor;
-import net.md_5.bungee.command.ConsoleCommandSender;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.ChannelsChatEvent;
@@ -32,7 +31,7 @@ public class ChannelTagCommandExecutor extends Command implements TabExecutor {
 		Message msg;
 		Channel chan = Channels.getInstance().getChannel(channelUUID);
 		
-		if (sender instanceof ConsoleCommandSender) {
+		if (!(sender instanceof ProxiedPlayer)) {
 			msg = new ConsoleMessage(chan, argsToMessage(args));
 		} else {
 			Chatter chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUniqueId().toString());

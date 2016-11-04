@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.command.ConsoleCommandSender;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 
@@ -25,7 +24,7 @@ public class ChannelPasswordCommand extends AbstractCommand implements ChannelsC
 		}
 		
 		// check perms
-		if (!(sender instanceof ConsoleCommandSender) && !chan.isMod(((ProxiedPlayer) sender).getUniqueId().toString()) && !sender.hasPermission("channels.password.foreign")) {
+		if (sender instanceof ProxiedPlayer && !chan.isMod(((ProxiedPlayer) sender).getUniqueId().toString()) && !sender.hasPermission("channels.password.foreign")) {
 			Channels.notify(sender, "channels.command.channel-no-permission");
 			return;
 		}

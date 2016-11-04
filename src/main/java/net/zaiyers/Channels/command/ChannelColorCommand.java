@@ -6,7 +6,6 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.command.ConsoleCommandSender;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 
@@ -36,7 +35,7 @@ public class ChannelColorCommand extends AbstractCommand {
 			return;
 		}
 		
-		if (!(sender instanceof ConsoleCommandSender) && !chan.isMod(((ProxiedPlayer) sender).getUniqueId().toString()) && !sender.hasPermission("channels.setcolor.foreign")) {
+		if (sender instanceof ProxiedPlayer  && !chan.isMod(((ProxiedPlayer) sender).getUniqueId().toString()) && !sender.hasPermission("channels.setcolor.foreign")) {
 			Channels.notify(sender, "channels.command.channel-no-permission");
 			return;
 		}

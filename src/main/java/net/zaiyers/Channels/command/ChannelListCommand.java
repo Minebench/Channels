@@ -4,11 +4,9 @@ import com.google.common.collect.ImmutableMap;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.command.ConsoleCommandSender;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.Chatter;
@@ -20,13 +18,10 @@ public class ChannelListCommand extends AbstractCommand {
 	}
 
 	public void execute() {
-		boolean isConsoleCommand = (sender instanceof ConsoleCommandSender);
+		boolean isConsoleCommand = !(sender instanceof ProxiedPlayer );
 		Chatter chatter = null;
-		if (!isConsoleCommand && sender instanceof ProxiedPlayer) {
+		if (!isConsoleCommand) {
 			chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUniqueId().toString());
-		} else {
-			// possible? don't care then ...
-			return;
 		}
 		
 		if (args.length == 1 && args[0].equalsIgnoreCase("list")) {
@@ -47,14 +42,14 @@ public class ChannelListCommand extends AbstractCommand {
 							)
 						)
 				) {
-						chatter.sendMessage(" - " + channel.getColor() + channel.getTag() + " - " + channel.getName() + ChatColor.WHITE + " (" + ((channel.getPassword().isEmpty()) ? "public":"private") + ")");
+						sender.sendMessage(" - " + channel.getColor() + channel.getTag() + " - " + channel.getName() + ChatColor.WHITE + " (" + ((channel.getPassword().isEmpty()) ? "public":"private") + ")");
 				}
 			}
 		} else if (args.length == 2 || (args.length == 1 && args[0].equalsIgnoreCase("who") && !isConsoleCommand)) {
 			Channel channel = null;
 			if (args.length == 2) {
 				channel = Channels.getInstance().getChannel(args[1]);
-			} else if (chatter.getChannel() != null) {
+			} else if (!isConsoleCommand && chatter.getChannel() != null) {
 				channel = Channels.getInstance().getChannel(chatter.getChannel());
 			} else {
 				Channels.notify(sender, "channels.chatter.has-no-channel");
@@ -93,7 +88,7 @@ public class ChannelListCommand extends AbstractCommand {
                             chatterList.addExtra(dndComponent);
                         }
 					}
-					chatter.sendMessage(chatterList);
+					sender.sendMessage(chatterList);
 				}
 			} else {
 				Channels.notify(sender, "channels.permission.list-channel", ImmutableMap.of("channel", channel.getName(), "channelColor", channel.getColor().toString()));

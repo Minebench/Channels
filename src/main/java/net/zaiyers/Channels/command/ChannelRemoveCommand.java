@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.command.ConsoleCommandSender;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 
@@ -16,7 +15,7 @@ public class ChannelRemoveCommand extends AbstractCommand {
 	public void execute() {
 		Channel channel = Channels.getInstance().getChannel(args[1]);
 		if (channel != null) {
-			if (!(sender instanceof ConsoleCommandSender) && !channel.isMod(((ProxiedPlayer) sender).getUniqueId().toString()) && !sender.hasPermission("channels.remove.foreign")) {
+			if (sender instanceof ProxiedPlayer && !channel.isMod(((ProxiedPlayer) sender).getUniqueId().toString()) && !sender.hasPermission("channels.remove.foreign")) {
 				Channels.notify(sender, "channels.command.channel-no-permission");
 				return;
 			}

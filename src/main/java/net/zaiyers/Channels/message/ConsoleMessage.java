@@ -3,8 +3,8 @@ package net.zaiyers.Channels.message;
 import java.util.regex.Matcher;
 
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.command.ConsoleCommandSender;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.ChannelsChatEvent;
@@ -17,8 +17,7 @@ public class ConsoleMessage extends AbstractMessage {
 	
 	/**
 	 * constructor
-	 * 
-	 * @param chatter
+	 *
 	 * @param channel
 	 * @param rawMessage
 	 */
@@ -49,7 +48,7 @@ public class ConsoleMessage extends AbstractMessage {
 	}
 
 	public CommandSender getSender() {
-		return ConsoleCommandSender.getInstance();
+		return ProxyServer.getInstance().getConsole();
 	}
 	
 	public Channel getChannel() {
