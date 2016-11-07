@@ -41,6 +41,11 @@
             <version>2.13</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>2.11.4</version>
+        </dependency>
     </dependencies>
 
     <properties>
@@ -95,6 +100,35 @@
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.4.3</version>
+                <configuration>
+                    <artifactSet>
+                        <includes>
+                            <include>org.mongodb:mongo-java-driver</include>
+                        </includes>
+                    </artifactSet>
+                    <relocations>
+                        <relocation>
+                            <pattern>com.mongodb</pattern>
+                            <shadedPattern>net.zaiyers.Channels.lib.mongodb</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.bson</pattern>
+                            <shadedPattern>net.zaiyers.Channels.lib.bson</shadedPattern>
+                        </relocation>
+                    </relocations>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
