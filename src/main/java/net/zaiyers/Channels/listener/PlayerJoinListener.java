@@ -22,8 +22,12 @@ public class PlayerJoinListener implements Listener {
 					// I'm allowed to join
 					if (chatter.hasPermission(Channels.getInstance().getChannel(channelUUID), "subscribe")) {
 						Channels.getInstance().getChannel(channelUUID).subscribe(chatter);
-					} else if (channelUUID.equals(Channels.getConfig().getDefaultChannelUUID())) {
-						Channels.getInstance().getLogger().warning("Chatter '"+chatter.getName()+"' is not allowed to join the default channel");
+					} else {
+						// chatter no longer has permission for this channel - remove from chatter config
+						chatter.unsubscribe(channelUUID);
+						if (channelUUID.equals(Channels.getConfig().getDefaultChannelUUID())) {
+							Channels.getInstance().getLogger().warning("Chatter '"+chatter.getName()+"' is not allowed to join the default channel");
+						}
 					}
 				} else {
 					// channel has been removed - remove from player config
