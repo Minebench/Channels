@@ -3,6 +3,7 @@ package net.zaiyers.Channels.config;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import net.md_5.bungee.api.ChatColor;
 import net.zaiyers.Channels.Channels;
 
 public class LanguageConfig extends YamlConfig {
@@ -26,7 +27,7 @@ public class LanguageConfig extends YamlConfig {
 		if (cfg.getString(key, "").isEmpty()) {
 			return "§cUnknown language key: §6"+key;
 		} else {
-			return cfg.getString(key); 
+			return ChatColor.translateAlternateColorCodes('&', cfg.getString(key));
 		}
 	}
 }
