@@ -179,3 +179,4 @@ channels:
       list-channel: '§cYou are not allowed see members of %channelColor%%channel%'
       list-channel: '§cYou are not allowed see info for channel %channelColor%%channel%'
       insufficient-permission: '§cYou do not have permission: §6%permission%'
+      channel-no-speak: "§cYou are not allowed to speak in the channel %channelColor%%channel%§c!"
