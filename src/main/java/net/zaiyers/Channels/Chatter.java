@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+import com.google.common.collect.ImmutableMap;
 import me.lucko.luckperms.api.Contexts;
 import me.lucko.luckperms.api.User;
 import me.lucko.luckperms.api.caching.MetaData;
@@ -112,6 +113,33 @@ public class Chatter {
 		subs.remove(uuid);
 		
 		cfg.setSubscriptions(subs);
+
+        // if removed channel is currently focused one switch to server default channel
+        if (uuid.equals(getChannel())) {
+            Channel chan = Channels.getInstance().getChannel(Channels.getConfig().getServerDefaultChannel(player.getServer().getInfo().getName()));
+
+            if (chan == null) {
+                // server doesn't have default channel
+                for (String channelId : subs) {
+                    // search for one in his subscription that he can speak in
+                    chan = Channels.getInstance().getChannel(channelId);
+                    if (chan.doAutojoin() && !chan.isTemporary() && hasPermission(chan, "speak")) {
+                        // he can speak in the channel! Yay \o/
+                        break;
+                    }
+                    // can't speak in channel, reset to null
+                    chan = null;
+                }
+            }
+
+            if (chan != null && hasPermission(chan, "subscribe")) {
+                setDefaultChannelUUID(chan.getUUID());
+                subscribe(chan.getUUID());
+                if (getLastRecipient() == null) {
+                    Channels.notify(getPlayer(), "channels.chatter.default-channel-set", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
+                }
+            } // player is screwed and wont be able to speak
+        }
 		
 		// unsubscribe from channel
 		if (Channels.getInstance().getChannel(uuid) != null) {
