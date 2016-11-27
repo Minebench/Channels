@@ -20,7 +20,7 @@ public class ChannelUnsubscribeCommand extends AbstractCommand implements Channe
 			return;
 		}
 						
-		Chatter chatter = Channels.getInstance().getChatter( ((ProxiedPlayer) sender).getUniqueId().toString() );
+		Chatter chatter = Channels.getInstance().getChatter( ((ProxiedPlayer) sender).getUniqueId());
 		Channel chan = Channels.getInstance().getChannel(args[1]);
 
 		// no such channel

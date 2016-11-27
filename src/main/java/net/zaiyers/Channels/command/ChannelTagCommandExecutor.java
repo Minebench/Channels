@@ -34,7 +34,7 @@ public class ChannelTagCommandExecutor extends Command implements TabExecutor {
 		if (!(sender instanceof ProxiedPlayer)) {
 			msg = new ConsoleMessage(chan, argsToMessage(args));
 		} else {
-			Chatter chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUniqueId().toString());
+			Chatter chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUniqueId());
 			
 			if (!chatter.getSubscriptions().contains(chan.getUUID())) {
 				Channels.notify(sender, "channels.chatter.channel-not-subscribed", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));

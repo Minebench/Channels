@@ -18,7 +18,7 @@ public class ChannelInfoCommand extends AbstractCommand {
 		boolean isConsoleCommand = !(sender instanceof ProxiedPlayer);
 		Chatter chatter = null;
 		if (!isConsoleCommand) {
-			chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUniqueId().toString());
+			chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUniqueId());
 		}
 		
 		Channel channel = null;

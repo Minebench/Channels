@@ -21,7 +21,7 @@ public class PMCommand extends AbstractCommand {
 			return;
 		}
 		
-		Chatter chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUniqueId().toString());
+		Chatter chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUniqueId());
 		
 		if (args.length == 0) {
 			chatter.setPrivateRecipient(null);

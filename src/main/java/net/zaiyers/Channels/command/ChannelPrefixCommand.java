@@ -7,6 +7,8 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.config.ChatterYamlConfig;
 
+import java.util.UUID;
+
 public class ChannelPrefixCommand extends AbstractCommand {
 
 	public ChannelPrefixCommand(CommandSender sender, String[] args) {
@@ -14,7 +16,7 @@ public class ChannelPrefixCommand extends AbstractCommand {
 	}
 
 	public void execute() {
-		String chatterUUID;
+		UUID chatterUUID;
 		ProxiedPlayer player = Channels.getInstance().getProxy().getPlayer(args[1]);
 		
 		String value;
@@ -50,7 +52,7 @@ public class ChannelPrefixCommand extends AbstractCommand {
 			
 			Channels.notify(player, "channels.chatter.set-prefix", ImmutableMap.of("chatter", Channels.getPlayerName(chatterUUID), "prefix", value));
 		} else {
-			chatterUUID = player.getUniqueId().toString();
+			chatterUUID = player.getUniqueId();
 			Channels.getInstance().getChatter(chatterUUID).setPrefix(value);
 			
 			Channels.notify(sender, "channels.chatter.set-prefix", ImmutableMap.of("chatter", player.getName(), "prefix", value));

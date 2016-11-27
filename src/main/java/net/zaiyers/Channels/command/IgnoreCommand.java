@@ -1,6 +1,7 @@
 package net.zaiyers.Channels.command;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -23,7 +24,8 @@ public class IgnoreCommand extends AbstractCommand {
 		}
 		
 		if (args.length > 0) {
-			String ignoreName, ignoreUUID;
+			String ignoreName;
+			UUID ignoreUUID;
 			if (args.length > 1 && args[0].equalsIgnoreCase("ignore")) {
 				ignoreName = args[1];
 			} else {
@@ -38,7 +40,7 @@ public class IgnoreCommand extends AbstractCommand {
 			
 			Chatter ignore = Channels.getInstance().getChatterByName(ignoreName);
 			if (ignore != null) {
-				ignoreUUID = ignore.getPlayer().getUniqueId().toString();
+				ignoreUUID = ignore.getPlayer().getUniqueId();
 				ignoreName = ignore.getName();
 			} else {
 				// try uuiddb
@@ -48,18 +50,18 @@ public class IgnoreCommand extends AbstractCommand {
 					return; // i don't know a player by that name
 				}
 			}
-			Chatter chatter = Channels.getInstance().getChatter( ((ProxiedPlayer) sender).getUniqueId().toString() );
+			Chatter chatter = Channels.getInstance().getChatter( ((ProxiedPlayer) sender).getUniqueId());
 			// toggle ignore
-			if (chatter.getIgnores().contains(ignoreUUID)) {
-				chatter.removeIgnore(ignoreUUID);
+			if (chatter.getIgnores().contains(ignoreUUID.toString())) {
+				chatter.removeIgnore(ignoreUUID.toString());
 				Channels.notify(sender, "channels.command.ignore-removed", ImmutableMap.of("chatter", ignoreName));			
 			} else {
-				chatter.addIgnore(ignoreUUID);
+				chatter.addIgnore(ignoreUUID.toString());
 				Channels.notify(sender, "channels.command.ignore-added", ImmutableMap.of("chatter", ignoreName));
 			}
 		} else {
 			// list ignores
-			Chatter chatter = Channels.getInstance().getChatter( ((ProxiedPlayer) sender).getUniqueId().toString() );
+			Chatter chatter = Channels.getInstance().getChatter( ((ProxiedPlayer) sender).getUniqueId());
 			List<String> ignores = chatter.getIgnores();
 			if (ignores.size() > 0) {
 				String ignoreList = Channels.getPlayerName(ignores.get(0));

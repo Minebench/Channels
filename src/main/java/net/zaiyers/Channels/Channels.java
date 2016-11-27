@@ -4,7 +4,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableMap;
 
 import me.lucko.luckperms.LuckPerms;
@@ -34,7 +38,7 @@ public class Channels extends Plugin {
     /**
 	 * List of Chatters
 	 */
-	private Map<String, Chatter> chatters = new HashMap<>();
+	private LoadingCache<UUID, Chatter> chatters;
 	
 	/**
 	 * channels configuration
@@ -68,6 +72,17 @@ public class Channels extends Plugin {
 	 */
 	public void onEnable() {
         instance = this;
+
+		chatters = CacheBuilder.newBuilder().build(new CacheLoader<UUID, Chatter>() {
+			@Override
+			public Chatter load(UUID uuid) throws Exception {
+				ProxiedPlayer player = getProxy().getPlayer(uuid);
+				if (player != null) {
+					return createChatter(player);
+				}
+				return null;
+			}
+		});
 
 		// load configuration
 		try {
@@ -149,7 +164,7 @@ public class Channels extends Plugin {
 		}
 		
 		// save chatter configurations
-		for (Chatter chatter: chatters.values()) {
+		for (Chatter chatter: chatters.asMap().values()) {
 			chatter.save();
 		}
 		
@@ -186,11 +201,25 @@ public class Channels extends Plugin {
 
 	/**
 	 * get chatter object
-	 * @param uuid The UUID of the player
+	 * @param playerId The UUID of the player
 	 * @return The player's chatter object
 	 */
-	public Chatter getChatter(String uuid) {
-		return chatters.get(uuid);
+	public Chatter getChatter(String playerId) {
+		return getChatter(UUID.fromString(playerId));
+	}
+
+	/**
+	 * get chatter object
+	 * @param playerId The UUID of the player
+	 * @return The player's chatter object
+	 */
+	public Chatter getChatter(UUID playerId) {
+		try {
+			return chatters.get(playerId);
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
@@ -199,7 +228,7 @@ public class Channels extends Plugin {
 	 */
 	public Chatter getChatterByName(String name) {
 		name = name.toLowerCase();
-		for (Chatter onlinechatter: chatters.values().toArray(new Chatter[getChatters().size()])) {
+		for (Chatter onlinechatter : chatters.asMap().values()) {
 			if (onlinechatter != null && onlinechatter.getName().toLowerCase().startsWith(name)) {
 				return onlinechatter;
 			}
@@ -246,19 +275,11 @@ public class Channels extends Plugin {
 	}
 
 	/**
-	 * register chatter
-	 * @param chatter   The chatter to register
-	 */
-	public void addChatter(Chatter chatter) {
-		chatters.put(chatter.getPlayer().getUniqueId().toString(), chatter);
-	}
-
-	/**
 	 * unregister chatter from plugin
-	 * @param chatter   The chatter to remove
+	 * @param playerId   The uuid of the chatter
 	 */
-	public void removeChatter(Chatter chatter) {
-		chatters.remove(chatter.getPlayer().getUniqueId().toString());
+	public void removeChatter(UUID playerId) {
+		chatters.invalidate(playerId);
 	}
 
 	/**
@@ -336,8 +357,8 @@ public class Channels extends Plugin {
 		}
 	}
 		
-	public Map<String, Chatter> getChatters() {
-		return chatters;
+	public Map<UUID, Chatter> getChatters() {
+		return chatters.asMap();
 	}
 
 	/**
@@ -422,26 +443,77 @@ public class Channels extends Plugin {
      * @param name  The name of the player
      * @return      The player's UUID or <tt>null</tt> if none found
      */
-    public static String getPlayerId(String name) {
-        String playerId = null;
+    public static UUID getPlayerId(String name) {
+        UUID playerId = null;
 
         ProxiedPlayer player = ProxyServer.getInstance().getPlayer(name);
 
         if (player != null) {
-            playerId = player.getUniqueId().toString();
+            playerId = player.getUniqueId();
         }
 
         if (playerId == null && getUuidDb() != null) {
-            playerId = getUuidDb().getStorage().getUUIDByName(name, false);
+			String idStr = getUuidDb().getStorage().getUUIDByName(name, false);
+			if (idStr != null) {
+				playerId = UUID.fromString(idStr);
+			}
         }
 
         if (playerId == null && getLuckPermsApi() != null) {
             User lpUser = getLuckPermsApi().getUser(name);
             if (lpUser != null) {
-                playerId = lpUser.getUuid().toString();
+                playerId = lpUser.getUuid();
             }
         }
 
         return playerId;
     }
+
+	private Chatter createChatter(ProxiedPlayer player) {
+		try {
+			Chatter chatter = new Chatter(player);
+
+			for (String channelUUID: chatter.getSubscriptions()) {
+				// channel exists
+				if (getChannel(channelUUID) != null) {
+					// I'm allowed to join
+					if (chatter.hasPermission(Channels.getInstance().getChannel(channelUUID), "subscribe")) {
+						getChannel(channelUUID).subscribe(chatter);
+					} else {
+						// chatter no longer has permission for this channel - remove from chatter config
+						chatter.unsubscribe(channelUUID);
+						if (channelUUID.equals(Channels.getConfig().getDefaultChannelUUID())) {
+							getLogger().warning("Chatter '"+chatter.getName()+"' is not allowed to join the default channel");
+						}
+					}
+				} else {
+					// channel has been removed - remove from player config
+					chatter.unsubscribe(channelUUID);
+				}
+			}
+
+			// check for autojoin channels
+			for (Channel channel: Channels.getInstance().getChannels().values()) {
+				if (channel.doAutojoin() && !channel.isTemporary() && chatter.hasPermission(channel, "subscribe")) {
+					// joining twice doesn't matter, caught elsewhere
+					chatter.subscribe(channel.getUUID());
+				}
+			}
+
+			return chatter;
+		} catch (IOException e) {
+			getLogger().severe("Unable to create Chatter '" + player.getName() + "'/" + player.getUniqueId());
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * Load a chatter from the database/file
+	 * @param playerId	The UUID of the player
+	 * @return 			<tt>true</tt> if the chatter was loaded successfully; <tt>false</tt> if not
+	 */
+	public boolean loadChatter(UUID playerId) {
+		return getChatter(playerId) != null;
+	}
 }

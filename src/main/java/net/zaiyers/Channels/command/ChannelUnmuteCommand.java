@@ -7,6 +7,8 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.config.ChatterYamlConfig;
 
+import java.util.UUID;
+
 public class ChannelUnmuteCommand extends AbstractCommand {
 
 	public ChannelUnmuteCommand(CommandSender sender, String[] args) {
@@ -14,7 +16,7 @@ public class ChannelUnmuteCommand extends AbstractCommand {
 	}
 
 	public void execute() {
-		String chatterUUID;
+		UUID chatterUUID;
 		ProxiedPlayer player = Channels.getInstance().getProxy().getPlayer(args[1]);
 		if (player == null) {
 			chatterUUID = Channels.getPlayerId(args[1]);
@@ -29,7 +31,7 @@ public class ChannelUnmuteCommand extends AbstractCommand {
 			
 			Channels.notify(sender, "channels.command.chatter-unmuted", ImmutableMap.of("chatter", Channels.getPlayerName(chatterUUID)));
 		} else {
-			chatterUUID = player.getUniqueId().toString();
+			chatterUUID = player.getUniqueId();
 			Channels.getInstance().getChatter(chatterUUID).setMuted(false);
 			
 			Channels.notify(sender, "channels.command.chatter-unmuted", ImmutableMap.of("chatter", player.getName()));

@@ -21,7 +21,7 @@ public class ChannelListCommand extends AbstractCommand {
 		boolean isConsoleCommand = !(sender instanceof ProxiedPlayer );
 		Chatter chatter = null;
 		if (!isConsoleCommand) {
-			chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUniqueId().toString());
+			chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUniqueId());
 		}
 		
 		if (args.length == 1 && args[0].equalsIgnoreCase("list")) {

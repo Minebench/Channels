@@ -21,7 +21,7 @@ public class ReplyCommand extends AbstractCommand {
 			return;
 		}
 		
-		Chatter chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUniqueId().toString());
+		Chatter chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUniqueId());
 
 		if (chatter.getLastSender() != null) {
 			Chatter recipient = Channels.getInstance().getChatter(chatter.getLastSender());

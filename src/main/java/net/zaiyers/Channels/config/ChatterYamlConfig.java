@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import net.zaiyers.Channels.Channels;
 
@@ -25,8 +26,8 @@ public class ChatterYamlConfig extends YamlConfig implements ChatterConfig {
 	 * @param uuid
 	 * @return
 	 */
-	public static ChatterYamlConfig load(String uuid) {
-		String configFilePath = Channels.getInstance().getDataFolder()+("/chatters/"+uuid.substring(0,2)+"/"+uuid.substring(2,4)+"/"+uuid+".yml").toLowerCase();
+	public static ChatterYamlConfig load(UUID uuid) {
+		String configFilePath = Channels.getInstance().getDataFolder()+("/chatters/"+uuid.toString().substring(0,2)+"/"+uuid.toString().substring(2,4)+"/"+uuid+".yml").toLowerCase();
 		File cfgFile = new File(configFilePath);
 		if (cfgFile.exists()) {
 			try {
