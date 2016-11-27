@@ -109,7 +109,7 @@ public class Channels extends Plugin {
         }
 
         if (getProxy().getPluginManager().getPlugin("UUIDDB") != null) {
-            uuidDb = UUIDDB.getInstance();
+            uuidDb = (UUIDDBPlugin) getProxy().getPluginManager().getPlugin("UUIDDB");
         }
 
         if (getUuidDb() == null && getLuckPermsApi() == null) {
