@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -59,7 +60,7 @@ public class Channel {
 	
 	/**
 	 * load channel by uuid
-	 * @param name
+	 * @param uuid
 	 * @throws IOException 
 	 */
 	public Channel(String uuid) throws IOException {
@@ -91,7 +92,7 @@ public class Channel {
 	/**
 	 * send message to subscribers
 	 * 
-	 * @param channelMessage
+	 * @param message
 	 */
 	public void send(ChannelMessage message) {
 		Chatter sender = message.getChatter();
@@ -168,7 +169,7 @@ public class Channel {
 	/**
 	 * set new channel name
 	 * 
-	 * @param string
+	 * @param name
 	 */
 	public void setName(String name) {
 		cfg.setName(name);
@@ -177,7 +178,7 @@ public class Channel {
 	/**
 	 * set new channel tag
 	 * 
-	 * @param string
+	 * @param tag
 	 */
 	public void setTag(String tag) {
 		cfg.setTag(tag);
@@ -186,7 +187,7 @@ public class Channel {
 	/**
 	 * set new channel password
 	 * 
-	 * @param String
+	 * @param password
 	 */
 	public void setPassword(String password) {
 		cfg.setPassword(password);
@@ -267,7 +268,7 @@ public class Channel {
 
 	/**
 	 * add chatter as moderator
-	 * @param sender
+	 * @param uuid
 	 */
 	public void addModerator(String uuid) {
 		cfg.addModerator(uuid);
@@ -318,8 +319,8 @@ public class Channel {
 	 * ban and kick player from channel
 	 * @param chatterUUID
 	 */
-	public void banChatter(String chatterUUID) {
-		cfg.addBan(chatterUUID);
+	public void banChatter(UUID chatterUUID) {
+		cfg.addBan(chatterUUID.toString());
 		
 		Chatter chatter = Channels.getInstance().getChatter(chatterUUID);
 		if (chatter != null) {
@@ -363,8 +364,8 @@ public class Channel {
 	 * remove chatter from channel banlist
 	 * @param chatterUUID
 	 */
-	public void unbanChatter(String chatterUUID) {
-		cfg.removeBan(chatterUUID);
+	public void unbanChatter(UUID chatterUUID) {
+		cfg.removeBan(chatterUUID.toString());
 		
 		// announce
 		String banned = Channels.getPlayerName(chatterUUID);

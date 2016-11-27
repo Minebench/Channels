@@ -7,6 +7,8 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 
+import java.util.UUID;
+
 
 public class ChannelUnbanCommand extends AbstractCommand {
 
@@ -26,7 +28,7 @@ public class ChannelUnbanCommand extends AbstractCommand {
 			return;
 		}
 		
-		String chatterUUID = Channels.getPlayerId(args[2]);
+		UUID chatterUUID = Channels.getPlayerId(args[2]);
 		if (chatterUUID == null) {
 			Channels.notify(sender, "channels.command.chatter-not-found", ImmutableMap.of("chatter", args[2]));
 			return;

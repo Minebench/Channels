@@ -7,6 +7,8 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 
+import java.util.UUID;
+
 public class ChannelRemoveModCommand extends AbstractCommand {
 	public ChannelRemoveModCommand(CommandSender sender, String[] args) {
 		super(sender, args);
@@ -24,18 +26,18 @@ public class ChannelRemoveModCommand extends AbstractCommand {
 			return;
 		}
 		
-		String modUUID = Channels.getPlayerId(args[2]);
+		UUID modUUID = Channels.getPlayerId(args[2]);
 		if (modUUID == null) {
 			Channels.notify(sender, "channels.command.chatter-not-found", ImmutableMap.of("chatter", args[2]));
 			return;
 		}
 		
-		if (!chan.isMod(modUUID)) {
+		if (!chan.isMod(modUUID.toString())) {
 			Channels.notify(sender, "channels.command.chatter-not-mod", ImmutableMap.of("chatter", args[2]));
 		} else if (chan.getModerators().size() == 1 && chan.isTemporary()) {
 			Channels.notify(sender, "channels.command.channel-last-mod");
 		} else {
-			chan.removeModerator(modUUID);
+			chan.removeModerator(modUUID.toString());
 			Channels.notify(sender, "channels.command.channel-mod-removed", ImmutableMap.of(
 					"chatter", args[2],
 					"channelColor", chan.getColor().toString(),
