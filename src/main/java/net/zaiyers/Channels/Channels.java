@@ -76,11 +76,15 @@ public class Channels extends Plugin {
 		chatters = CacheBuilder.newBuilder().build(new CacheLoader<UUID, Chatter>() {
 			@Override
 			public Chatter load(UUID uuid) throws Exception {
+				Chatter chatter = null;
 				ProxiedPlayer player = getProxy().getPlayer(uuid);
 				if (player != null) {
-					return createChatter(player);
+					chatter = createChatter(player);
 				}
-				return null;
+				if (chatter == null) {
+					throw new ChatterNotFoundException("Could not create the chatter?" + (player == null ? " The player with the uuid " + uuid + " wasn't found online?" : ""));
+				}
+				return chatter;
 			}
 		});
 
@@ -217,7 +221,7 @@ public class Channels extends Plugin {
 		try {
 			return chatters.get(playerId);
 		} catch (ExecutionException e) {
-			e.printStackTrace();
+			getLogger().severe("Error while getting chatter: " + e.getMessage());
 		}
 		return null;
 	}
@@ -515,5 +519,11 @@ public class Channels extends Plugin {
 	 */
 	public boolean loadChatter(UUID playerId) {
 		return getChatter(playerId) != null;
+	}
+
+	private class ChatterNotFoundException extends ExecutionException {
+		ChatterNotFoundException(String msg) {
+			super(msg);
+		}
 	}
 }
