@@ -41,10 +41,7 @@ public class ConsoleMessage extends AbstractMessage {
 	
 	public void send() {
 		processMessage();
-		ChannelsChatEvent chatEvent = new ChannelsChatEvent(this);
-		if (!Channels.getInstance().getProxy().getPluginManager().callEvent( chatEvent ).isCancelled()) {
-			channel.send(this);
-		}	
+		channel.send(this);
 	}
 
 	public CommandSender getSender() {

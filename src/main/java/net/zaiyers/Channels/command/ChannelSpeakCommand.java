@@ -6,6 +6,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
+import net.zaiyers.Channels.ChannelsChatEvent;
 import net.zaiyers.Channels.Chatter;
 import net.zaiyers.Channels.message.ChannelMessage;
 import net.zaiyers.Channels.message.ConsoleMessage;
@@ -60,8 +61,11 @@ public class ChannelSpeakCommand extends AbstractCommand {
                 }
 			}
 		}
-		
-		msg.send();
+
+		ChannelsChatEvent chatEvent = new ChannelsChatEvent(msg);
+		if (!Channels.getInstance().getProxy().getPluginManager().callEvent( chatEvent ).isCancelled()) {
+			msg.send();
+		}
 	}
 
 	/**
