@@ -6,6 +6,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
+import net.md_5.bungee.event.EventPriority;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.ChannelsChatEvent;
@@ -17,9 +18,11 @@ import net.zaiyers.Channels.message.Message;
 import net.zaiyers.Channels.message.PrivateMessage;
 
 public class MessageListener implements Listener {
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onMessageRecieve(ChatEvent event) {
-		if (!(event.getSender() instanceof ProxiedPlayer) || event.isCommand()) { return; }
+		if (event.isCancelled() || !(event.getSender() instanceof ProxiedPlayer) || event.isCommand()) {
+			return;
+		}
 		
         boolean canceled = true;
 		ProxiedPlayer player = (ProxiedPlayer) event.getSender();
