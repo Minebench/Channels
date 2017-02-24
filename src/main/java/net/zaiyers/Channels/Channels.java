@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -208,6 +209,19 @@ public class Channels extends Plugin {
 			chan.removeChannel();
 		}
 		channels.remove(uuid);
+	}
+
+	public Chatter getChatter(ProxiedPlayer player) {
+		Chatter chatter = chatters.getIfPresent(player.getUniqueId());
+		if (chatter == null) {
+			chatter = createChatter(player);
+		}
+		if (chatter == null) {
+			getLogger().log(Level.WARNING, "Could not get the chatter for " + player.getName() + "/" + player.getUniqueId() + "?");
+			return null;
+		}
+		chatters.put(player.getUniqueId(), chatter);
+		return chatter;
 	}
 
 	/**
