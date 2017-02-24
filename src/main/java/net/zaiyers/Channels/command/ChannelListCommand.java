@@ -74,7 +74,7 @@ public class ChannelListCommand extends AbstractCommand {
 					Chatter subscriber = Channels.getInstance().getChatter(uuid);
 					if (chatter == null
 							|| Channels.getVNPBungee() == null
-							|| VNPBungee.canSee(chatter.getPlayer(), subscriber.getPlayer())) {
+							|| Channels.getVNPBungee().canSee(chatter.getPlayer(), subscriber.getPlayer())) {
 						chatters.add(subscriber);
 					}
 				}
