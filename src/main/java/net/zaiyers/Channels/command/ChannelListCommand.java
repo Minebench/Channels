@@ -2,6 +2,7 @@ package net.zaiyers.Channels.command;
 
 import com.google.common.collect.ImmutableMap;
 
+import de.themoep.vnpbungee.VNPBungee;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -10,6 +11,9 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.Chatter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChannelListCommand extends AbstractCommand {
 
@@ -64,11 +68,21 @@ public class ChannelListCommand extends AbstractCommand {
 			if (isConsoleCommand || chatter.hasPermission(channel, "list") || (channel.isTemporary() && channel.getSubscribers().contains(chatter.getPlayer().getUniqueId().toString()))) {
 				String[] uuids = channel.getSubscribers().toArray(new String[channel.getSubscribers().size()]);
 				Channels.notify(sender, "channels.chatter.channel-list-chatters", ImmutableMap.of("channel", channel.getName(), "channelColor", channel.getColor().toString()));
-				
-				if (uuids.length > 0) {
+
+				List<Chatter> chatters = new ArrayList<>();
+				for (String uuid : uuids) {
+					Chatter subscriber = Channels.getInstance().getChatter(uuid);
+					if (chatter == null
+							|| Channels.getVNPBungee() == null
+							|| VNPBungee.canSee(chatter.getPlayer(), subscriber.getPlayer())) {
+						chatters.add(subscriber);
+					}
+				}
+
+				if (chatters.size() > 0) {
                     TextComponent chatterList = new TextComponent("");
-					for (int i=0; i<uuids.length; i++) {
-                        Chatter subscriber = Channels.getInstance().getChatter(uuids[i]);
+					for (int i=0; i < chatters.size(); i++) {
+                        Chatter subscriber = chatters.get(i);
                         if (i > 0) {
                             chatterList.addExtra(new TextComponent(TextComponent.fromLegacyText(ChatColor.WHITE + ", ")));
                         }

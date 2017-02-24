@@ -11,6 +11,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableMap;
 
+import de.themoep.vnpbungee.VNPBungee;
 import me.lucko.luckperms.LuckPerms;
 import me.lucko.luckperms.api.LuckPermsApi;
 import me.lucko.luckperms.api.User;
@@ -67,7 +68,9 @@ public class Channels extends Plugin {
 
     private static UUIDDBPlugin uuidDb = null;
 
-    /**
+	private static VNPBungee vnpBungee = null;
+
+	/**
 	 * executed on startup
 	 */
 	public void onEnable() {
@@ -106,6 +109,10 @@ public class Channels extends Plugin {
 			e.printStackTrace();
 			
 			return;
+		}
+
+		if (getProxy().getPluginManager().getPlugin("VNPBungee") != null) {
+			vnpBungee = VNPBungee.getInstance();
 		}
 
 		if (getProxy().getPluginManager().getPlugin("LuckPerms") != null) {
@@ -393,6 +400,14 @@ public class Channels extends Plugin {
 				Channels.notify(sender, "channels.command.default-no-defchannel-available", ImmutableMap.of("server", server.getName()));
 			}
 		}
+	}
+
+	/**
+	 * Get the instance of VNPBungee if it is installed
+	 * @return The VNPBungee instance or <tt>null</tt> if VNPBungee is not installed
+	 */
+	public static VNPBungee getVNPBungee() {
+		return vnpBungee;
 	}
 
     /**
