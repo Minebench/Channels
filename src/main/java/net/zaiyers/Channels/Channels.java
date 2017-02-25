@@ -342,8 +342,8 @@ public class Channels extends Plugin {
 		
 		// insert replacements
 		if (replacements != null) {
-			for (String variable: replacements.keySet()) {
-				string = string.replaceAll("%"+variable+"%", replacements.get(variable));
+			for (Map.Entry<String, String> entry : replacements.entrySet()) {
+				string = string.replaceAll("%"+entry.getKey()+"%", entry.getValue());
 			}
 		}
 		
