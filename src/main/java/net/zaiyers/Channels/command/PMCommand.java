@@ -37,7 +37,8 @@ public class PMCommand extends AbstractCommand {
 		if (args.length > 0) {
 			//set recipient
 			Chatter recipient = Channels.getInstance().getChatterByName(args[0]);
-			if (recipient == null || recipient.getPlayer() == null || !recipient.getPlayer().isConnected()) {
+			if (recipient == null || recipient.getPlayer() == null || !recipient.getPlayer().isConnected()
+					|| (args.length == 1 && Channels.getVNPBungee() != null && !Channels.getVNPBungee().canSee(chatter.getPlayer(), recipient.getPlayer()))) {
 				//nobody matched
 				Channels.notify(sender, "channels.command.chatter-not-found", ImmutableMap.of("chatter", args[0]));
 			} else if (args.length == 1) {
