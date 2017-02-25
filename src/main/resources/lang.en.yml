@@ -36,6 +36,7 @@ channels:
       channel-removed: '§aChannel %channelColor%%channel% §ahas been removed.'
       channel-modified: '§aChannel modified.'
       chatter-not-found: '§6%chatter% §ccould not be found.'
+      chatter-config-not-found: '§6Config of %chatter% §ccould not be found.'
       channel-moderator-added: '§6%chatter% §ais now a moderator of %channelColor%%channel%§a.'
       channel-subscribed: "§aYou have subscribed to %channelColor%%channel%§a"
       channel-unsubscribed: "§aYou have unsubscribed from %channelColor%%channel%§a"
