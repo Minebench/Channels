@@ -545,15 +545,6 @@ public class Channels extends Plugin {
 		return null;
 	}
 
-	/**
-	 * Load a chatter from the database/file
-	 * @param playerId	The UUID of the player
-	 * @return 			<tt>true</tt> if the chatter was loaded successfully; <tt>false</tt> if not
-	 */
-	public boolean loadChatter(UUID playerId) {
-		return getChatter(playerId) != null;
-	}
-
 	private class ChatterNotFoundException extends ExecutionException {
 		ChatterNotFoundException(String msg) {
 			super(msg);
