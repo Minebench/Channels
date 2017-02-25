@@ -72,9 +72,11 @@ public class ChannelListCommand extends AbstractCommand {
 				List<Chatter> chatters = new ArrayList<>();
 				for (String uuid : uuids) {
 					Chatter subscriber = Channels.getInstance().getChatter(uuid);
-					if (chatter == null
-							|| Channels.getVNPBungee() == null
-							|| Channels.getVNPBungee().canSee(chatter.getPlayer(), subscriber.getPlayer())) {
+					if (subscriber.getPlayer() != null && subscriber.getPlayer().isConnected() && (
+							chatter == null
+									|| Channels.getVNPBungee() == null
+									|| Channels.getVNPBungee().canSee(chatter.getPlayer(), subscriber.getPlayer()))
+							) {
 						chatters.add(subscriber);
 					}
 				}
