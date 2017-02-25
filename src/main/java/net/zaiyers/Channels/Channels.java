@@ -252,6 +252,10 @@ public class Channels extends Plugin {
 	 * @return null if chatter not found
 	 */
 	public Chatter getChatterByName(String name) {
+		ProxiedPlayer player = getProxy().getPlayer(name);
+		if (player != null) {
+			return getChatter(player);
+		}
 		name = name.toLowerCase();
 		for (Chatter onlinechatter : chatters.asMap().values()) {
 			if (onlinechatter != null && onlinechatter.getName().toLowerCase().startsWith(name)) {
