@@ -116,7 +116,10 @@ public class Chatter {
 
         // if removed channel is currently focused one switch to server default channel
         if (uuid.equals(getChannel())) {
-            Channel chan = Channels.getInstance().getChannel(Channels.getConfig().getServerDefaultChannel(player.getServer().getInfo().getName()));
+            Channel chan = null;
+			if (player != null && player.getServer() != null) {
+				chan = Channels.getInstance().getChannel(Channels.getConfig().getServerDefaultChannel(player.getServer().getInfo().getName()));
+			}
 
             if (chan == null) {
                 // server doesn't have default channel
