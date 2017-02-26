@@ -52,7 +52,12 @@ public class ChannelTagCommandExecutor extends Command implements TabExecutor {
 				Channels.notify(sender, "channels.chatter.default-channel-set", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
 				return;
 			} else {
-				msg = new ChannelMessage(chatter, chan, argsToMessage(args));
+				if(chan.isBackend()) {
+					((ProxiedPlayer) sender).chat(argsToMessage(args));
+					return;
+				} else {
+					msg = new ChannelMessage(chatter, chan, argsToMessage(args));
+				}
 			}
 		}
 		

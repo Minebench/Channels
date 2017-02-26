@@ -53,7 +53,7 @@ public class ChannelSpeakCommand extends AbstractCommand {
 				Channels.notify(sender, "channels.chatter.default-channel-set", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
 				return;
 			} else {
-                if(chan.isBackend() && sender instanceof ProxiedPlayer) {
+                if(chan.isBackend()) {
                     ((ProxiedPlayer) sender).chat(argsToMessage(args));
                     return;
                 } else {
