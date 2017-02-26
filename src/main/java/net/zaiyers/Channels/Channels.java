@@ -40,7 +40,7 @@ public class Channels extends Plugin {
     /**
 	 * List of Chatters
 	 */
-	private LoadingCache<UUID, Chatter> chatters;
+	private Map<UUID, Chatter> chatters = new HashMap<>();
 	
 	/**
 	 * channels configuration
@@ -76,21 +76,6 @@ public class Channels extends Plugin {
 	 */
 	public void onEnable() {
         instance = this;
-
-		chatters = CacheBuilder.newBuilder().build(new CacheLoader<UUID, Chatter>() {
-			@Override
-			public Chatter load(UUID uuid) throws Exception {
-				Chatter chatter = null;
-				ProxiedPlayer player = getProxy().getPlayer(uuid);
-				if (player != null) {
-					chatter = createChatter(player);
-				}
-				if (chatter == null) {
-					throw new ChatterNotFoundException("Could not create the chatter?" + (player == null ? " The player with the uuid " + uuid + " wasn't found online?" : ""));
-				}
-				return chatter;
-			}
-		});
 
 		// load configuration
 		try {
@@ -176,7 +161,7 @@ public class Channels extends Plugin {
 		}
 		
 		// save chatter configurations
-		for (Chatter chatter: chatters.asMap().values()) {
+		for (Chatter chatter: chatters.values()) {
 			chatter.save();
 		}
 		
@@ -212,7 +197,7 @@ public class Channels extends Plugin {
 	}
 
 	public Chatter getChatter(ProxiedPlayer player) {
-		Chatter chatter = chatters.getIfPresent(player.getUniqueId());
+		Chatter chatter = chatters.get(player.getUniqueId());
 		if (chatter == null) {
 			chatter = createChatter(player);
 		}
@@ -239,11 +224,15 @@ public class Channels extends Plugin {
 	 * @return The player's chatter object
 	 */
 	public Chatter getChatter(UUID playerId) {
-		try {
-			return chatters.get(playerId);
-		} catch (ExecutionException e) {
-			getLogger().severe("Error while getting chatter: " + e.getMessage());
+		Chatter chatter = chatters.get(playerId);
+		if (chatter != null) {
+			return chatter;
 		}
+		ProxiedPlayer player = getProxy().getPlayer(playerId);
+		if (player != null) {
+			return getChatter(player);
+		}
+		getLogger().log(Level.WARNING, "Could not create the chatter? The player with the uuid " + playerId + " wasn't found online?");
 		return null;
 	}
 
@@ -257,7 +246,7 @@ public class Channels extends Plugin {
 			return getChatter(player);
 		}
 		name = name.toLowerCase();
-		for (Chatter onlinechatter : chatters.asMap().values()) {
+		for (Chatter onlinechatter : chatters.values()) {
 			if (onlinechatter != null && onlinechatter.getName().toLowerCase().startsWith(name)) {
 				return onlinechatter;
 			}
@@ -308,7 +297,7 @@ public class Channels extends Plugin {
 	 * @param playerId   The uuid of the chatter
 	 */
 	public void removeChatter(UUID playerId) {
-		chatters.invalidate(playerId);
+		chatters.remove(playerId);
 	}
 
 	/**
@@ -387,7 +376,7 @@ public class Channels extends Plugin {
 	}
 		
 	public Map<UUID, Chatter> getChatters() {
-		return chatters.asMap();
+		return chatters;
 	}
 
 	/**
