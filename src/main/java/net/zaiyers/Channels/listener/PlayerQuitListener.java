@@ -9,7 +9,7 @@ import net.zaiyers.Channels.Chatter;
 public class PlayerQuitListener implements Listener {
 	@EventHandler
 	public void onPlayerQuit(PlayerDisconnectEvent event) {
-		Chatter chatter = Channels.getInstance().getChatter(event.getPlayer().getUniqueId());
+		Chatter chatter = Channels.getInstance().getChatter(event.getPlayer());
 
 		if (chatter != null) {
 			// unsubscribe from channels
