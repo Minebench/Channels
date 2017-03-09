@@ -450,6 +450,12 @@ public class Channels extends Plugin {
     public static String getPlayerName(UUID playerId) {
         String playerName = null;
 
+		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(playerId);
+
+		if (player != null) {
+			playerName = player.getName();
+		}
+
         if (getUuidDb() != null) {
             playerName = getUuidDb().getStorage().getNameByUUID(playerId);
         }
