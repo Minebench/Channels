@@ -169,18 +169,14 @@ public class Chatter {
 	 * get my prefix
 	 */
 	public String getPrefix() {
-		if (Channels.getLuckPermsApi() != null) {
-			User lpUser = Channels.getLuckPermsApi().getUser(player.getUniqueId());
-            if (lpUser != null) {
-                Optional<UserData> userData = lpUser.getUserDataCache();
-                if (userData.isPresent()) {
-                    MetaData metaData = userData.get().getMetaData(makeContexts());
-                    String prefix = metaData.getPrefix();
-                    if (prefix != null) {
-                        return prefix;
-                    }
-                }
-            }
+		if (cfg.getPrefix() == null && cfg.getPrefix().isEmpty()) {
+			// No prefix in chatter config, try to query from other plugins
+			if (Channels.getLuckPermsApi() != null) {
+				MetaData metaData = getMetaData();
+				if (metaData != null && metaData.getPrefix() != null) {
+					return metaData.getPrefix();
+				}
+			}
 		}
 		return cfg.getPrefix();
 	}
@@ -189,35 +185,37 @@ public class Chatter {
 	 * get my suffix
 	 */
 	public String getSuffix() {
-        if (Channels.getLuckPermsApi() != null) {
-            User lpUser = Channels.getLuckPermsApi().getUser(player.getUniqueId());
-            if (lpUser != null) {
-                Optional<UserData> userData = lpUser.getUserDataCache();
-                if (userData.isPresent()) {
-                    MetaData metaData = userData.get().getMetaData(makeContexts());
-                    String suffix = metaData.getSuffix();
-                    if (suffix != null) {
-                        return suffix;
-                    }
-                }
-            }
-        }
+		if (cfg.getSuffix() == null && cfg.getSuffix().isEmpty()) {
+			// No suffix in chatter config, try to query from other plugins
+			if (Channels.getLuckPermsApi() != null) {
+				MetaData metaData = getMetaData();
+				if (metaData != null && metaData.getSuffix() != null) {
+					return metaData.getSuffix();
+				}
+			}
+		}
         return cfg.getSuffix();
 	}
 
-    private Contexts makeContexts() {
-        MutableContextSet contextSet = new MutableContextSet();
-        contextSet.add("server", player.getServer().getInfo().getName());
-        return Contexts.of(contextSet.makeImmutable(), true, true, true, true, true, false);
-    }
+	private MetaData getMetaData() {
+		User lpUser = Channels.getLuckPermsApi().getUserSafe(player.getUniqueId()).orElse(null);
+		if (lpUser != null) {
+			UserData userData = lpUser.getUserDataCache().orElse(null);
+			if (userData != null) {
+				Contexts contexts = Channels.getLuckPermsApi().getContextForUser(lpUser).orElse(null);
+				if (contexts != null) {
+					return userData.getMetaData(contexts);
+				}
+			}
+		}
+		return null;
+	}
 
 	/**
 	 * person who last wrote me
 	 */
 	public String getLastSender() {
-		String lastSender = cfg.getLastSender();
-		
-		return lastSender;
+		return cfg.getLastSender();
 	}
 	
 	/**
