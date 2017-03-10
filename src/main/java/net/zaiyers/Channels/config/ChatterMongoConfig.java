@@ -38,10 +38,6 @@ public class ChatterMongoConfig extends MongoConfig implements ChatterConfig {
 		return cfg.getString("lastSender", null);
 	}
 
-	public String getLastRecipient() {
-		return cfg.getString("lastRecipient", null);
-	}
-
 	public String getChannelUUID() {
 		return cfg.getString("channelUUID");
 	}

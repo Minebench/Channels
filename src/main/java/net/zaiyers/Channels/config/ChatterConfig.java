@@ -35,11 +35,6 @@ public interface ChatterConfig extends Config {
 	public String getLastSender();
 	
 	/**
-	 * I like this guy
-	 */
-	public String getLastRecipient();
-	
-	/**
 	 * I have many friends
 	 */
 	public String getChannelUUID();

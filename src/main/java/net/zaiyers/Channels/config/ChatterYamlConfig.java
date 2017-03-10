@@ -70,10 +70,6 @@ public class ChatterYamlConfig extends YamlConfig implements ChatterConfig {
 		return cfg.getString("lastSender", null);
 	}
 
-	public String getLastRecipient() {
-		return cfg.getString("lastRecipient", null);
-	}
-
 	public String getChannelUUID() {
 		return cfg.getString("channelUUID");
 	}
