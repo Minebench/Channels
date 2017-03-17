@@ -98,14 +98,17 @@ public class Channels extends Plugin {
 		}
 
 		if (getProxy().getPluginManager().getPlugin("VNPBungee") != null) {
+			getLogger().info("Found VNPBungee!");
 			vnpBungee = VNPBungee.getInstance();
 		}
 
 		if (getProxy().getPluginManager().getPlugin("LuckPerms") != null) {
+			getLogger().info("Found LuckPerms!");
             luckPermsApi = LuckPerms.getApi();
         }
 
         if (getProxy().getPluginManager().getPlugin("UUIDDB") != null) {
+			getLogger().info("Found UUIDDB!");
             uuidDb = (UUIDDBPlugin) getProxy().getPluginManager().getPlugin("UUIDDB");
         }
 
