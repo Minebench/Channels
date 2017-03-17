@@ -169,7 +169,7 @@ public class Chatter {
 	 * get my prefix
 	 */
 	public String getPrefix() {
-		if (cfg.getPrefix() == null && cfg.getPrefix().isEmpty()) {
+		if (cfg.getPrefix() == null || cfg.getPrefix().isEmpty()) {
 			// No prefix in chatter config, try to query from other plugins
 			if (Channels.getLuckPermsApi() != null) {
 				MetaData metaData = getMetaData();
@@ -185,7 +185,7 @@ public class Chatter {
 	 * get my suffix
 	 */
 	public String getSuffix() {
-		if (cfg.getSuffix() == null && cfg.getSuffix().isEmpty()) {
+		if (cfg.getSuffix() == null || cfg.getSuffix().isEmpty()) {
 			// No suffix in chatter config, try to query from other plugins
 			if (Channels.getLuckPermsApi() != null) {
 				MetaData metaData = getMetaData();
