@@ -2,14 +2,13 @@ package net.zaiyers.Channels;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 import com.google.common.collect.ImmutableMap;
 import me.lucko.luckperms.api.Contexts;
 import me.lucko.luckperms.api.User;
 import me.lucko.luckperms.api.caching.MetaData;
 import me.lucko.luckperms.api.caching.UserData;
-import me.lucko.luckperms.api.context.MutableContextSet;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.zaiyers.Channels.config.ChatterConfig;
@@ -174,7 +173,7 @@ public class Chatter {
 			if (Channels.getLuckPermsApi() != null) {
 				MetaData metaData = getMetaData();
 				if (metaData != null && metaData.getPrefix() != null) {
-					return metaData.getPrefix();
+					return ChatColor.translateAlternateColorCodes('&', metaData.getPrefix());
 				}
 			}
 		}
@@ -190,7 +189,7 @@ public class Chatter {
 			if (Channels.getLuckPermsApi() != null) {
 				MetaData metaData = getMetaData();
 				if (metaData != null && metaData.getSuffix() != null) {
-					return metaData.getSuffix();
+					return ChatColor.translateAlternateColorCodes('&', metaData.getSuffix());
 				}
 			}
 		}
