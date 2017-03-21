@@ -90,4 +90,13 @@ public class ChannelMessage extends AbstractMessage {
 	public Channel getChannel() {
 		return channel;
 	}
+
+	/**
+	 * sets a new raw message
+	 * @param rawMessage the new raw message
+	 */
+	public void setRawMessage(String rawMessage) {
+		this.rawMessage = Matcher.quoteReplacement(rawMessage);
+		processMessage();
+	}
 }
