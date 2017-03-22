@@ -7,16 +7,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Iterables;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.TabExecutor;
 import net.zaiyers.Channels.Channel;
@@ -133,31 +129,33 @@ public class ChannelsCommandExecutor extends Command implements TabExecutor {
 	}
 
 	public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
-		if (args.length <= 1) {
-			return matchingCommands(sender, (args.length > 0) ? args[0] : "");
-		} else if (args.length == 2) {
-			if (args[0].toLowerCase().matches("^addserver|global|backend|remove|removeserver|addmod|ban|color|info|kick|password|removemod|rename|unban|speak|list|who|subscribe|unsubscribe$")) {
-				return matchingChannels(args[1]);
-			} else if (args[0].toLowerCase().matches("^mute|prefix|suffix$")) {
-				return matchingPlayers(args[1]);
-			} else if (args[0].toLowerCase().matches("^serverdefaultchannel$")) {
-				return matchingServers(args[1]);
-			}
-		} else if (args.length == 3) {
-			if (args[0].toLowerCase().matches("^addserver|removeserver$")) {
-				return matchingServers(args[2]);
-			} else if (args[0].toLowerCase().matches("^autojoin|global|backend$")) {
-				return matchingBoolean(args[2]);
-			} else if (args[0].toLowerCase().matches("^serverdefaultchannel$")) {
-				return matchingChannels(args[2]);
-			} else if (args[0].toLowerCase().matches("^addmod|ban|kick|removemod|unban$")) {
-				return matchingPlayers(args[2]);
-			} else if (args[0].toLowerCase().matches("^color$")) {
-				return matchingColors(args[2]);
-			}
-		} else if (args.length == 4) {
-			 if (args[0].toLowerCase().matches("^serverdefaultchannel$")) {
-				return matchingBoolean(args[3]);
+		if ("channel".equals(getName())) {
+			if (args.length <= 1) {
+				return matchingCommands(sender, (args.length > 0) ? args[0] : "");
+			} else if (args.length == 2) {
+				if (args[0].toLowerCase().matches("^addserver|global|backend|remove|removeserver|addmod|ban|color|info|kick|password|removemod|rename|unban|speak|list|who|subscribe|unsubscribe$")) {
+					return matchingChannels(args[1]);
+				} else if (args[0].toLowerCase().matches("^mute|prefix|suffix$")) {
+					return matchingPlayers(args[1]);
+				} else if (args[0].toLowerCase().matches("^serverdefaultchannel$")) {
+					return matchingServers(args[1]);
+				}
+			} else if (args.length == 3) {
+				if (args[0].toLowerCase().matches("^addserver|removeserver$")) {
+					return matchingServers(args[2]);
+				} else if (args[0].toLowerCase().matches("^autojoin|global|backend$")) {
+					return matchingBoolean(args[2]);
+				} else if (args[0].toLowerCase().matches("^serverdefaultchannel$")) {
+					return matchingChannels(args[2]);
+				} else if (args[0].toLowerCase().matches("^addmod|ban|kick|removemod|unban$")) {
+					return matchingPlayers(args[2]);
+				} else if (args[0].toLowerCase().matches("^color$")) {
+					return matchingColors(args[2]);
+				}
+			} else if (args.length == 4) {
+				if (args[0].toLowerCase().matches("^serverdefaultchannel$")) {
+					return matchingBoolean(args[3]);
+				}
 			}
 		}
 		
