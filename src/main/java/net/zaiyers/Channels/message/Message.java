@@ -18,7 +18,13 @@ public interface Message {
 	 * get the unprocessed message
 	 */
 	public String getRawMessage();
-	
+
+	/**
+	 * sets a new raw message
+	 * @param rawMessage the new raw message
+	 */
+	public void setRawMessage(String rawMessage);
+
 	/**
 	 * get the time the message was sent
 	 */
