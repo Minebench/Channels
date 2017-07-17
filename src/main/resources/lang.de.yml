@@ -6,6 +6,7 @@ channels:
     channel-list-chatters: '&aPersonen im Channel %channelColor%%channel%&a:'
     wrong-password: '&cFalsches Kennwort.'
     default-channel-set: '&aDu sprichst nun in %channelColor%%channel%'
+    default-channel-set-bypassed: '&aServer Defaultchannel ist %channelColor%%channel%'
     set-prefix: '&aPrefix für Spieler &6%chatter% &a in &r%prefix%&a geändert.'
     set-suffix: '&aSuffix für Spieler &6%chatter% &a in &r%suffix%&a geändert.'
     recipient-offline: '&cEmpfänger ist offline gegangen.'

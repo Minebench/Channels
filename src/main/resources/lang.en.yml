@@ -6,6 +6,7 @@ channels:
       channel-list-chatters: "&aPeople in Channel %channelColor%%channel%&a:"
       wrong-password: '&cWrong password.'
       default-channel-set: "&aYou are now speaking in %channelColor%%channel%"
+      default-channel-set-bypassed: "&aServer default channel is %channelColor%%channel%"
       set-prefix: '&aSet prefix of &6%chatter% &ato &r%prefix%&a.'
       set-suffix: '&aSet suffix of &6%chatter% &ato &r%suffix%&a.'
       recipient-offline: '&cRecipient went offline.'
