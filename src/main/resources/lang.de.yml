@@ -88,7 +88,7 @@ channels:
   usage:
     ChannelAddModCommand: "Verwendung: /channel addMod <Channel> <Chatter>"
     ChannelAddServerCommand: "Verwendung: /channel addServer <Channel> <Server>"
-      ChannelAutofocusCommand: "Usage: /channel autofocus <channel> <true|false>"
+    ChannelAutofocusCommand: "Usage: /channel autofocus <channel> <true|false>"
     ChannelAutojoinCommand: "Verwendung: /channel autojoin <Channel> <true|false>"
     ChannelBanCommand: "Verwendung: /channel ban <Channel> <Chatter>"
     ChannelColorCommand: "Verwendung: /channel color <Channel> <Farbe>"
