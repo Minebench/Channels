@@ -46,7 +46,7 @@ public class ChannelSubscribeCommand extends AbstractCommand {
         }
 
         // subscribe
-        chatter.subscribe(chan.getUUID());
+        chatter.subscribe(chan);
         Channels.notify(sender, "channels.command.channel-subscribed", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
     }
 

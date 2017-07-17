@@ -5,9 +5,9 @@ import net.md_5.bungee.api.CommandSender;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 
-public class ChannelBackendCommand extends AbstractCommand {
+public class ChannelAutofocusCommand extends AbstractCommand {
 
-	public ChannelBackendCommand(CommandSender sender, String[] args) {
+	public ChannelAutofocusCommand(CommandSender sender, String[] args) {
 		super(sender, args);
 	}
 
@@ -19,10 +19,11 @@ public class ChannelBackendCommand extends AbstractCommand {
 		}
 
 		try {
-			chan.setBackend(Boolean.parseBoolean(args[2]));
+			chan.setAutofocus(Boolean.parseBoolean(args[2]));
 			Channels.notify(sender, "channels.command.channel-modified", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
+			Channels.getInstance().checkSanity(sender, chan.getUUID());
 		} catch (ClassCastException e) {
-			Channels.notify(sender, "channels.usage.backend");
+			Channels.notify(sender, "channels.usage.autofocus");
 		}
 	}
 

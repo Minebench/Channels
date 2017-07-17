@@ -19,7 +19,7 @@ public class ServerSwitchListener implements Listener {
 			Chatter chatter = Channels.getInstance().getChatter(e.getPlayer());
 			
 			if (channel != null && !chatter.getChannel().equals(channel.getUUID())) {
-				chatter.subscribe(channel.getUUID());
+				chatter.subscribe(channel);
 				if (!chatter.hasPermission("channels.force-default-channel-bypass")) {
 					chatter.setDefaultChannelUUID(channel.getUUID());
 					Channels.notify(e.getPlayer(), "channels.chatter.default-channel-set", ImmutableMap.of("channel", channel.getName(), "channelColor", channel.getColor().toString()));

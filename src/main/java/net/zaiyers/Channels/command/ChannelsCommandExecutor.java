@@ -60,6 +60,8 @@ public class ChannelsCommandExecutor extends Command implements TabExecutor {
 					cmd = new ChannelAddModCommand(sender, args);
 				} else if (cmdName.equals("removemod")) {
 					cmd = new ChannelRemoveModCommand(sender, args);
+				} else if (cmdName.equals("autofocus")) {
+					cmd = new ChannelAutofocusCommand(sender, args);
 				} else if (cmdName.equals("autojoin")) {
 					cmd = new ChannelAutojoinCommand(sender, args);
 				} else if (cmdName.equals("ban")) {
@@ -133,7 +135,7 @@ public class ChannelsCommandExecutor extends Command implements TabExecutor {
 			if (args.length <= 1) {
 				return matchingCommands(sender, (args.length > 0) ? args[0] : "");
 			} else if (args.length == 2) {
-				if (args[0].toLowerCase().matches("^addserver|global|backend|remove|removeserver|addmod|ban|color|info|kick|password|removemod|rename|unban|speak|list|who|subscribe|unsubscribe$")) {
+				if (args[0].toLowerCase().matches("^addserver|autofocus|autojoin|global|backend|remove|removeserver|addmod|ban|color|info|kick|password|removemod|rename|unban|speak|list|who|subscribe|unsubscribe$")) {
 					return matchingChannels(args[1]);
 				} else if (args[0].toLowerCase().matches("^mute|prefix|suffix$")) {
 					return matchingPlayers(args[1]);
@@ -143,7 +145,7 @@ public class ChannelsCommandExecutor extends Command implements TabExecutor {
 			} else if (args.length == 3) {
 				if (args[0].toLowerCase().matches("^addserver|removeserver$")) {
 					return matchingServers(args[2]);
-				} else if (args[0].toLowerCase().matches("^autojoin|global|backend$")) {
+				} else if (args[0].toLowerCase().matches("^autofocus|autojoin|global|backend$")) {
 					return matchingBoolean(args[2]);
 				} else if (args[0].toLowerCase().matches("^serverdefaultchannel$")) {
 					return matchingChannels(args[2]);
@@ -205,11 +207,11 @@ public class ChannelsCommandExecutor extends Command implements TabExecutor {
             commands.add("backend");
         }
 		
-		if ("addServer".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelAddServerCommand.toString())) {
+		if ("addserver".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelAddServerCommand.toString())) {
 			commands.add("addServer");
 		}
 		
-		if ("removeServer".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelRemoveServerCommand.toString())) {
+		if ("removeserver".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelRemoveServerCommand.toString())) {
 			commands.add("removeServer");
 		}
 		
@@ -232,10 +234,14 @@ public class ChannelsCommandExecutor extends Command implements TabExecutor {
 			commands.add("addMod");
 		}
 		
-		if ("removeMod".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelRemoveModCommand.toString())) {
+		if ("removemod".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelRemoveModCommand.toString())) {
 			commands.add("removeMod");
 		}
-		
+
+		if ("autofocus".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelAutofocusCommand.toString())) {
+			commands.add("autofocus");
+		}
+
 		if ("autojoin".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelAutojoinCommand.toString())) {
 			commands.add("autojoin");
 		}
@@ -272,7 +278,7 @@ public class ChannelsCommandExecutor extends Command implements TabExecutor {
 			commands.add("suffix");
 		}
 		
-		if ("serverDefaultChannel".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ServerDefaultChannelCommand.toString())) {
+		if ("serverdefaultchannel".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ServerDefaultChannelCommand.toString())) {
 			commands.add("serverDefaultChannel");
 		}
 		

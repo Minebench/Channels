@@ -87,18 +87,23 @@ public class Chatter {
 	
 	/**
 	 * subscribes to a channel
-	 * @param uuid
+	 * @param chan
 	 */
-	public void subscribe(String uuid) {
+	public void subscribe(Channel chan) {
 		// add subscription to config
 		List<String> subs = cfg.getSubscriptions();
-		if (!subs.contains(uuid)) {
-			subs.add(uuid);
+		if (!subs.contains(chan.getUUID())) {
+			subs.add(chan.getUUID());
 			
 			cfg.setSubscriptions(subs);
 		}	
 		// subscribe to channel
-		Channels.getInstance().getChannel(uuid).subscribe(this);
+		chan.subscribe(this);
+
+		if (chan.doAutofocus() && privateRecipient == null && !chan.getUUID().equals(getChannel()) && !Channels.getInstance().getChannel(getChannel()).doAutofocus()) {
+			setDefaultChannelUUID(chan.getUUID());
+			Channels.notify(player, "channels.chatter.default-channel-set", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
+		}
 	}
 	
 	/**
@@ -136,7 +141,7 @@ public class Chatter {
 
             if (chan != null && hasPermission(chan, "subscribe")) {
                 setDefaultChannelUUID(chan.getUUID());
-                subscribe(chan.getUUID());
+                subscribe(chan);
                 if (getLastRecipient() == null) {
                     Channels.notify(getPlayer(), "channels.chatter.default-channel-set", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
                 }

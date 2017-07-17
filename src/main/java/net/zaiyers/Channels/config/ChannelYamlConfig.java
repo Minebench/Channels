@@ -151,4 +151,12 @@ public class ChannelYamlConfig extends YamlConfig implements ChannelConfig {
         return cfg.getBoolean("backend");
     }
 
+	public void setAutofocus(boolean autofocus) {
+		cfg.set("autofocus", autofocus);
+	}
+
+	public boolean doAutofocus() {
+		return cfg.getBoolean("autofocus", false);
+	}
+
 }

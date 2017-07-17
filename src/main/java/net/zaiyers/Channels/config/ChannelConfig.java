@@ -159,4 +159,16 @@ public interface ChannelConfig extends Config {
      * @param backend
      */
     void setBackend(boolean backend);
+
+	/**
+	 * set autofocus behavior
+	 * @param autofocus
+	 */
+	public void setAutofocus(boolean autofocus);
+
+	/**
+	 * get autofocus behavior
+	 * @return true if autofocus is enabled
+	 */
+	public boolean doAutofocus();
 }

@@ -21,6 +21,9 @@ public class ChannelHelpCommand extends AbstractCommand implements ChannelsComma
 				if (sender.hasPermission(CommandPermission.ChannelAddServerCommand.toString())) {
 					adminCommands.add("ChannelAddServerCommand");
 				}
+				if (sender.hasPermission(CommandPermission.ChannelAutofocusCommand.toString())) {
+					adminCommands.add("ChannelAutofocusCommand");
+				}
 				if (sender.hasPermission(CommandPermission.ChannelAutojoinCommand.toString())) {
 					adminCommands.add("ChannelAutojoinCommand");
 				}

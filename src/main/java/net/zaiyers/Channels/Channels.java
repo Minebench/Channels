@@ -531,7 +531,7 @@ public class Channels extends Plugin {
 			for (Channel channel: Channels.getInstance().getChannels().values()) {
 				if (channel.doAutojoin() && !channel.isTemporary() && chatter.hasPermission(channel, "subscribe")) {
 					// joining twice doesn't matter, caught elsewhere
-					chatter.subscribe(channel.getUUID());
+					chatter.subscribe(channel);
 				}
 			}
 

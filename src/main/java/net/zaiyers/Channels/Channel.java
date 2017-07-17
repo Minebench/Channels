@@ -316,6 +316,22 @@ public class Channel {
 	}
 
 	/**
+	 * toggle autofocus behavior
+	 * @param b
+	 */
+	public void setAutofocus(boolean b) {
+		cfg.setAutofocus(b);
+	}
+
+	/**
+	 * get autofocus behavior
+	 * @return
+	 */
+	public boolean doAutofocus() {
+		return cfg.doAutofocus();
+	}
+
+	/**
 	 * ban and kick player from channel
 	 * @param chatterUUID
 	 */

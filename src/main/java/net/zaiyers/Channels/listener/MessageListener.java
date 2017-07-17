@@ -72,7 +72,7 @@ public class MessageListener implements Listener {
 
                         if (chan.doAutojoin() && chatter.hasPermission(chan, "subscribe")) {
                             chatter.setDefaultChannelUUID(chan.getUUID());
-                            chatter.subscribe(chan.getUUID());
+                            chatter.subscribe(chan);
                             Channels.notify(chatter.getPlayer(), "channels.chatter.default-channel-set", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
                         } // else the guy is screwed due to a misconfiguration - see Channels.checkSanity()
                     }

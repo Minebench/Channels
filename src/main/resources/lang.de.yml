@@ -61,6 +61,7 @@ channels:
     channel-info-tag: "&aTag: '&f%tag%'"
     channel-info-color: "&aFarbe: %color%%colorName%"
     channel-info-password: "&aPasswort: '&f%password%'"
+    channel-info-autofocus: "&aAutofocus: '&f%autofocus%'"
     channel-info-autojoin: "&aAutojoin: '&f%autojoin%'"
     channel-info-msgFormat: "&aNachrichtenformat: '&f%format%'"
     channel-info-global: "&aGlobal: '&f%global%'"
@@ -87,6 +88,7 @@ channels:
   usage:
     ChannelAddModCommand: "Verwendung: /channel addMod <Channel> <Chatter>"
     ChannelAddServerCommand: "Verwendung: /channel addServer <Channel> <Server>"
+      ChannelAutofocusCommand: "Usage: /channel autofocus <channel> <true|false>"
     ChannelAutojoinCommand: "Verwendung: /channel autojoin <Channel> <true|false>"
     ChannelBanCommand: "Verwendung: /channel ban <Channel> <Chatter>"
     ChannelColorCommand: "Verwendung: /channel color <Channel> <Farbe>"
@@ -117,6 +119,8 @@ channels:
     explain-ChannelAddModCommand: Fügt dem Channel einen neuen Moderator hinzu
     help-ChannelAddServerCommand: " - &a/channel addServer <&6Channel&a> <&6Server&a>"
     explain-ChannelAddServerCommand: Fügt dem Channel einen weiteren Server hinzu
+    help-ChannelAutofocusCommand: " - &a/channel autofocus <&6channel&a> <&6true&a|&6false&a>"
+    explain-ChannelAutofocusCommand: Lässt Spieler den Channel automatisch fokusieren
     help-ChannelAutojoinCommand: " - &a/channel autojoin <&6true&a|&6false&a>"
     explain-ChannelAutojoinCommand: Lässt Spieler dem Channel automatisch beitreten
     help-ChannelBanCommand: " - &a/channel ban <&6Channel&a> <&6Chatter&a>"

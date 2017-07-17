@@ -3,6 +3,7 @@ package net.zaiyers.Channels.command;
 public enum CommandPermission {
 		ChannelAddModCommand("channels.addmod"),
 		ChannelAddServerCommand("channels.addserver"),
+		ChannelAutofocusCommand("channels.autofocus"),
 		ChannelAutojoinCommand("channels.autojoin"),
 		ChannelBanCommand("channels.ban"),
 		ChannelColorCommand("channels.setcolor"),

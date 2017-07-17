@@ -142,8 +142,16 @@ public class ChannelMongoConfig extends MongoConfig implements ChannelConfig {
     public void setBackend(boolean backend) {
         cfg.set("backend", backend);
     }
-    
-    public boolean isBackend() {
+
+	public boolean isBackend() {
         return cfg.getBoolean("backend", false);
     }
+
+	public void setAutofocus(boolean autofocus) {
+		cfg.set("autofocus", autofocus);
+	}
+
+	public boolean doAutofocus() {
+		return cfg.getBoolean("autofocus", false);
+	}
 }
