@@ -1,6 +1,7 @@
 package net.zaiyers.Channels.config;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import net.md_5.bungee.api.ChatColor;
@@ -12,10 +13,11 @@ public class LanguageConfig extends YamlConfig {
 	}
 
 	public void createDefaultConfig() {
-		// default is english
-		cfg = ymlCfg.load(
-				new InputStreamReader(Channels.getInstance().getResourceAsStream("lang.en.yml"))
-		);
+		InputStream defaultConfig = Channels.getInstance().getResourceAsStream(configFile.getName());
+		if (defaultConfig == null) {
+			defaultConfig = Channels.getInstance().getResourceAsStream("lang.en.yml");
+		}
+		cfg = ymlCfg.load(new InputStreamReader(defaultConfig));
 		
 		save();
 	}
