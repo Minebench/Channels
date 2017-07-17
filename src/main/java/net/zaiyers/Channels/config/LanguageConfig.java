@@ -25,7 +25,7 @@ public class LanguageConfig extends YamlConfig {
 	 */
 	public String getTranslation(String key) {
 		if (cfg.getString(key, "").isEmpty()) {
-			return "§cUnknown language key: §6"+key;
+			return ChatColor.RED + "Unknown language key: " + ChatColor.GOLD + key;
 		} else {
 			return ChatColor.translateAlternateColorCodes('&', cfg.getString(key));
 		}
