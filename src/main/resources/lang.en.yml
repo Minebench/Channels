@@ -99,7 +99,7 @@ channels:
       ChannelMuteCommand: 'Usage: /channel mute <chatter>'
       ChannelOpenCommand: 'Usage: /channel open <channel> <tag> [password]'
       ChannelPasswordCommand: 'Usage: /channel password <channel> [password]'
-      ChannelPrefixCommand: 'Usage: /channel prefix <chatter> "[prefix]"'
+      ChannelPrefixCommand: 'Usage: /channel prefix <chatter> [prefix]'
       ChannelRemoveCommand: 'Usage: /channel remove <channel>'
       ChannelRemoveModCommand: 'Usage: /channel removeMod <channel> <moderator>'
       ChannelRemoveServerCommand: 'Usage: /channel removeServer <channel> <server>'

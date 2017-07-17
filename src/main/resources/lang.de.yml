@@ -99,7 +99,7 @@ channels:
     ChannelMuteCommand: "Verwendung: /channel mute <Chatter>"
     ChannelOpenCommand: "Verwendung: /channel open <Channel> <Tag> [Passwort]"
     ChannelPasswordCommand: "Verwendung: /channel password <Channel> [Passwort]"
-    ChannelPrefixCommand: "Verwendung: /channel prefix <Chatter> "[Prefix]""
+    ChannelPrefixCommand: "Verwendung: /channel prefix <Chatter> [Prefix]"
     ChannelRemoveCommand: "Verwendung: /channel remove <Channel>"
     ChannelRemoveModCommand: "Verwendung: /channel removeMod <Channel> <Moderator>"
     ChannelRemoveServerCommand: "Verwendung: /channel removeServer <Channel> <Server>"
