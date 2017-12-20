@@ -204,13 +204,10 @@ public class Chatter {
 	private MetaData getMetaData() {
 		User lpUser = Channels.getLuckPermsApi().getUserSafe(player.getUniqueId()).orElse(null);
 		if (lpUser != null) {
-			UserData userData = lpUser.getUserDataCache().orElse(null);
-			if (userData != null) {
-				Contexts contexts = Channels.getLuckPermsApi().getContextForUser(lpUser).orElse(null);
-				if (contexts != null) {
-					return userData.getMetaData(contexts);
-				}
-			}
+			Contexts contexts = Channels.getLuckPermsApi().getContextForUser(lpUser).orElse(null);
+			if (contexts != null) {
+                return lpUser.getCachedData().getMetaData(contexts);
+            }
 		}
 		return null;
 	}
