@@ -3,6 +3,7 @@ package net.zaiyers.Channels.config;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -112,9 +113,9 @@ public class ChannelsConfig extends YamlConfig {
 	 */
 	public String getPrivateMessageFormat(SenderRole role) {
 		if (role.equals(PrivateMessage.SenderRole.SENDER)) {
-			return cfg.getString("privateMessageFormatSender", "§bTo %receiver%: %message%");
+			return cfg.getString("privateMessageFormatSender", "[&bTo %prefix%&b%receiver%%suffix%:](&7%date% %time%) %msg%");
 		} else if (role.equals(PrivateMessage.SenderRole.RECEIVER)) {
-			return cfg.getString("privateMessageFormatReceiver", "§dFrom %sender%: %message%");
+			return cfg.getString("privateMessageFormatReceiver", "[&dFrom %prefix%&d%sender%%suffix%:](&7%date% %time%) %msg%");
 		} else return null;
 	}
 
@@ -125,6 +126,22 @@ public class ChannelsConfig extends YamlConfig {
     public String getTimeHoverFormat() {
         return cfg.getString("timeHoverFormat", "§7%date% %time%");
     }
+	
+	/**
+	 * format for the %date% placeholder
+	 * @return
+	 */
+	public SimpleDateFormat getDateFormat() {
+		return new SimpleDateFormat(cfg.getString("dateFormat","yyyy-MM-dd"));
+	}
+	
+	/**
+	 * format for the %time% placeholder
+	 * @return
+	 */
+	public SimpleDateFormat getTimeFormat() {
+		return new SimpleDateFormat(cfg.getString("timeFormat","HH:mm:ss"));
+	}
 
 	/**
 	 * create default configuration

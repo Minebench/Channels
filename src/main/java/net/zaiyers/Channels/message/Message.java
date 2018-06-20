@@ -1,7 +1,7 @@
 package net.zaiyers.Channels.message;
 
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.BaseComponent;
 
 public interface Message {
 	/**
@@ -12,7 +12,7 @@ public interface Message {
 	/**
 	 * get the final message
 	 */
-	public TextComponent getProcessedMessage();
+	public BaseComponent[] getProcessedMessage();
 	
 	/**
 	 * get the unprocessed message

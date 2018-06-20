@@ -12,6 +12,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableMap;
 
+import de.themoep.minedown.MineDown;
 import de.themoep.vnpbungee.VNPBungee;
 import me.lucko.luckperms.LuckPerms;
 import me.lucko.luckperms.api.LuckPermsApi;
@@ -332,17 +333,7 @@ public class Channels extends Plugin {
 	public static void notify(CommandSender sender, String key, Map<String, String> replacements) {
 		String string = Channels.getInstance().getLanguage().getTranslation(key);
 		
-		// insert replacements
-		if (replacements != null) {
-			for (Map.Entry<String, String> entry : replacements.entrySet()) {
-				string = string.replaceAll("%"+entry.getKey()+"%", entry.getValue());
-			}
-		}
-		
-		// add colors
-		string = addSpecialChars(string);
-		
-		sender.sendMessage(TextComponent.fromLegacyText(string));
+		sender.sendMessage(new MineDown(string).replace(replacements).toComponent());
 	}
 	
 

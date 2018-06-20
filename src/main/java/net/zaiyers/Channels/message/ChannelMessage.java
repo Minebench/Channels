@@ -4,10 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
 
+import de.themoep.minedown.MineDown;
+import de.themoep.minedown.Replacer;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.Chatter;
@@ -40,30 +39,29 @@ public class ChannelMessage extends AbstractMessage {
 	 * generate message and format it
 	 */
 	public void processMessage() {
-		BaseComponent[] baseComponents = TextComponent.fromLegacyText(
-				channel.getFormat()
-						.replaceAll("%prefix%", chatter.getPrefix())
-						.replaceAll("%sender%", chatter.getName())
-						.replaceAll("%suffix%", chatter.getSuffix())
-						.replaceAll("%msg%", chatter.hasPermission(channel, "color") ?
-								Channels.addSpecialChars(rawMessage) : rawMessage)
-						.replaceAll("%channelColor%", channel.getColor().toString())
-						.replaceAll("%channelTag%", channel.getTag())
-						.replaceAll("%channelName%", channel.getName())
+		Date date = new Date(getTime());
+		SimpleDateFormat dateFormat = Channels.getConfig().getDateFormat();
+		SimpleDateFormat timeFormat = Channels.getConfig().getTimeFormat();
+
+		MineDown md = new MineDown(channel.getFormat()).replace(
+				"prefix", chatter.getPrefix(),
+				"sender", chatter.getName(),
+				"suffix", chatter.getSuffix(),
+				"channelColor", channel.getColor().toString(),
+				"channelTag", channel.getTag(),
+				"channelName", channel.getName(),
+				"date", dateFormat.format(date),
+				"time", timeFormat.format(date)
 		);
 
-		if(baseComponents.length > 0) {
-			Date date = new Date(getTime());
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-			HoverEvent hoverTime = new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(
-					Channels.getConfig().getTimeHoverFormat()
-							.replaceAll("%date%", dateFormat.format(date))
-							.replaceAll("%time%", timeFormat.format(date))
-			));
-			baseComponents[0].setHoverEvent(hoverTime);
+		if (chatter.hasPermission("channels.minedown")) {
+			md.replacer().replacements().put("msg", rawMessage);
+			processedMessage = md.toComponent();
+		} else  {
+			processedMessage = md.toComponent();
+			String message = chatter.hasPermission("channels.color") ? Channels.addSpecialChars(rawMessage) : rawMessage;
+			processedMessage = Replacer.replace(processedMessage, "msg", message);
 		}
-		processedMessage = new TextComponent(baseComponents);
 	}
 	
 	/**

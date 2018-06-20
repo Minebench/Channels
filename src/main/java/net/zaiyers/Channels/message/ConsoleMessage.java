@@ -1,13 +1,14 @@
 package net.zaiyers.Channels.message;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 
+import de.themoep.minedown.MineDown;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
-import net.zaiyers.Channels.ChannelsChatEvent;
 
 public class ConsoleMessage extends AbstractMessage {
 	/**
@@ -30,13 +31,18 @@ public class ConsoleMessage extends AbstractMessage {
 	 * generate message and format it
 	 */
 	public void processMessage() {
-		processedMessage = new TextComponent( TextComponent.fromLegacyText(
-				channel.getConsoleFormat()
-									.replaceAll("%channelColor%",	channel.getColor().toString())
-									.replaceAll("%channelTag%",		channel.getTag())
-									.replaceAll("%channelName%",	channel.getName())
-									.replaceAll("%msg%", rawMessage)
-		) );
+		Date date = new Date(getTime());
+		SimpleDateFormat dateFormat = Channels.getConfig().getDateFormat();
+		SimpleDateFormat timeFormat = Channels.getConfig().getTimeFormat();
+		
+		processedMessage = MineDown.parse(channel.getConsoleFormat(),
+				"channelColor", channel.getColor().toString(),
+				"channelTag", channel.getTag(),
+				"channelName", channel.getName(),
+				"date", dateFormat.format(date),
+				"time", timeFormat.format(date),
+				"msg", rawMessage
+		);
 	}
 	
 	public void send() {
