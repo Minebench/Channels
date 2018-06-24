@@ -125,12 +125,12 @@ public class Channels extends Plugin {
 		getProxy().getPluginManager().registerListener(this, swl);
 		
 		// register command executors
-		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("channel", "", new String[] {"ch, channels"}));
-		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("pm", "", new String[] {"tell", "msg"}));
-		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("reply", "", new String[] {"r"}));
-		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("afk", "", new String[] {}));
-		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("dnd", "", new String[] {}));
-		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("ignore", "", new String[] {}));
+		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("channel", "", "ch", "channels"));
+		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("pm", "", "tell", "msg"));
+		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("reply", "", "r"));
+		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("afk", ""));
+		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("dnd", ""));
+		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("ignore", ""));
 		
 		// load and register channels
 		for (String channelUUID: config.getChannels()) {

@@ -21,7 +21,7 @@ import net.zaiyers.Channels.Channels;
 public class ChannelsCommandExecutor extends Command implements TabExecutor {
 	String command;
 	
-	public ChannelsCommandExecutor(String name, String permission,	String[] aliases) {
+	public ChannelsCommandExecutor(String name, String permission, String... aliases) {
 		super(name, permission, aliases);
 		
 		command = name;
