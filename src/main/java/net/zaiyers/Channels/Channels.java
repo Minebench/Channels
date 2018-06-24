@@ -7,11 +7,7 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableMap;
-
 import de.themoep.minedown.MineDown;
 import de.themoep.vnpbungee.VNPBungee;
 import me.lucko.luckperms.LuckPerms;
@@ -20,7 +16,6 @@ import me.lucko.luckperms.api.User;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -32,7 +27,6 @@ import net.zaiyers.Channels.listener.MessageListener;
 import net.zaiyers.Channels.listener.PlayerJoinListener;
 import net.zaiyers.Channels.listener.PlayerQuitListener;
 import net.zaiyers.Channels.listener.ServerSwitchListener;
-import net.zaiyers.UUIDDB.bungee.UUIDDB;
 import net.zaiyers.UUIDDB.core.UUIDDBPlugin;
 
 public class Channels extends Plugin {
@@ -131,7 +125,7 @@ public class Channels extends Plugin {
 		getProxy().getPluginManager().registerListener(this, swl);
 		
 		// register command executors
-		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("channel", "", new String[] {"ch"}));
+		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("channel", "", new String[] {"ch, channels"}));
 		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("pm", "", new String[] {"tell", "msg"}));
 		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("reply", "", new String[] {"r"}));
 		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("afk", "", new String[] {}));

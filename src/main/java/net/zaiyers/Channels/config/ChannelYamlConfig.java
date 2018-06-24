@@ -58,6 +58,10 @@ public class ChannelYamlConfig extends YamlConfig implements ChannelConfig {
 	public void setTag(String tag) {
 		cfg.set("tag", tag);
 	}
+	
+	public void setFormat(String format) {
+		cfg.set("format", format);
+	}
 
 	public void setPassword(String password) {
 		if (password == null) {

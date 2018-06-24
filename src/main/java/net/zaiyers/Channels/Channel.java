@@ -185,6 +185,15 @@ public class Channel {
 	}
 	
 	/**
+	 * set the channel format
+	 *
+	 * @param format new format
+	 */
+	public void setFormat(String format) {
+		cfg.setFormat(format);
+	}
+	
+	/**
 	 * set new channel password
 	 * 
 	 * @param password
@@ -437,5 +446,4 @@ public class Channel {
 		}
 		cfg.removeConfig();
 	}
-
 }

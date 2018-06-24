@@ -50,19 +50,25 @@ public interface ChannelConfig extends Config {
 	
 	/**
 	 * set channel name
-	 * @param new name
+	 * @param name new name
 	 */
 	public void setName(String name);
 	
 	/**
 	 * set channel tag
-	 * @param new tag
+	 * @param tag new tag
 	 */
 	public void setTag(String tag);
 	
 	/**
+	 * set the channel format
+	 * @param format new format
+	 */
+	public void setFormat(String format);
+	
+	/**
 	 * set channel passwd
-	 * @param new password
+	 * @param password new password
 	 */
 	public void setPassword(String password);
 	
@@ -97,14 +103,14 @@ public interface ChannelConfig extends Config {
 	
 	/**
 	 * add moderator
-	 * @param moderators uuid
+	 * @param uuid moderators uuid
 	 */
 	public void addModerator(String uuid);
 	
 
 	/**
 	 * remove moderator
-	 * @param moderators uuid
+	 * @param modUUID moderators uuid
 	 */
 	public void removeModerator(String modUUID);
 	
@@ -134,7 +140,7 @@ public interface ChannelConfig extends Config {
 	
 	/**
 	 * set channel color
-	 * @param new color
+	 * @param color new color
 	 */
 	public void setColor(ChatColor color);
 	

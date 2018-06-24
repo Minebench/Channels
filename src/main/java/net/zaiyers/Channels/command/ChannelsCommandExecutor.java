@@ -72,6 +72,8 @@ public class ChannelsCommandExecutor extends Command implements TabExecutor {
 					cmd = new ChannelUnbanCommand(sender, args);
 				} else if (cmdName.equals("color")) {
 					cmd = new ChannelColorCommand(sender, args);
+				} else if (cmdName.equals("format")) {
+					cmd = new ChannelFormatCommand(sender, args);
 				} else if (cmdName.equals("mute")) {
 					cmd = new ChannelMuteCommand(sender, args);
 				} else if (cmdName.equals("unmute")) {
@@ -202,10 +204,14 @@ public class ChannelsCommandExecutor extends Command implements TabExecutor {
 		if ("global".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelGlobalCommand.toString())) {
 			commands.add("global");
 		}
-
-        if ("backend".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelBackendCommand.toString())) {
-            commands.add("backend");
-        }
+		
+		if ("backend".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelBackendCommand.toString())) {
+			commands.add("backend");
+		}
+		
+		if ("format".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelFormatCommand.toString())) {
+			commands.add("format");
+		}
 		
 		if ("addserver".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelAddServerCommand.toString())) {
 			commands.add("addServer");

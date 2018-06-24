@@ -27,15 +27,18 @@ public class ChannelHelpCommand extends AbstractCommand implements ChannelsComma
 				if (sender.hasPermission(CommandPermission.ChannelAutojoinCommand.toString())) {
 					adminCommands.add("ChannelAutojoinCommand");
 				}
+				if (sender.hasPermission(CommandPermission.ChannelBackendCommand.toString())) {
+					adminCommands.add("ChannelBackendCommand");
+				}
 				if (sender.hasPermission(CommandPermission.ChannelCreateCommand.toString())) {
 					adminCommands.add("ChannelCreateCommand");
+				}
+				if (sender.hasPermission(CommandPermission.ChannelFormatCommand.toString())) {
+					adminCommands.add("ChannelFormatCommand");
 				}
 				if (sender.hasPermission(CommandPermission.ChannelGlobalCommand.toString())) {
 					adminCommands.add("ChannelGlobalCommand");
 				}
-                if (sender.hasPermission(CommandPermission.ChannelBackendCommand.toString())) {
-                    adminCommands.add("ChannelBackendCommand");
-                }
 				if (sender.hasPermission(CommandPermission.ChannelMuteCommand.toString())) {
 					adminCommands.add("ChannelMuteCommand");
 				}

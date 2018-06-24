@@ -95,6 +95,7 @@ channels:
     ChannelCreateCommand: "Verwendung: /channel create <Channel> <Tag> [Passwort]"
     ChannelGlobalCommand: "Verwendung: /channel global <Channel> <true|false>"
     ChannelBackendCommand: "Verwendung: /channel backend <Channel> <true|false>"
+    ChannelFormatCommand: 'Usage: /channel format <channel> <format>'
     ChannelKickCommand: "Verwendung: /channel kick <Channel> <Chatter>"
     ChannelMuteCommand: "Verwendung: /channel mute <Chatter>"
     ChannelOpenCommand: "Verwendung: /channel open <Channel> <Tag> [Passwort]"
@@ -133,6 +134,8 @@ channels:
     explain-ChannelGlobalCommand: Macht einen Channel auf allen Servern verfügbar
     help-ChannelBackendCommand: " - &a/channel backend <&6Channel&a> <&6true&a|false&6>"
     explain-ChannelBackendCommand: Leitet einen Channel zu dem Server hinter dem Proxy weiter
+    help-ChannelFormatCommand: " - &a/channel format <&6channel&a> <&6format&6>"
+    explain-ChannelFormatCommand: set the format of the channel
     help-ChannelInfoCommand: " - &a/channel info <&6Channel&a>"
     explain-ChannelInfoCommand: Zeigt Informationen über einen Channel
     help-ChannelKickCommand: " - &a/channel kick <&6Channel&a> <&6Chatter&a>"
