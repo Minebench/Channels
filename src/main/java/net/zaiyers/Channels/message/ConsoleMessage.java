@@ -35,7 +35,10 @@ public class ConsoleMessage extends AbstractMessage {
 		SimpleDateFormat dateFormat = Channels.getConfig().getDateFormat();
 		SimpleDateFormat timeFormat = Channels.getConfig().getTimeFormat();
 		
-		processedMessage = MineDown.parse(channel.getConsoleFormat(),
+		processedMessage = MineDown.parse(channel.getFormat(),
+				"prefix", "",
+				"sender", "(Console)",
+				"suffix", "",
 				"channelColor", channel.getColor().toString(),
 				"channelTag", channel.getTag(),
 				"channelName", channel.getName(),

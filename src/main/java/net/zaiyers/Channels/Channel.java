@@ -190,7 +190,7 @@ public class Channel {
 	 * @param format new format
 	 */
 	public void setFormat(String format) {
-		cfg.setFormat(format);
+		cfg.setFormat(format.replace("\\n", "\n"));
 	}
 	
 	/**
@@ -226,14 +226,6 @@ public class Channel {
 	 */
 	public boolean isTemporary() {
 		return temporary;
-	}
-
-	/**
-	 * format for console messages
-	 * @return
-	 */
-	public String getConsoleFormat() {
-		return cfg.getConsoleFormat();
 	}
 
 	/**

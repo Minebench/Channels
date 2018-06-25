@@ -81,10 +81,6 @@ public class ChannelYamlConfig extends YamlConfig implements ChannelConfig {
 		save();
 	}
 
-	public String getConsoleFormat() {
-		return cfg.getString("consoleFormat");
-	}
-
 	public void addServer(String servername) {
 		List<String> servers = getServers();
 		servers.add(servername);

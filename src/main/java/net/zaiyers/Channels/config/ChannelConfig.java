@@ -90,12 +90,6 @@ public interface ChannelConfig extends Config {
 	public void addServer(String servername);
 	
 	/**
-	 * get format for console messages
-	 * @return console format
-	 */
-	public String getConsoleFormat();
-	
-	/**
 	 * remove server from distribute list
 	 * @param servername
 	 */
