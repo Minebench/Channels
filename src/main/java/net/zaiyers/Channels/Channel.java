@@ -64,11 +64,10 @@ public class Channel {
 	 * @throws IOException 
 	 */
 	public Channel(String uuid) throws IOException {
-		String cfgFilePath = Channels.getInstance().getDataFolder().getAbsolutePath()+File.separatorChar+"channels"+File.separatorChar+uuid+".yml";
 		if (Channels.getConfig().getMongoDBConnection() != null && Channels.getConfig().getMongoDBConnection().isAvilable()) {
 			cfg = new ChannelMongoConfig(Channels.getConfig().getMongoDBConnection().getChannels(), uuid);
 		} else {
-			cfg = new ChannelYamlConfig(cfgFilePath);
+			cfg = new ChannelYamlConfig(new File(Channels.getInstance().getDataFolder().getAbsolutePath(), "channels" + File.separatorChar + uuid + ".yml"));
 		}
 	}
 	
