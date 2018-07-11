@@ -1,5 +1,6 @@
 package net.zaiyers.Channels;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +9,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 
 import com.google.common.collect.ImmutableMap;
-import de.themoep.minedown.MineDown;
 import de.themoep.vnpbungee.VNPBungee;
 import me.lucko.luckperms.LuckPerms;
 import me.lucko.luckperms.api.LuckPermsApi;
@@ -74,7 +74,7 @@ public class Channels extends Plugin {
 
 		// load configuration
 		try {
-			config = new ChannelsConfig(getDataFolder()+"/config.yml");
+			config = new ChannelsConfig(new File(getDataFolder(), "config.yml"));
 		} catch (IOException e) {
 			getLogger().severe("Unable to load configuration! Channels will not be enabled.");
 			e.printStackTrace();
@@ -84,7 +84,7 @@ public class Channels extends Plugin {
 		
 		// load language
 		try {
-			lang = new LanguageConfig(getDataFolder()+"/lang."+config.getLanguage()+".yml");
+			lang = new LanguageConfig(new File(getDataFolder(), "lang."+config.getLanguage()+".yml"));
 		} catch (IOException e) {
 			getLogger().severe("Unable to load language! Channels will not be enabled.");
 			e.printStackTrace();
@@ -147,6 +147,21 @@ public class Channels extends Plugin {
 		}
 		
 		checkSanity(getProxy().getConsole(), null);
+	}
+	
+	/**
+	 * Reload the config. Currently it is only possible to reload the language config.
+	 */
+	public boolean reloadConfig() {
+		try {
+			lang.load();
+		} catch (IOException e) {
+			getLogger().severe("Error while loading the language config!");
+			e.printStackTrace();
+			
+			return false;
+		}
+		return true;
 	}
 	
 	/**
@@ -525,7 +540,7 @@ public class Channels extends Plugin {
 		}
 		return null;
 	}
-
+	
 	private class ChatterNotFoundException extends ExecutionException {
 		ChatterNotFoundException(String msg) {
 			super(msg);

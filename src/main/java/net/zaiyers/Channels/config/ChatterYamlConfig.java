@@ -14,11 +14,11 @@ public class ChatterYamlConfig extends YamlConfig implements ChatterConfig {
 	/**
 	 * load configuration from disk
 	 * 
-	 * @param configFilePath
+	 * @param configFile
 	 * @throws IOException
 	 */
-	public ChatterYamlConfig(String configFilePath) throws IOException {
-		super(configFilePath);
+	public ChatterYamlConfig(File configFile) throws IOException {
+		super(configFile);
 	}
 
 	/**
@@ -27,11 +27,16 @@ public class ChatterYamlConfig extends YamlConfig implements ChatterConfig {
 	 * @return
 	 */
 	public static ChatterYamlConfig load(UUID uuid) {
-		String configFilePath = Channels.getInstance().getDataFolder()+("/chatters/"+uuid.toString().substring(0,2)+"/"+uuid.toString().substring(2,4)+"/"+uuid+".yml").toLowerCase();
-		File cfgFile = new File(configFilePath);
+		File cfgFile = new File(Channels.getInstance().getDataFolder(),
+				("chatters" + File.separator
+						+ uuid.toString().substring(0,2) + File.separator
+						+ uuid.toString().substring(2,4) + File.separator
+						+ uuid +".yml"
+				).toLowerCase()
+		);
 		if (cfgFile.exists()) {
 			try {
-				return new ChatterYamlConfig(configFilePath);
+				return new ChatterYamlConfig(cfgFile);
 			} catch (IOException e) {
 				e.printStackTrace();
 				return null;

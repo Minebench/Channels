@@ -19,6 +19,7 @@ public enum CommandPermission {
 	ChannelOpenCommand("channels.open"),
 	ChannelPasswordCommand("channels.password"),
 	ChannelPrefixCommand("channels.prefix"),
+	ChannelReloadCommand("channels.reload"),
 	ChannelRemoveCommand("channels.remove"),
 	ChannelRemoveModCommand("channels.removemod"),
 	ChannelRemoveServerCommand("channels.removeserver"),

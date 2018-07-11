@@ -1,5 +1,6 @@
 package net.zaiyers.Channels;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -65,8 +66,15 @@ public class Chatter {
 		if (Channels.getConfig().getMongoDBConnection() != null && Channels.getConfig().getMongoDBConnection().isAvilable()) {
 			cfg = new ChatterMongoConfig(Channels.getConfig().getMongoDBConnection().getChatters(), uuid);
 		} else {
-			String cfgPath = Channels.getInstance().getDataFolder()+("/chatters/"+uuid.substring(0,2)+"/"+uuid.substring(2,4)+"/"+uuid+".yml").toLowerCase();
-			cfg	= new ChatterYamlConfig(cfgPath);
+			cfg	= new ChatterYamlConfig(
+					new File(Channels.getInstance().getDataFolder(),
+							("chatters" + File.separator
+									+ uuid.substring(0,2) + File.separator
+									+ uuid.substring(2,4) + File.separator
+									+ uuid + ".yml"
+							).toLowerCase()
+					)
+			);
 		}
 	}
 	

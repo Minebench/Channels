@@ -1,9 +1,6 @@
 package net.zaiyers.Channels.command;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -92,6 +89,8 @@ public class ChannelsCommandExecutor extends Command implements TabExecutor {
 					cmd = new ChannelRenameCommand(sender, args);
 				} else if (cmdName.equals("password")) {
 					cmd = new ChannelPasswordCommand(sender, args);
+				} else if (cmdName.equals("reload")) {
+					cmd = new ChannelReloadCommand(sender, args);
 				} else if (cmdName.equals("help")) {
 					cmd = new ChannelHelpCommand(sender, args);
 				} else if (Channels.getInstance().getChannel(args[0]) != null) {
@@ -173,9 +172,6 @@ public class ChannelsCommandExecutor extends Command implements TabExecutor {
 	 */
 	private Iterable<String> matchingCommands(CommandSender sender, String s) {
 		List<String> commands = new ArrayList<String>();
-		if ("ignore".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.IgnoreCommand.toString())) {
-			commands.add("ignore");
-		}
 		
 		if ("subscribe".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelSubscribeCommand.toString())) {
 			commands.add("subscribe");
@@ -307,9 +303,14 @@ public class ChannelsCommandExecutor extends Command implements TabExecutor {
 			commands.add("password");
 		}
 		
+		if ("reload".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelHelpCommand.toString())) {
+			commands.add("reload");
+		}
+		
 		if ("help".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelHelpCommand.toString())) {
 			commands.add("help");
 		}
+		commands.sort(String::compareTo);
 		return commands;
 	}
 	

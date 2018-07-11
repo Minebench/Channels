@@ -104,6 +104,7 @@ channels:
     ChannelOpenCommand: "Verwendung: /channel open <Channel> <Tag> [Passwort]"
     ChannelPasswordCommand: "Verwendung: /channel password <Channel> [Passwort]"
     ChannelPrefixCommand: "Verwendung: /channel prefix <Chatter> [Prefix]"
+    ChannelReloadCommand: "Verwendung: /channel reload"
     ChannelRemoveCommand: "Verwendung: /channel remove <Channel>"
     ChannelRemoveModCommand: "Verwendung: /channel removeMod <Channel> <Moderator>"
     ChannelRemoveServerCommand: "Verwendung: /channel removeServer <Channel> <Server>"
@@ -153,6 +154,8 @@ channels:
     explain-ChannelPasswordCommand: Setzt oder entfernt ein Kennwort
     help-ChannelPrefixCommand: " - &a/channel prefix <&6Chatter&a> <&6prefix&a>"
     explain-ChannelPrefixCommand: Setzt einen Prefix für einen Spieler
+    help-ChannelReloadCommand: " - &a/channel reload"
+    explain-ChannelReloadCommand: Lädt die Config neu
     help-ChannelRemoveCommand: " - &a/channel remove <&6Channel&a>"
     explain-ChannelRemoveCommand: Entfernt einen Channel
     help-ChannelRemoveModCommand: " - &a/channel removeMod <&6Channel&a> <&6Moderator&a>"

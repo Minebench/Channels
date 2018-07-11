@@ -16,23 +16,29 @@ public abstract class YamlConfig implements Config {
 	
 	/**
 	 * read configuration into memory
-	 * @param configFilePath
-	 * @throws IOException 
+	 * @param configFile
+	 * @throws IOException
 	 */
-	public YamlConfig(String configFilePath) throws IOException {
-			configFile = new File(configFilePath);
-			
-			if (!configFile.exists()) {
-				if (!configFile.getParentFile().exists()) {
-					configFile.getParentFile().mkdirs();
-				}
-				configFile.createNewFile();
-				cfg = ConfigurationProvider.getProvider( YamlConfiguration.class ).load( configFile );
-				
-				createDefaultConfig();
-			} else {
-				cfg = ConfigurationProvider.getProvider( YamlConfiguration.class ).load( configFile );
+	public YamlConfig(File configFile) throws IOException {
+		this.configFile = configFile;
+		load();
+	}
+	
+	/**
+	 * load configuration from disk
+	 */
+	public void load() throws IOException {
+		if (!configFile.exists()) {
+			if (!configFile.getParentFile().exists()) {
+				configFile.getParentFile().mkdirs();
 			}
+			configFile.createNewFile();
+			cfg = ConfigurationProvider.getProvider( YamlConfiguration.class ).load( configFile );
+			
+			createDefaultConfig();
+		} else {
+			cfg = ConfigurationProvider.getProvider( YamlConfiguration.class ).load( configFile );
+		}
 	}
 	
 	/**

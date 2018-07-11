@@ -1,5 +1,6 @@
 package net.zaiyers.Channels.config;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
@@ -12,11 +13,11 @@ public class ChannelYamlConfig extends YamlConfig implements ChannelConfig {
 	/**
 	 * load configuration from disk
 	 * 
-	 * @param configFilePath
+	 * @param configFile
 	 * @throws IOException
 	 */
-	public ChannelYamlConfig(String configFilePath) throws IOException {
-		super(configFilePath);
+	public ChannelYamlConfig(File configFile) throws IOException {
+		super(configFile);
 	}
 	
 	public String getName() {

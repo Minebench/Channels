@@ -60,6 +60,9 @@ public class ChannelHelpCommand extends AbstractCommand implements ChannelsComma
 				if (sender.hasPermission(CommandPermission.ServerDefaultChannelCommand.toString())) {
 					adminCommands.add("ServerDefaultChannelCommand");
 				}
+				if (sender.hasPermission(CommandPermission.ChannelReloadCommand.toString())) {
+					adminCommands.add("ChannelReloadCommand");
+				}
 				Channels.notify(sender, "channels.usage.help-adminCommands");
 				for (String command: adminCommands) {
 					Channels.notify(sender, "channels.usage.help-"+command);

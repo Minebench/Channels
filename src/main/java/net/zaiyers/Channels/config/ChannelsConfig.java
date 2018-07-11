@@ -25,11 +25,11 @@ public class ChannelsConfig extends YamlConfig {
 	/**
 	 * load configuration from disk
 	 * 
-	 * @param configFilePath
+	 * @param configFile
 	 * @throws IOException
 	 */
-	public ChannelsConfig(String configFilePath) throws IOException {
-		super(configFilePath);
+	public ChannelsConfig(File configFile) throws IOException {
+		super(configFile);
 		
 		if (cfg.getBoolean("mongo.use")) {
 			mongo = new MongoDBConnection(cfg);
@@ -57,7 +57,7 @@ public class ChannelsConfig extends YamlConfig {
 				}
 			}
 		} else {
-			File channelConfigDir = new File(configFile.getParentFile()+File.separator+"channels");
+			File channelConfigDir = new File(configFile.getParentFile(), "channels");
 			if (!channelConfigDir.exists()) {
 				channelConfigDir.mkdirs();
 				Channel def = makeDefaultChannel();

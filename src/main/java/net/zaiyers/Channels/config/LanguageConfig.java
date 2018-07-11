@@ -1,5 +1,6 @@
 package net.zaiyers.Channels.config;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -11,8 +12,8 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.zaiyers.Channels.Channels;
 
 public class LanguageConfig extends YamlConfig {
-	public LanguageConfig(String configFilePath) throws IOException {
-		super(configFilePath);
+	public LanguageConfig(File configFile) throws IOException {
+		super(configFile);
 	}
 
 	public void createDefaultConfig() {
