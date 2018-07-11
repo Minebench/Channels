@@ -35,17 +35,20 @@ public class ConsoleMessage extends AbstractMessage {
 		SimpleDateFormat dateFormat = Channels.getConfig().getDateFormat();
 		SimpleDateFormat timeFormat = Channels.getConfig().getTimeFormat();
 		
-		processedMessage = MineDown.parse(channel.getFormat(),
-				"prefix", "",
-				"sender", "(Console)",
-				"suffix", "",
-				"channelColor", channel.getColor().toString(),
-				"channelTag", channel.getTag(),
-				"channelName", channel.getName(),
-				"date", dateFormat.format(date),
-				"time", timeFormat.format(date),
-				"msg", rawMessage
-		);
+		processedMessage = new MineDown(channel.getFormat())
+				.replace(
+						"prefix", "",
+						"sender", "(Console)",
+						"suffix", "",
+						"channelColor", channel.getColor().toString(),
+						"channelTag", channel.getTag(),
+						"channelName", channel.getName(),
+						"date", dateFormat.format(date),
+						"time", timeFormat.format(date))
+				.replace("msg", new MineDown(rawMessage)
+						.urlHoverText(Channels.getInstance().getLanguage().getTranslation("chat.hover.open-url"))
+						.toComponent())
+				.toComponent();
 	}
 	
 	public void send() {

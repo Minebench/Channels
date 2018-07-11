@@ -42,8 +42,20 @@ public class ChannelMessage extends AbstractMessage {
 		Date date = new Date(getTime());
 		SimpleDateFormat dateFormat = Channels.getConfig().getDateFormat();
 		SimpleDateFormat timeFormat = Channels.getConfig().getTimeFormat();
-
-		MineDown md = new MineDown(channel.getFormat()).replace(
+		
+		MineDown messageMd = new MineDown(rawMessage)
+				.urlHoverText(Channels.getInstance().getLanguage().getTranslation("chat.hover.open-url"));
+		if (!chatter.hasPermission("channels.color")) {
+			messageMd.disable(MineDownParser.Option.LEGACY_COLORS);
+		}
+		if (!chatter.hasPermission("channels.minedown.advanced")) {
+			messageMd.disable(MineDownParser.Option.ADVANCED_FORMATTING);
+		}
+		if (!chatter.hasPermission("channels.minedown.simple")) {
+			messageMd.disable(MineDownParser.Option.SIMPLE_FORMATTING);
+		}
+		
+		processedMessage = new MineDown(channel.getFormat()).replace(
 				"prefix", chatter.getPrefix(),
 				"sender", chatter.getName(),
 				"suffix", chatter.getSuffix(),
@@ -52,26 +64,7 @@ public class ChannelMessage extends AbstractMessage {
 				"channelName", channel.getName(),
 				"date", dateFormat.format(date),
 				"time", timeFormat.format(date)
-		);
-
-		if (chatter.hasPermission("channels.minedown")) {
-			md.replacer().replacements().put("msg", rawMessage);
-			md.urlHoverText(Channels.getInstance().getLanguage().getTranslation("chat.hover.open-url"));
-			processedMessage = md.toComponent();
-		} else  {
-			MineDown messageMd = new MineDown(rawMessage)
-					.urlHoverText(Channels.getInstance().getLanguage().getTranslation("chat.hover.open-url"));
-			if (!chatter.hasPermission("channels.color")) {
-				messageMd.disable(MineDownParser.Option.LEGACY_COLORS);
-			}
-			if (!chatter.hasPermission("channels.minedown.advanced")) {
-				messageMd.disable(MineDownParser.Option.ADVANCED_FORMATTING);
-			}
-			if (!chatter.hasPermission("channels.minedown.simple")) {
-				messageMd.disable(MineDownParser.Option.SIMPLE_FORMATTING);
-			}
-			processedMessage = md.replace("msg", messageMd.toComponent()).toComponent();
-		}
+		).replace("msg", messageMd.toComponent()).toComponent();
 	}
 	
 	/**

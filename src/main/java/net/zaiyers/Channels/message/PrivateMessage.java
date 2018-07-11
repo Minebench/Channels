@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 import com.google.common.collect.ImmutableMap;
 
 import de.themoep.minedown.MineDown;
-import de.themoep.minedown.Replacer;
+import de.themoep.minedown.MineDownParser;
 import net.md_5.bungee.api.CommandSender;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.Chatter;
@@ -63,7 +63,19 @@ public class PrivateMessage extends AbstractMessage {
 		
 		String pmFormat = Channels.getConfig().getPrivateMessageFormat(role);
 		
-		MineDown md = new MineDown(pmFormat).replace(
+		MineDown messageMd = new MineDown(rawMessage)
+				.urlHoverText(Channels.getInstance().getLanguage().getTranslation("chat.hover.open-url"));
+		if (!getChatter().hasPermission("channels.color")) {
+			messageMd.disable(MineDownParser.Option.LEGACY_COLORS);
+		}
+		if (!getChatter().hasPermission("channels.minedown.advanced")) {
+			messageMd.disable(MineDownParser.Option.ADVANCED_FORMATTING);
+		}
+		if (!getChatter().hasPermission("channels.minedown.simple")) {
+			messageMd.disable(MineDownParser.Option.SIMPLE_FORMATTING);
+		}
+		
+		processedMessage = new MineDown(pmFormat).replace(
 				"sender-prefix", sender.getPrefix(),
 				"sender", sender.getName(),
 				"sender-suffix", sender.getSuffix(),
@@ -72,16 +84,7 @@ public class PrivateMessage extends AbstractMessage {
 				"receiver-suffix", receiver.getSuffix(),
 				"date", dateFormat.format(date),
 				"time", timeFormat.format(date)
-		);
-		
-		if (getChatter().hasPermission("channels.minedown")) {
-			md.replacer().replacements().put("msg", rawMessage);
-			processedMessage = md.toComponent();
-		} else  {
-			processedMessage = md.toComponent();
-			String message = getChatter().hasPermission("channels.color") ? Channels.addSpecialChars(rawMessage) : rawMessage;
-			processedMessage = Replacer.replace(processedMessage, "msg", message);
-		}
+		).replace("msg", messageMd.toComponent()).toComponent();
 	}
 	
 	public CommandSender getSender() {
