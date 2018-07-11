@@ -325,9 +325,7 @@ public class Channels extends Plugin {
 	 * @param key       The language key
 	 */
 	public static void notify(CommandSender sender, String key, Map<String, String> replacements) {
-		String string = Channels.getInstance().getLanguage().getTranslation(key);
-		
-		sender.sendMessage(new MineDown(string).replace(replacements).toComponent());
+		sender.sendMessage(Channels.getInstance().getLanguage().getTranslationComponent(key, replacements));
 	}
 	
 

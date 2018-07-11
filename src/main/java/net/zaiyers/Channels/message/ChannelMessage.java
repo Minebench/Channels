@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.regex.Matcher;
 
 import de.themoep.minedown.MineDown;
-import de.themoep.minedown.Replacer;
+import de.themoep.minedown.MineDownParser;
 import net.md_5.bungee.api.CommandSender;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
@@ -56,11 +56,21 @@ public class ChannelMessage extends AbstractMessage {
 
 		if (chatter.hasPermission("channels.minedown")) {
 			md.replacer().replacements().put("msg", rawMessage);
+			md.urlHoverText(Channels.getInstance().getLanguage().getTranslation("chat.hover.open-url"));
 			processedMessage = md.toComponent();
 		} else  {
-			processedMessage = md.toComponent();
-			String message = chatter.hasPermission("channels.color") ? Channels.addSpecialChars(rawMessage) : rawMessage;
-			processedMessage = Replacer.replace(processedMessage, "msg", message);
+			MineDown messageMd = new MineDown(rawMessage)
+					.urlHoverText(Channels.getInstance().getLanguage().getTranslation("chat.hover.open-url"));
+			if (!chatter.hasPermission("channels.color")) {
+				messageMd.disable(MineDownParser.Option.LEGACY_COLORS);
+			}
+			if (!chatter.hasPermission("channels.minedown.advanced")) {
+				messageMd.disable(MineDownParser.Option.ADVANCED_FORMATTING);
+			}
+			if (!chatter.hasPermission("channels.minedown.simple")) {
+				messageMd.disable(MineDownParser.Option.SIMPLE_FORMATTING);
+			}
+			processedMessage = md.replace("msg", messageMd.toComponent()).toComponent();
 		}
 	}
 	

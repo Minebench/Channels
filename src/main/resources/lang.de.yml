@@ -1,3 +1,6 @@
+chat:
+  hover:
+    open-url: 'Klicke um den Link zu öffnen'
 channels:
   chatter:
     is-muted: "&cDu wurdest stumm geschaltet und kannst nicht sprechen."
