@@ -2,6 +2,8 @@ package net.zaiyers.Channels.config;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -10,6 +12,7 @@ import net.zaiyers.Channels.Channels;
 
 public abstract class YamlConfig implements Config {
 	protected Configuration cfg;
+	private final Configuration defaultCfg;
 	protected final static ConfigurationProvider ymlCfg = ConfigurationProvider.getProvider( YamlConfiguration.class );
 	
 	protected File configFile; 
@@ -21,6 +24,12 @@ public abstract class YamlConfig implements Config {
 	 */
 	public YamlConfig(File configFile) throws IOException {
 		this.configFile = configFile;
+		InputStream stream = Channels.getInstance().getResourceAsStream(configFile.getName());
+		if (stream != null) {
+			defaultCfg = ymlCfg.load(new InputStreamReader(stream));
+		} else {
+			defaultCfg = null;
+		}
 		load();
 	}
 	
@@ -33,11 +42,11 @@ public abstract class YamlConfig implements Config {
 				configFile.getParentFile().mkdirs();
 			}
 			configFile.createNewFile();
-			cfg = ConfigurationProvider.getProvider( YamlConfiguration.class ).load( configFile );
+			cfg = ymlCfg.load(configFile, defaultCfg);
 			
 			createDefaultConfig();
 		} else {
-			cfg = ConfigurationProvider.getProvider( YamlConfiguration.class ).load( configFile );
+			cfg = ymlCfg.load(configFile, defaultCfg);
 		}
 	}
 	

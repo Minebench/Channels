@@ -89,7 +89,15 @@ public class ChannelsConfig extends YamlConfig {
 			e.printStackTrace();
 		}
 	}
-
+	
+	/**
+	 * return whether or not vanished players should be hidden from messages and commands
+	 * @return true if vanished players should be hidden, false if they should show up
+	 */
+	public boolean shouldHideVanished() {
+		return cfg.getBoolean("hideVanished");
+	}
+	
 	/**
 	 * return name of default channel
 	 * @return
@@ -105,10 +113,10 @@ public class ChannelsConfig extends YamlConfig {
 	public void setDefaultChannelId(int id) {
 		cfg.set("defaultChannelUUID", id);
 	}
-
+	
 	/**
 	 * format for private messages
-	 * @param role 
+	 * @param role
 	 * @return
 	 */
 	public String getPrivateMessageFormat(SenderRole role) {
@@ -118,7 +126,7 @@ public class ChannelsConfig extends YamlConfig {
 			return cfg.getString("privateMessageFormatReceiver", "[&dFrom %prefix%&d%sender%%suffix%:](&7%date% %time%) %msg%");
 		} else return null;
 	}
-
+	
     /**
      * format for time hover
      * @return
@@ -142,17 +150,17 @@ public class ChannelsConfig extends YamlConfig {
 	public SimpleDateFormat getTimeFormat() {
 		return new SimpleDateFormat(cfg.getString("timeFormat","HH:mm:ss"));
 	}
-
+	
 	/**
 	 * create default configuration
 	 */
-	public void createDefaultConfig() {		
+	public void createDefaultConfig() {
 		cfg = ymlCfg.load(new InputStreamReader(Channels.getInstance().getResourceAsStream("config.yml")));
 		cfg.set("defaultChannelUUID", UUID.randomUUID().toString());
 		
 		save();
 	}
-
+	
 	/**
 	 * get language name
 	 * @return
@@ -160,7 +168,7 @@ public class ChannelsConfig extends YamlConfig {
 	public String getLanguage() {
 		return cfg.getString("language");
 	}
-
+	
 	/**
 	 * set server default channel
 	 * @param serverName
@@ -178,7 +186,7 @@ public class ChannelsConfig extends YamlConfig {
 		
 		cfg.set("forceServerDefaultChannel", serverList);
 	}
-
+	
 	public String getServerDefaultChannel(String serverName) {
 		return cfg.getString("serverDefaultChannels." + serverName);
 	}
@@ -198,7 +206,7 @@ public class ChannelsConfig extends YamlConfig {
 	
 	private Channel makeDefaultChannel() {
 		// inital run, create default configuration
-		try {			
+		try {
 			Channel def;
 			
 			def = new Channel(getDefaultChannelUUID());

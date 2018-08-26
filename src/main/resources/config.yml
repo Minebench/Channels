@@ -1,3 +1,4 @@
+hideVanished: true
 defaultChannelUUID: ''
 privateMessageFormatSender: '[&bTo %receiver-prefix%&b%receiver%%receiver-suffix%:](&7%date% %time%) %msg%'
 privateMessageFormatReceiver: '[&dFrom %sender-prefix%&d%sender%%sender-suffix%:](&7%date% %time%) %msg%'

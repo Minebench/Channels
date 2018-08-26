@@ -2,7 +2,6 @@ package net.zaiyers.Channels.command;
 
 import com.google.common.collect.ImmutableMap;
 
-import de.themoep.vnpbungee.VNPBungee;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -66,7 +65,7 @@ public class ChannelListCommand extends AbstractCommand {
 			}
 			
 			if (isConsoleCommand || chatter.hasPermission(channel, "list") || (channel.isTemporary() && channel.getSubscribers().contains(chatter.getPlayer().getUniqueId().toString()))) {
-				String[] uuids = channel.getSubscribers().toArray(new String[channel.getSubscribers().size()]);
+				String[] uuids = channel.getSubscribers().toArray(new String[0]);
 				Channels.notify(sender, "channels.chatter.channel-list-chatters", ImmutableMap.of("channel", channel.getName(), "channelColor", channel.getColor().toString()));
 
 				List<Chatter> chatters = new ArrayList<>();
@@ -74,6 +73,7 @@ public class ChannelListCommand extends AbstractCommand {
 					Chatter subscriber = Channels.getInstance().getChatter(uuid);
 					if (subscriber.getPlayer() != null && subscriber.getPlayer().isConnected() && (
 							chatter == null
+									|| !Channels.getConfig().shouldHideVanished()
 									|| Channels.getVNPBungee() == null
 									|| Channels.getVNPBungee().canSee(chatter.getPlayer(), subscriber.getPlayer()))
 							) {
