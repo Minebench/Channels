@@ -13,7 +13,6 @@ public class ChatterYamlConfig extends YamlConfig implements ChatterConfig {
 
 	/**
 	 * load configuration from disk
-	 * 
 	 * @param configFile
 	 * @throws IOException
 	 */
@@ -29,9 +28,9 @@ public class ChatterYamlConfig extends YamlConfig implements ChatterConfig {
 	public static ChatterYamlConfig load(UUID uuid) {
 		File cfgFile = new File(Channels.getInstance().getDataFolder(),
 				("chatters" + File.separator
-						+ uuid.toString().substring(0,2) + File.separator
-						+ uuid.toString().substring(2,4) + File.separator
-						+ uuid +".yml"
+						+ uuid.toString().substring(0, 2) + File.separator
+						+ uuid.toString().substring(2, 4) + File.separator
+						+ uuid + ".yml"
 				).toLowerCase()
 		);
 		if (cfgFile.exists()) {
@@ -45,16 +44,17 @@ public class ChatterYamlConfig extends YamlConfig implements ChatterConfig {
 			return null;
 		}
 	}
-	
+
 	public List<String> getSubscriptions() {
 		ArrayList<String> subs = new ArrayList<String>();
-		for (String sub: cfg.getStringList("subscriptions")) {
+		for (String sub : cfg.getStringList("subscriptions")) {
 			subs.add(sub);
-		};
-		
+		}
+		;
+
 		return subs;
 	}
-	
+
 	public boolean isMuted() {
 		return cfg.getBoolean("muted", false);
 	}
@@ -70,7 +70,7 @@ public class ChatterYamlConfig extends YamlConfig implements ChatterConfig {
 	public String getSuffix() {
 		return cfg.getString("suffix", "");
 	}
-	
+
 	public String getLastSender() {
 		return cfg.getString("lastSender", null);
 	}
@@ -83,33 +83,33 @@ public class ChatterYamlConfig extends YamlConfig implements ChatterConfig {
 		try {
 			ymlCfg.save(cfg, configFile);
 		} catch (IOException e) {
-			Channels.getInstance().getLogger().severe("Unable to save chatter configuration '"+configFile.getAbsolutePath()+"'");
+			Channels.getInstance().getLogger().severe("Unable to save chatter configuration '" + configFile.getAbsolutePath() + "'");
 			e.printStackTrace();
 		}
 	}
 
 	public void createDefaultConfig() {
 		cfg = ymlCfg.load(
-			new InputStreamReader(Channels.getInstance().getResourceAsStream("chatter.yml"))
+				new InputStreamReader(Channels.getInstance().getResourceAsStream("chatter.yml"))
 		);
-		
+
 		// set default channel
 		cfg.set("channelUUID", Channels.getConfig().getDefaultChannelUUID().toString());
-		
+
 		// subscribe to default channel
 		ArrayList<String> subs = new ArrayList<String>();
 		subs.add(Channels.getConfig().getDefaultChannelUUID());
 		setSubscriptions(subs);
-		
+
 		save();
 	}
 
 	public void setSubscriptions(List<String> subs) {
 		List<String> subscriptions = new ArrayList<String>();
-		for (String u: subs) {
+		for (String u : subs) {
 			subscriptions.add(u.toString());
 		}
-		
+
 		cfg.set("subscriptions", subscriptions);
 	}
 
@@ -128,14 +128,14 @@ public class ChatterYamlConfig extends YamlConfig implements ChatterConfig {
 	public void removeIgnore(String ignoreUUID) {
 		List<String> ignores = cfg.getStringList("ignores");
 		ignores.remove(ignoreUUID);
-		
+
 		cfg.set("ignores", ignores);
 	}
 
 	public void addIgnore(String uuid) {
 		List<String> ignores = cfg.getStringList("ignores");
 		ignores.add(uuid);
-		
+
 		cfg.set("ignores", ignores);
 	}
 

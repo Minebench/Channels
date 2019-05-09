@@ -22,77 +22,76 @@ public class Chatter {
 	 * player object of the chatter
 	 */
 	private ProxiedPlayer player;
-	
+
 	/**
 	 * afk status
 	 */
 	private boolean afk = false;
-	
+
 	/**
 	 * afk notice
 	 */
 	private String afkMessage = "";
-	
+
 	/**
 	 * dnd status
 	 */
 	private boolean dnd = false;
-	
+
 	/**
 	 * dnd notice
 	 */
 	private String dndMessage = "";
-	
+
 	/**
 	 * configuration for this guy
 	 */
 	private ChatterConfig cfg;
-	
+
 	/**
 	 * uuid of the recipient for private messages
 	 */
-	private String privateRecipient = null; 
-	
+	private String privateRecipient = null;
+
 	/**
-	 * 
 	 * @param player
 	 * @throws IOException
 	 */
 	public Chatter(ProxiedPlayer player) throws IOException {
 		this.player = player;
-		
+
 		// load my preferences
 		String uuid = player.getUniqueId().toString();
 		if (Channels.getConfig().getMongoDBConnection() != null && Channels.getConfig().getMongoDBConnection().isAvilable()) {
 			cfg = new ChatterMongoConfig(Channels.getConfig().getMongoDBConnection().getChatters(), uuid);
 		} else {
-			cfg	= new ChatterYamlConfig(
+			cfg = new ChatterYamlConfig(
 					new File(Channels.getInstance().getDataFolder(),
 							("chatters" + File.separator
-									+ uuid.substring(0,2) + File.separator
-									+ uuid.substring(2,4) + File.separator
+									+ uuid.substring(0, 2) + File.separator
+									+ uuid.substring(2, 4) + File.separator
 									+ uuid + ".yml"
 							).toLowerCase()
 					)
 			);
 		}
 	}
-	
+
 	/**
 	 * return my subscriptions
 	 * @return
 	 */
 	public List<String> getSubscriptions() {
 		List<String> subscriptions = cfg.getSubscriptions();
-		
+
 		if (subscriptions.size() == 0) {
 			// lets add this poor guy to the default channel
 			subscriptions.add(Channels.getConfig().getDefaultChannelUUID());
 		}
-		
+
 		return subscriptions;
 	}
-	
+
 	/**
 	 * subscribes to a channel
 	 * @param chan
@@ -102,9 +101,9 @@ public class Chatter {
 		List<String> subs = cfg.getSubscriptions();
 		if (!subs.contains(chan.getUUID())) {
 			subs.add(chan.getUUID());
-			
+
 			cfg.setSubscriptions(subs);
-		}	
+		}
 		// subscribe to channel
 		chan.subscribe(this);
 
@@ -113,55 +112,54 @@ public class Chatter {
 			Channels.notify(player, "channels.chatter.default-channel-set", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
 		}
 	}
-	
+
 	/**
 	 * unsubscribe from a  channel
-	 * 
 	 * @param uuid
 	 */
 	public void unsubscribe(String uuid) {
 		// remove subscription from config
 		List<String> subs = cfg.getSubscriptions();
 		subs.remove(uuid);
-		
+
 		cfg.setSubscriptions(subs);
 
-        // if removed channel is currently focused one switch to server default channel
-        if (uuid.equals(getChannel())) {
-            Channel chan = null;
+		// if removed channel is currently focused one switch to server default channel
+		if (uuid.equals(getChannel())) {
+			Channel chan = null;
 			if (player != null && player.getServer() != null) {
 				chan = Channels.getInstance().getChannel(Channels.getConfig().getServerDefaultChannel(player.getServer().getInfo().getName()));
 			}
 
-            if (chan == null) {
-                // server doesn't have default channel
-                for (String channelId : subs) {
-                    // search for one in his subscription that he can speak in
-                    chan = Channels.getInstance().getChannel(channelId);
-                    if (chan.doAutojoin() && !chan.isTemporary() && hasPermission(chan, "speak")) {
-                        // he can speak in the channel! Yay \o/
-                        break;
-                    }
-                    // can't speak in channel, reset to null
-                    chan = null;
-                }
-            }
+			if (chan == null) {
+				// server doesn't have default channel
+				for (String channelId : subs) {
+					// search for one in his subscription that he can speak in
+					chan = Channels.getInstance().getChannel(channelId);
+					if (chan.doAutojoin() && !chan.isTemporary() && hasPermission(chan, "speak")) {
+						// he can speak in the channel! Yay \o/
+						break;
+					}
+					// can't speak in channel, reset to null
+					chan = null;
+				}
+			}
 
-            if (chan != null && hasPermission(chan, "subscribe")) {
-                setDefaultChannelUUID(chan.getUUID());
-                subscribe(chan);
-                if (getLastRecipient() == null) {
-                    Channels.notify(getPlayer(), "channels.chatter.default-channel-set", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
-                }
-            } // player is screwed and wont be able to speak
-        }
-		
+			if (chan != null && hasPermission(chan, "subscribe")) {
+				setDefaultChannelUUID(chan.getUUID());
+				subscribe(chan);
+				if (getLastRecipient() == null) {
+					Channels.notify(getPlayer(), "channels.chatter.default-channel-set", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
+				}
+			} // player is screwed and wont be able to speak
+		}
+
 		// unsubscribe from channel
 		if (Channels.getInstance().getChannel(uuid) != null) {
 			Channels.getInstance().getChannel(uuid).unsubscribe(this);
 		}
 	}
-	
+
 	/**
 	 * am I muted?
 	 * @return
@@ -169,14 +167,14 @@ public class Chatter {
 	public boolean isMuted() {
 		return cfg.isMuted();
 	}
-	
+
 	/**
 	 * people I don't want to read
 	 */
 	public List<String> getIgnores() {
 		return cfg.getIgnores();
 	}
-	
+
 	/**
 	 * get my prefix
 	 */
@@ -192,7 +190,7 @@ public class Chatter {
 		}
 		return cfg.getPrefix();
 	}
-	
+
 	/**
 	 * get my suffix
 	 */
@@ -206,7 +204,7 @@ public class Chatter {
 				}
 			}
 		}
-        return cfg.getSuffix();
+		return cfg.getSuffix();
 	}
 
 	private MetaData getMetaData() {
@@ -214,8 +212,8 @@ public class Chatter {
 		if (lpUser != null) {
 			Contexts contexts = Channels.getLuckPermsApi().getContextForUser(lpUser).orElse(null);
 			if (contexts != null) {
-                return lpUser.getCachedData().getMetaData(contexts);
-            }
+				return lpUser.getCachedData().getMetaData(contexts);
+			}
 		}
 		return null;
 	}
@@ -226,24 +224,26 @@ public class Chatter {
 	public String getLastSender() {
 		return cfg.getLastSender();
 	}
-	
+
 	/**
 	 * person I last wrote to
 	 */
 	public String getLastRecipient() {
 		return privateRecipient;
 	}
-	
+
 	/**
 	 * channel I'm writing in
 	 */
 	public String getChannel() {
 		String channelUUID = cfg.getChannelUUID();
-		if (Channels.getInstance().getChannel(channelUUID) == null) { channelUUID = Channels.getConfig().getDefaultChannelUUID(); } // channel was removed
-		
+		if (Channels.getInstance().getChannel(channelUUID) == null) {
+			channelUUID = Channels.getConfig().getDefaultChannelUUID();
+		} // channel was removed
+
 		return channelUUID;
 	}
-	
+
 	/**
 	 * get my name
 	 */
@@ -253,15 +253,14 @@ public class Chatter {
 
 	/**
 	 * check my permissions for this channel
-	 * 
 	 * @param channel
 	 * @param permission
 	 * @return
 	 */
 	public boolean hasPermission(Channel channel, String permission) {
-		return player.hasPermission("channels."+permission+"."+channel.getTag());
+		return player.hasPermission("channels." + permission + "." + channel.getTag());
 	}
-	
+
 	/**
 	 * check if I have this permission
 	 * @param permission
@@ -299,7 +298,7 @@ public class Chatter {
 	 * @param string
 	 */
 	public void setDefaultChannelUUID(String string) {
-		cfg.setDefaultChannel(string);		
+		cfg.setDefaultChannel(string);
 	}
 
 	/**
@@ -402,13 +401,13 @@ public class Chatter {
 		player.sendMessage(new TextComponent(string));
 	}
 
-    /**
-     * Send a text component
-     * @param textComponent
-     */
-    public void sendMessage(TextComponent textComponent) {
-        player.sendMessage(textComponent);
-    }
+	/**
+	 * Send a text component
+	 * @param textComponent
+	 */
+	public void sendMessage(TextComponent textComponent) {
+		player.sendMessage(textComponent);
+	}
 
 	public void removeIgnore(String ignoreUUID) {
 		cfg.removeIgnore(ignoreUUID);
