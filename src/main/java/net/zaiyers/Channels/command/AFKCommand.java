@@ -34,7 +34,7 @@ public class AFKCommand extends AbstractCommand {
 			if (msg == null) {
 				Channels.notify(sender, "channels.chatter.now-afk");
 			} else {
-				Channels.notify(sender, "channels.chatter.now-afk-with-msg", ImmutableMap.of("msg", msg));
+				Channels.notify(sender, "channels.chatter.now-afk-with-msg", ImmutableMap.of("msg", chatter.getAFKMessage()));
 			}
 		}
 		

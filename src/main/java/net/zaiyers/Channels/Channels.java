@@ -23,6 +23,7 @@ import net.zaiyers.Channels.command.ChannelTagCommandExecutor;
 import net.zaiyers.Channels.command.ChannelsCommandExecutor;
 import net.zaiyers.Channels.config.ChannelsConfig;
 import net.zaiyers.Channels.config.LanguageConfig;
+import net.zaiyers.Channels.integration.BTLPIntegration;
 import net.zaiyers.Channels.listener.MessageListener;
 import net.zaiyers.Channels.listener.PlayerJoinListener;
 import net.zaiyers.Channels.listener.PlayerQuitListener;
@@ -105,6 +106,11 @@ public class Channels extends Plugin {
 		if (getProxy().getPluginManager().getPlugin("UUIDDB") != null) {
 			getLogger().info("Found UUIDDB!");
 			uuidDb = (UUIDDBPlugin) getProxy().getPluginManager().getPlugin("UUIDDB");
+		}
+
+		if (getProxy().getPluginManager().getPlugin("BungeeTabListPlus") != null) {
+			getLogger().info("Found BungeeTabListPlus!");
+			new BTLPIntegration();
 		}
 
 		if (getUuidDb() == null && getLuckPermsApi() == null) {

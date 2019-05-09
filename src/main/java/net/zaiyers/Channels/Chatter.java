@@ -8,13 +8,14 @@ import com.google.common.collect.ImmutableMap;
 import me.lucko.luckperms.api.Contexts;
 import me.lucko.luckperms.api.User;
 import me.lucko.luckperms.api.caching.MetaData;
-import me.lucko.luckperms.api.caching.UserData;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.zaiyers.Channels.config.ChatterConfig;
 import net.zaiyers.Channels.config.ChatterMongoConfig;
 import net.zaiyers.Channels.config.ChatterYamlConfig;
+import net.zaiyers.Channels.events.ChatterAfkEvent;
+import net.zaiyers.Channels.events.ChatterDndEvent;
 import net.zaiyers.Channels.message.Message;
 
 public class Chatter {
@@ -355,8 +356,10 @@ public class Chatter {
 	 * @param afkMessage
 	 */
 	public void setAFK(boolean isAfk, String afkMessage) {
+		ChatterAfkEvent event = new ChatterAfkEvent(this, isAfk, afkMessage);
+		Channels.getInstance().getProxy().getPluginManager().callEvent(event);
 		afk = isAfk;
-		this.afkMessage = afkMessage;
+		this.afkMessage = event.getMessage();
 	}
 
 	/**
@@ -373,8 +376,10 @@ public class Chatter {
 	 * @param dndMsg
 	 */
 	public void setDND(boolean isDnd, String dndMsg) {
+		ChatterDndEvent event = new ChatterDndEvent(this, isDnd, dndMsg);
+		Channels.getInstance().getProxy().getPluginManager().callEvent(event);
 		dnd = isDnd;
-		dndMessage = dndMsg;
+		dndMessage = event.getMessage();
 	}
 
 	/**

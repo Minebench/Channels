@@ -32,7 +32,7 @@ public class DNDCommand extends AbstractCommand {
 			if (msg == null) {
 				Channels.notify(sender, "channels.chatter.now-dnd");
 			} else {
-				Channels.notify(sender, "channels.chatter.now-dnd-with-msg", ImmutableMap.of("msg", msg));
+				Channels.notify(sender, "channels.chatter.now-dnd-with-msg", ImmutableMap.of("msg", chatter.getDNDMessage()));
 			}
 		}
 	}
