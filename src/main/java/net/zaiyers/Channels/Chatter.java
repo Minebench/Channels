@@ -9,6 +9,7 @@ import me.lucko.luckperms.api.Contexts;
 import me.lucko.luckperms.api.User;
 import me.lucko.luckperms.api.caching.MetaData;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.zaiyers.Channels.config.ChatterConfig;
@@ -291,7 +292,7 @@ public class Chatter {
 	 * @param message
 	 */
 	public void sendMessage(Message message) {
-		player.sendMessage(message.getProcessedMessage());
+		player.sendMessage(ChatMessageType.CHAT, message.getProcessedMessage());
 	}
 
 	/**
@@ -403,7 +404,7 @@ public class Chatter {
 	 * @param string
 	 */
 	public void sendMessage(String string) {
-		player.sendMessage(new TextComponent(string));
+		player.sendMessage(TextComponent.fromLegacyText(string));
 	}
 
 	/**
