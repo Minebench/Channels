@@ -5,9 +5,10 @@ import java.io.IOException;
 import java.util.List;
 
 import com.google.common.collect.ImmutableMap;
-import me.lucko.luckperms.api.Contexts;
-import me.lucko.luckperms.api.User;
-import me.lucko.luckperms.api.caching.MetaData;
+import net.luckperms.api.cacheddata.CachedMetaData;
+import net.luckperms.api.context.ContextSet;
+import net.luckperms.api.model.user.User;
+import net.luckperms.api.query.QueryOptions;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -184,7 +185,7 @@ public class Chatter {
 		if (cfg.getPrefix() == null || cfg.getPrefix().isEmpty()) {
 			// No prefix in chatter config, try to query from other plugins
 			if (Channels.getLuckPermsApi() != null) {
-				MetaData metaData = getMetaData();
+				CachedMetaData metaData = getMetaData();
 				if (metaData != null && metaData.getPrefix() != null) {
 					return ChatColor.translateAlternateColorCodes('&', metaData.getPrefix());
 				}
@@ -200,7 +201,7 @@ public class Chatter {
 		if (cfg.getSuffix() == null || cfg.getSuffix().isEmpty()) {
 			// No suffix in chatter config, try to query from other plugins
 			if (Channels.getLuckPermsApi() != null) {
-				MetaData metaData = getMetaData();
+				CachedMetaData metaData = getMetaData();
 				if (metaData != null && metaData.getSuffix() != null) {
 					return ChatColor.translateAlternateColorCodes('&', metaData.getSuffix());
 				}
@@ -209,12 +210,12 @@ public class Chatter {
 		return cfg.getSuffix();
 	}
 
-	private MetaData getMetaData() {
-		User lpUser = Channels.getLuckPermsApi().getUserSafe(player.getUniqueId()).orElse(null);
+	private CachedMetaData getMetaData() {
+		User lpUser = Channels.getLuckPermsApi().getUserManager().getUser(player.getUniqueId());
 		if (lpUser != null) {
-			Contexts contexts = Channels.getLuckPermsApi().getContextForUser(lpUser).orElse(null);
+			ContextSet contexts = Channels.getLuckPermsApi().getContextManager().getContext(lpUser).orElse(null);
 			if (contexts != null) {
-				return lpUser.getCachedData().getMetaData(contexts);
+				return lpUser.getCachedData().getMetaData(QueryOptions.contextual(contexts));
 			}
 		}
 		return null;

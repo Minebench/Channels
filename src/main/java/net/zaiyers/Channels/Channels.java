@@ -10,9 +10,9 @@ import java.util.logging.Level;
 
 import com.google.common.collect.ImmutableMap;
 import de.themoep.vnpbungee.VNPBungee;
-import me.lucko.luckperms.LuckPerms;
-import me.lucko.luckperms.api.LuckPermsApi;
-import me.lucko.luckperms.api.User;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.LuckPermsProvider;
+import net.luckperms.api.model.user.User;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
@@ -61,7 +61,7 @@ public class Channels extends Plugin {
 	/**
 	 * Soft depend on LuckPerms
 	 */
-	private static LuckPermsApi luckPermsApi = null;
+	private static LuckPerms luckPermsApi = null;
 
 	private static UUIDDBPlugin uuidDb = null;
 
@@ -100,7 +100,7 @@ public class Channels extends Plugin {
 
 		if (getProxy().getPluginManager().getPlugin("LuckPerms") != null) {
 			getLogger().info("Found LuckPerms!");
-			luckPermsApi = LuckPerms.getApi();
+			luckPermsApi = LuckPermsProvider.get();
 		}
 
 		if (getProxy().getPluginManager().getPlugin("UUIDDB") != null) {
@@ -423,7 +423,7 @@ public class Channels extends Plugin {
 	 * Get the LuckPermsApi if LuckPerms is installed
 	 * @return The LuckPermsApi or <tt>null</tt> if LuckPerms is not installed
 	 */
-	public static LuckPermsApi getLuckPermsApi() {
+	public static LuckPerms getLuckPermsApi() {
 		return luckPermsApi;
 	}
 
@@ -463,9 +463,9 @@ public class Channels extends Plugin {
 		}
 
 		if (playerName == null && getLuckPermsApi() != null) {
-			User lpUser = getLuckPermsApi().getUser(playerId);
+			User lpUser = getLuckPermsApi().getUserManager().getUser(playerId);
 			if (lpUser != null) {
-				playerName = lpUser.getName();
+				playerName = lpUser.getUsername();
 			}
 		}
 
@@ -494,9 +494,9 @@ public class Channels extends Plugin {
 		}
 
 		if (playerId == null && getLuckPermsApi() != null) {
-			User lpUser = getLuckPermsApi().getUser(name);
+			User lpUser = getLuckPermsApi().getUserManager().getUser(name);
 			if (lpUser != null) {
-				playerId = lpUser.getUuid();
+				playerId = lpUser.getUniqueId();
 			}
 		}
 
