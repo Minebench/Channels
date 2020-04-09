@@ -39,7 +39,9 @@ public class PrivateMessage extends AbstractMessage {
 			} else {
 				Channels.notify(sender.getPlayer(), "channels.chatter.is-dnd", ImmutableMap.of("chatter", receiver.getName()));
 			}
-			return;
+			if (!sender.hasPermission("channels.bypass.dnd")) {
+				return;
+			}
 		}
 		
 		processMessage(SenderRole.SENDER);
