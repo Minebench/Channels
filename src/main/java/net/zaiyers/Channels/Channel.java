@@ -100,10 +100,12 @@ public class Channel {
 			Channels.notify(sender.getPlayer(), "channels.chatter.is-muted");
 			return;
 		}
-		String serverName = sender.getPlayer().getServer().getInfo().getName();
-		if (!cfg.isGlobal() && !sender.hasPermission(this, "globalread") && !cfg.getServers().contains(serverName)) {
-			Channels.notify(sender.getPlayer(), "channels.command.channel-not-available", ImmutableMap.of("channelColor", getColor().toString(), "channel", getName(), "server", serverName));
-			return;
+		if (sender.getPlayer().getServer() != null) {
+			String serverName = sender.getPlayer().getServer().getInfo().getName();
+			if (!cfg.isGlobal() && !sender.hasPermission(this, "globalread") && !cfg.getServers().contains(serverName)) {
+				Channels.notify(sender.getPlayer(), "channels.command.channel-not-available", ImmutableMap.of("channelColor", getColor().toString(), "channel", getName(), "server", serverName));
+				return;
+			}
 		}
 
 		List<String> subCur = new ArrayList<String>(subscribers);
