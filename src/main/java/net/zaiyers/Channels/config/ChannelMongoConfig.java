@@ -27,7 +27,7 @@ public class ChannelMongoConfig extends MongoConfig implements ChannelConfig {
 	}
 
 	public ChatColor getColor() {
-		return ChatColor.valueOf(cfg.getString("color"));
+		return ChatColor.of(cfg.getString("color"));
 	}
 
 	public String getPassword() {

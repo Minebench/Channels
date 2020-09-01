@@ -187,7 +187,7 @@ public class Chatter {
 			if (Channels.getLuckPermsApi() != null) {
 				CachedMetaData metaData = getMetaData();
 				if (metaData != null && metaData.getPrefix() != null) {
-					return ChatColor.translateAlternateColorCodes('&', metaData.getPrefix());
+					return metaData.getPrefix();
 				}
 			}
 		}
@@ -203,7 +203,7 @@ public class Chatter {
 			if (Channels.getLuckPermsApi() != null) {
 				CachedMetaData metaData = getMetaData();
 				if (metaData != null && metaData.getSuffix() != null) {
-					return ChatColor.translateAlternateColorCodes('&', metaData.getSuffix());
+					return metaData.getSuffix();
 				}
 			}
 		}

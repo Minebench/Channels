@@ -33,7 +33,7 @@ public class LanguageConfig extends YamlConfig {
 		if (cfg.getString(key, "").isEmpty()) {
 			return ChatColor.RED + "Unknown language key: " + ChatColor.GOLD + key;
 		} else {
-			return ChatColor.translateAlternateColorCodes('&', cfg.getString(key));
+			return cfg.getString(key);
 		}
 	}
 	
@@ -48,6 +48,6 @@ public class LanguageConfig extends YamlConfig {
 	 * get translation as a base component from the config with replacements
 	 */
 	public BaseComponent[] getTranslationComponent(String key, Map<String, String> replacements) {
-		return new MineDown(getTranslation(key)).replace(replacements).toComponent();
+		return new MineDown(getTranslation(key)).replace(replacements).replaceFirst(true).toComponent();
 	}
 }

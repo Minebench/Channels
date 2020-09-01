@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.zaiyers</groupId>
     <artifactId>Channels</artifactId>
-    <version>1.3-SNAPSHOT</version>
+    <version>1.4-SNAPSHOT</version>
     <name>Channels</name>
     <description>A multichannel Chatplugin for BungeeCord</description>
 
@@ -36,7 +36,7 @@
         <dependency>
             <groupId>net.md-5</groupId>
             <artifactId>bungeecord-api</artifactId>
-            <version>1.14-SNAPSHOT</version>
+            <version>1.16-R0.2-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

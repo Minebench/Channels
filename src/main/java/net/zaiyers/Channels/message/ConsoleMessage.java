@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.regex.Matcher;
 
 import de.themoep.minedown.MineDown;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.zaiyers.Channels.Channel;
@@ -46,7 +47,7 @@ public class ConsoleMessage extends AbstractMessage {
 						"date", dateFormat.format(date),
 						"time", timeFormat.format(date))
 				.replace("msg", new MineDown(rawMessage)
-						.urlHoverText(Channels.getInstance().getLanguage().getTranslation("chat.hover.open-url"))
+						.urlHoverText(ChatColor.translateAlternateColorCodes('&', Channels.getInstance().getLanguage().getTranslation("chat.hover.open-url")))
 						.toComponent())
 				.toComponent();
 	}

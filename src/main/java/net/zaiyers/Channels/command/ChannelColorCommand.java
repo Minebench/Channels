@@ -41,7 +41,7 @@ public class ChannelColorCommand extends AbstractCommand {
 		}
 		
 		try {
-			ChatColor color = ChatColor.valueOf(args[2].toUpperCase());
+			ChatColor color = ChatColor.of(args[2]);
 			chan.setColor(color);
 			Channels.notify(sender, "channels.command.channel-modified", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
 		} catch (IllegalArgumentException e) {

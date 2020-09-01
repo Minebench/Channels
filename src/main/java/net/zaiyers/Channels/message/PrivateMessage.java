@@ -8,6 +8,7 @@ import com.google.common.collect.ImmutableMap;
 
 import de.themoep.minedown.MineDown;
 import de.themoep.minedown.MineDownParser;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.Chatter;
@@ -66,7 +67,7 @@ public class PrivateMessage extends AbstractMessage {
 		String pmFormat = Channels.getConfig().getPrivateMessageFormat(role);
 		
 		MineDown messageMd = new MineDown(rawMessage)
-				.urlHoverText(Channels.getInstance().getLanguage().getTranslation("chat.hover.open-url"));
+				.urlHoverText(ChatColor.translateAlternateColorCodes('&', Channels.getInstance().getLanguage().getTranslation("chat.hover.open-url")));
 		if (!getChatter().hasPermission("channels.color")) {
 			messageMd.disable(MineDownParser.Option.LEGACY_COLORS);
 		}
@@ -78,15 +79,16 @@ public class PrivateMessage extends AbstractMessage {
 		}
 		
 		processedMessage = new MineDown(pmFormat).replace(
-				"sender-prefix", sender.getPrefix(),
 				"sender", sender.getName(),
-				"sender-suffix", sender.getSuffix(),
-				"receiver-prefix", receiver.getPrefix(),
 				"receiver", receiver.getName(),
-				"receiver-suffix", receiver.getSuffix(),
 				"date", dateFormat.format(date),
 				"time", timeFormat.format(date)
-		).replace("msg", messageMd.toComponent()).toComponent();
+		).replace("msg", messageMd.toComponent())
+				.replace("sender-prefix", MineDown.parse(sender.getPrefix()))
+				.replace("sender-suffix", MineDown.parse(sender.getSuffix()))
+				.replace("receiver-prefix", MineDown.parse(receiver.getPrefix()))
+				.replace("receiver-suffix", MineDown.parse(receiver.getSuffix()))
+				.toComponent();
 	}
 	
 	public CommandSender getSender() {

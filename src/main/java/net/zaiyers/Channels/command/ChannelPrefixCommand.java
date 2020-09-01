@@ -39,8 +39,7 @@ public class ChannelPrefixCommand extends AbstractCommand {
 				}
 			}
 		}
-		value = value.replaceAll("([&#]([a-fk-or0-9]))", "\u00A7$2");
-		
+
 		if (player == null) {
 			chatterUUID = Channels.getPlayerId(args[1]);
 			if (chatterUUID == null) {

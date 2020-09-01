@@ -2,10 +2,13 @@ package net.zaiyers.Channels.command;
 
 import com.google.common.collect.ImmutableMap;
 
+import de.themoep.minedown.MineDown;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.hover.content.Text;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
@@ -82,29 +85,29 @@ public class ChannelListCommand extends AbstractCommand {
 				}
 
 				if (chatters.size() > 0) {
-                    TextComponent chatterList = new TextComponent("");
+					ComponentBuilder chatterList = new ComponentBuilder("");
 					for (int i=0; i < chatters.size(); i++) {
-                        Chatter subscriber = chatters.get(i);
-                        if (i > 0) {
-                            chatterList.addExtra(new TextComponent(TextComponent.fromLegacyText(ChatColor.WHITE + ", ")));
-                        }
-                        chatterList.addExtra(new TextComponent(TextComponent.fromLegacyText(subscriber.getPrefix()+ChatColor.WHITE+subscriber.getName()+subscriber.getSuffix())));
-                        if (subscriber.isAFK()) {
-                            TextComponent afkComponent = new TextComponent(TextComponent.fromLegacyText(ChatColor.GRAY + " (AFK)"));
-                            if (subscriber.getAFKMessage() != null) {
-                                afkComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(ChatColor.GRAY + "AFK: " + ChatColor.ITALIC + subscriber.getAFKMessage())));
-                            }
-                            chatterList.addExtra(afkComponent);
-                        }
-                        if (subscriber.isDND()) {
-                            TextComponent dndComponent = new TextComponent(TextComponent.fromLegacyText(ChatColor.GRAY + " (DND)"));
-                            if (subscriber.getDNDMessage() != null) {
-                                dndComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(ChatColor.GRAY + "DND: " + ChatColor.ITALIC + subscriber.getDNDMessage())));
-                            }
-                            chatterList.addExtra(dndComponent);
-                        }
+						Chatter subscriber = chatters.get(i);
+						if (i > 0) {
+							chatterList.append(", ").color(ChatColor.WHITE);
+						}
+						chatterList.append(MineDown.parse(subscriber.getPrefix()))
+								.append(subscriber.getName()).color(ChatColor.WHITE)
+								.append(MineDown.parse(subscriber.getSuffix()));
+						if (subscriber.isAFK()) {
+							chatterList.append("(AFK)").color(ChatColor.GRAY);
+							if (subscriber.getAFKMessage() != null) {
+								chatterList.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(TextComponent.fromLegacyText(ChatColor.GRAY + "AFK: " + ChatColor.ITALIC + subscriber.getAFKMessage()))));
+							}
+						}
+						if (subscriber.isDND()) {
+							chatterList.append("(DND)").color(ChatColor.GRAY);
+							if (subscriber.getDNDMessage() != null) {
+								chatterList.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(TextComponent.fromLegacyText(ChatColor.GRAY + "DND: " + ChatColor.ITALIC + subscriber.getDNDMessage()))));
+							}
+						}
 					}
-					sender.sendMessage(chatterList);
+					sender.sendMessage(chatterList.create());
 				}
 			} else {
 				Channels.notify(sender, "channels.permission.list-channel", ImmutableMap.of("channel", channel.getName(), "channelColor", channel.getColor().toString()));
