@@ -8,7 +8,7 @@ import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.TabExecutor;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
-import net.zaiyers.Channels.ChannelsChatEvent;
+import net.zaiyers.Channels.events.ChannelsChatEvent;
 import net.zaiyers.Channels.Chatter;
 import net.zaiyers.Channels.message.ChannelMessage;
 import net.zaiyers.Channels.message.ConsoleMessage;

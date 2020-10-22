@@ -9,7 +9,7 @@ import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
-import net.zaiyers.Channels.ChannelsChatEvent;
+import net.zaiyers.Channels.events.ChannelsChatEvent;
 import net.zaiyers.Channels.Chatter;
 import net.zaiyers.Channels.command.ChannelsCommand;
 import net.zaiyers.Channels.command.PMCommand;

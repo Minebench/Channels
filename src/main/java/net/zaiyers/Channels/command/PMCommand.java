@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.zaiyers.Channels.Channels;
-import net.zaiyers.Channels.ChannelsChatEvent;
+import net.zaiyers.Channels.events.ChannelsChatEvent;
 import net.zaiyers.Channels.Chatter;
 import net.zaiyers.Channels.message.Message;
 import net.zaiyers.Channels.message.PrivateMessage;
