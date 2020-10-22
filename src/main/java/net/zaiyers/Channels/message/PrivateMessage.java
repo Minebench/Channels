@@ -46,11 +46,12 @@ public class PrivateMessage extends AbstractMessage {
 		}
 		
 		processMessage(SenderRole.SENDER);
-		sender.sendMessage(this);
-		
-		if (!receiver.getIgnores().contains(sender.getPlayer().getUniqueId().toString())) {
+		sender.sendMessage(sender, this);
+
+		boolean bypassIgnore = sender.hasPermission("channels.bypass.ignore");
+		if (!receiver.getIgnores().contains(sender.getPlayer().getUniqueId().toString()) || bypassIgnore) {
 			processMessage(SenderRole.RECEIVER);
-			receiver.sendMessage(this);
+			receiver.sendMessage(bypassIgnore ? null : sender, this);
 			receiver.setLastPrivateSender(sender);
 		}
 	}

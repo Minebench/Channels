@@ -108,11 +108,13 @@ public class Channel {
 			}
 		}
 
+		Chatter messageSender = sender.hasPermission("channels.bypass.ignore") ? null: sender;
+
 		List<String> subCur = new ArrayList<String>(subscribers);
 		for (String uuid: subCur) {
 			Chatter receiver = Channels.getInstance().getChatter(uuid);
 			if (receiver != null && receiver.getPlayer() != null) {
-				if (receiver.getIgnores().contains(sender.getPlayer().getUniqueId().toString())) {
+				if (receiver.getIgnores().contains(sender.getPlayer().getUniqueId().toString()) && messageSender != null) {
 					// I don't want to read this message
 					continue;
 				} else if (!cfg.isGlobal() && !receiver.hasPermission(this, "globalread") && receiver.getPlayer().getServer() != null && !cfg.getServers().contains(receiver.getPlayer().getServer().getInfo().getName())) {
@@ -121,7 +123,7 @@ public class Channel {
 				}
 				
 				// send the message
-				receiver.sendMessage(message);
+				receiver.sendMessage(messageSender, message);
 			}
 		}
 	}
@@ -139,7 +141,7 @@ public class Channel {
 			}
 			
 			// send the message
-			reciever.sendMessage(consoleMessage);
+			reciever.sendMessage(null, consoleMessage);
 		}
 	}
 

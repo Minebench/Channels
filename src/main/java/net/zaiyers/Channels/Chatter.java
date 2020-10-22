@@ -290,10 +290,11 @@ public class Chatter {
 
 	/**
 	 * sends me a message
-	 * @param message
+	 * @param sender The sender of the message
+	 * @param message The message
 	 */
-	public void sendMessage(Message message) {
-		player.sendMessage(ChatMessageType.CHAT, message.getProcessedMessage());
+	public void sendMessage(Chatter sender, Message message) {
+		player.sendMessage(sender != null ? sender.getPlayer().getUniqueId() : null, message.getProcessedMessage());
 	}
 
 	/**
