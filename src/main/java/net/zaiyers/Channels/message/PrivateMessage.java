@@ -10,6 +10,7 @@ import de.themoep.minedown.MineDown;
 import de.themoep.minedown.MineDownParser;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.Chatter;
 
@@ -44,11 +45,17 @@ public class PrivateMessage extends AbstractMessage {
 				return;
 			}
 		}
+
+		boolean bypassIgnore = sender.hasPermission("channels.bypass.ignore");
+		if (receiver != null && receiver.getPlayer().getChatMode() != ProxiedPlayer.ChatMode.SHOWN) {
+			if (receiver.getPlayer().getChatMode() == ProxiedPlayer.ChatMode.HIDDEN || !bypassIgnore) {
+				Channels.notify(sender.getPlayer(), "Channels.chatter.hides-chat", ImmutableMap.of("chatter", receiver.getName()));
+			}
+		}
 		
 		processMessage(SenderRole.SENDER);
 		sender.sendMessage(sender, this);
 
-		boolean bypassIgnore = sender.hasPermission("channels.bypass.ignore");
 		if (!receiver.getIgnores().contains(sender.getPlayer().getUniqueId().toString()) || bypassIgnore) {
 			processMessage(SenderRole.RECEIVER);
 			receiver.sendMessage(bypassIgnore ? null : sender, this);

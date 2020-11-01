@@ -17,6 +17,7 @@ channels:
       recipient-unset: "&aYou are no longer talking privatly."
       nobody-wrote: "&cNobody has written."
       has-no-channel: '&cYou have not set a default channel.'
+      hides-chat: "&6%chatter%&c has disables chat in their client and cant read your message."
       is-afk: '&6%chatter%&c is AFK and may not read your message.'
       is-afk-with-msg: '&6%chatter%&c is AFK (&o%msg%&r&c) and may not read your message.'
       is-dnd: '&6%chatter%&c does not want to be disturbed.'

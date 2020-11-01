@@ -16,6 +16,7 @@ channels:
     recipient-set: "&aDu sprichst nun mit &e%recipient%&a."
     nobody-wrote: "&cNiemand hat dir geschrieben."
     has-no-channel: "&cDu sprichst in keinem Channel."
+    hides-chat: "&6%chatter%&c hat den Chat im Client abgeschaltet und kann deine Nachricht nicht lesen."
     is-afk: "&6%chatter%&c ist AFK und liest deine Nachricht möglicherweise nicht."
     is-afk-with-msg: "&6%chatter%&c ist AFK (&o%msg%&r&c) und liest deine Nachricht möglicherweise nicht."
     is-dnd: "&6%chatter%&c möchte nicht gestört werden."
