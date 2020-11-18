@@ -1,6 +1,6 @@
 name: ''
 tag: ''
-format: "[%channelColor%[%channelTag%]](%channelColor%%channelName%\n&7%date% %time%) %prefix%&f%sender%%suffix%&f: &7%msg%"
+format: "[%channelColor%[%channelTag%]](%channelColor%%channelName%\n&7%date% %time%) %prefix%[&f%sender%](insert=%sender%)%suffix%&f: &7%msg%"
 color: DARK_GRAY
 password: ''
 servers: {}
