@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 
 import de.themoep.minedown.MineDown;
 import de.themoep.minedown.MineDownParser;
+import de.themoep.minedown.Replacer;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.zaiyers.Channels.Channel;
@@ -56,17 +57,18 @@ public class ChannelMessage extends AbstractMessage {
 			messageMd.disable(MineDownParser.Option.SIMPLE_FORMATTING);
 		}
 		
-		processedMessage = new MineDown(channel.getFormat()).replace(
-				"sender", chatter.getName(),
-				"channelColor", channel.getColor().toString(),
-				"channelTag", channel.getTag(),
-				"channelName", channel.getName(),
-				"date", dateFormat.format(date),
-				"time", timeFormat.format(date)
-		).replace("msg", messageMd.toComponent())
-				.replace("prefix", MineDown.parse(chatter.getPrefix()))
-				.replace("suffix", MineDown.parse(chatter.getSuffix()))
-				.toComponent();
+		processedMessage = new Replacer().replace("msg", messageMd.toComponent())
+				.replaceIn(new MineDown(channel.getFormat()).replace(
+						"sender", chatter.getName(),
+						"channelColor", channel.getColor().toString(),
+						"channelTag", channel.getTag(),
+						"channelName", channel.getName(),
+						"date", dateFormat.format(date),
+						"time", timeFormat.format(date)
+				).replace("prefix", MineDown.parse(chatter.getPrefix()))
+						.replace("suffix", MineDown.parse(chatter.getSuffix()))
+						.replaceFirst(true)
+						.toComponent());
 	}
 	
 	/**
