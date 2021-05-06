@@ -57,7 +57,10 @@ public class ChannelMessage extends AbstractMessage {
 			messageMd.disable(MineDownParser.Option.SIMPLE_FORMATTING);
 		}
 		
-		processedMessage = new Replacer().replace("msg", messageMd.toComponent())
+		processedMessage = new Replacer()
+				.replace("prefix", MineDown.parse(chatter.getPrefix()))
+				.replace("suffix", MineDown.parse(chatter.getSuffix()))
+				.replace("msg", messageMd.toComponent())
 				.replaceIn(new MineDown(channel.getFormat()).replace(
 						"sender", chatter.getName(),
 						"channelColor", channel.getColor().toString(),
@@ -65,9 +68,7 @@ public class ChannelMessage extends AbstractMessage {
 						"channelName", channel.getName(),
 						"date", dateFormat.format(date),
 						"time", timeFormat.format(date)
-				).replace("prefix", MineDown.parse(chatter.getPrefix()))
-						.replace("suffix", MineDown.parse(chatter.getSuffix()))
-						.replaceFirst(true)
+				).replaceFirst(true)
 						.toComponent());
 	}
 	
