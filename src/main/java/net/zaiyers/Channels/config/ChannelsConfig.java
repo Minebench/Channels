@@ -89,7 +89,15 @@ public class ChannelsConfig extends YamlConfig {
 			e.printStackTrace();
 		}
 	}
-	
+
+	/**
+	 * return whether or not to send messages with sender UUIDs to block them client side
+	 * @return true if sender UUIDs should be sent, false if not
+	 */
+	public boolean shouldSendUuidsInMessages() {
+		return cfg.getBoolean("sendUuidsInMessages");
+	}
+
 	/**
 	 * return whether or not vanished players should be hidden from messages and commands
 	 * @return true if vanished players should be hidden, false if they should show up

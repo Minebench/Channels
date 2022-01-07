@@ -9,8 +9,6 @@ import net.luckperms.api.cacheddata.CachedMetaData;
 import net.luckperms.api.context.ContextSet;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.query.QueryOptions;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.zaiyers.Channels.config.ChatterConfig;
@@ -294,7 +292,7 @@ public class Chatter {
 	 * @param message The message
 	 */
 	public void sendMessage(Chatter sender, Message message) {
-		player.sendMessage(sender != null ? sender.getPlayer().getUniqueId() : null, message.getProcessedMessage());
+		player.sendMessage(sender != null && Channels.getConfig().shouldSendUuidsInMessages() ? sender.getPlayer().getUniqueId() : null, message.getProcessedMessage());
 	}
 
 	/**
