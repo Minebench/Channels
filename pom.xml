@@ -14,7 +14,7 @@
         </repository>
         <repository>
             <id>minebench-repo</id>
-            <url>http://repo.minebench.de/</url>
+            <url>https://repo.minebench.de/</url>
         </repository>
         <repository>
             <id>luck-repo</id>
@@ -22,7 +22,7 @@
         </repository>
         <repository>
             <id>bungeetablistplus-repo</id>
-            <url>http://nexus.codecrafter47.de/content/repositories/public/</url>
+            <url>https://nexus.codecrafter47.de/content/repositories/public/</url>
         </repository>
     </repositories>
 
