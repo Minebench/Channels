@@ -9,6 +9,7 @@ import de.themoep.minedown.MineDownParser;
 import de.themoep.minedown.Replacer;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.Chatter;
@@ -41,6 +42,10 @@ public class ChannelMessage extends AbstractMessage {
 	 * generate message and format it
 	 */
 	public void processMessage() {
+		if (processedMessage != null)
+			// Only process once
+			return;
+
 		Date date = new Date(getTime());
 		SimpleDateFormat dateFormat = Channels.getConfig().getDateFormat();
 		SimpleDateFormat timeFormat = Channels.getConfig().getTimeFormat();
@@ -72,13 +77,21 @@ public class ChannelMessage extends AbstractMessage {
 				.replace("msg", messageMd.toComponent())
 				.toComponent();
 	}
+
+	/**
+	 * the final message
+	 */
+	@Override
+	public BaseComponent[] getProcessedMessage() {
+		if (processedMessage == null)
+			processMessage();
+		return super.getProcessedMessage();
+	}
 	
 	/**
 	 * send the message to its channel
 	 */
 	public void send() {
-		processMessage();
-		
 		channel.send(this);		
 	}
 	

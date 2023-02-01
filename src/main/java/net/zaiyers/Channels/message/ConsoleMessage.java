@@ -8,6 +8,7 @@ import de.themoep.minedown.MineDown;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 
@@ -51,9 +52,18 @@ public class ConsoleMessage extends AbstractMessage {
 						.toComponent())
 				.toComponent();
 	}
+
+	/**
+	 * the final message
+	 */
+	@Override
+	public BaseComponent[] getProcessedMessage() {
+		if (processedMessage == null)
+			processMessage();
+		return super.getProcessedMessage();
+	}
 	
 	public void send() {
-		processMessage();
 		channel.send(this);
 	}
 
