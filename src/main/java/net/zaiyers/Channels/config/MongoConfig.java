@@ -1,10 +1,9 @@
 package net.zaiyers.Channels.config;
 
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
-
-import com.mongodb.BasicDBObject;
 import org.bson.Document;
 
 public abstract class MongoConfig implements Config {
@@ -48,6 +47,6 @@ public abstract class MongoConfig implements Config {
 	}
 	
 	public void removeConfig() {
-		col.deleteMany(new BasicDBObject("uuid", uuid));
+		col.deleteMany(Filters.eq("uuid", uuid));
 	}
 }

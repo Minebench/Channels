@@ -7,19 +7,16 @@ import java.util.List;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.Filters;
 import org.bson.Document;
 import org.yaml.snakeyaml.Yaml;
-
-import com.mongodb.BasicDBObject;
 
 public class MongoConfiguration {
 	private Document settings;
 	
 	public MongoConfiguration(MongoCollection<Document> col, String uuid) {
 		if (uuid != null) {
-			BasicDBObject search = new BasicDBObject("uuid", uuid);
-
-			MongoCursor<Document> cursor = col.find(search).cursor();
+			MongoCursor<Document> cursor = col.find(Filters.eq("uuid", uuid)).cursor();
 			while (cursor.hasNext()) {
 				settings = cursor.next();
 			}
@@ -29,9 +26,8 @@ public class MongoConfiguration {
 	public static void save(MongoCollection<Document> col, MongoConfiguration cfg) {
 		Document config = new Document();
 		config.putAll(cfg.settings);
-		
-		col.deleteMany(new BasicDBObject("uuid", cfg.settings.get("uuid")));
-		col.insertOne(config);
+
+		col.replaceOne(Filters.eq("uuid", cfg.settings.get("uuid")), config);
 	}
 	
 	public List<String> getStringList(String path) {
