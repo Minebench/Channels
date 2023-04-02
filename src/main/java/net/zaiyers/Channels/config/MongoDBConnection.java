@@ -21,8 +21,10 @@ public class MongoDBConnection {
 	
 	public MongoDBConnection(Configuration cfg) {
 		if (!mongoDBConnect(cfg)) {
-			mongo.close();
-			mongo = null;
+			if (mongo != null) {
+				mongo.close();
+				mongo = null;
+			}
 		}
 	}
 	
@@ -43,8 +45,8 @@ public class MongoDBConnection {
 			settings.credential(MongoCredential.createPlainCredential(cfg.getString("mongo.user"), cfg.getString("mongo.authdb"), cfg.getString("mongo.pass").toCharArray()));
 		}
 
-		try (MongoClient mongo = MongoClients.create(settings.build())) {
-			this.mongo = mongo;
+		try {
+			this.mongo = MongoClients.create(settings.build());
 			// try auth
 			db = mongo.getDatabase(cfg.getString("mongo.db"));
 			
