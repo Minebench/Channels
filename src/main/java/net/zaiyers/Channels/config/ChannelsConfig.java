@@ -8,13 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 
+import com.mongodb.client.MongoCursor;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.message.PrivateMessage;
 import net.zaiyers.Channels.message.PrivateMessage.SenderRole;
+import org.bson.Document;
 
 public class ChannelsConfig extends YamlConfig {
 	/**
@@ -43,7 +44,7 @@ public class ChannelsConfig extends YamlConfig {
 		ArrayList<String> chans = new ArrayList<String>(); 
 		
 		if (mongo != null && mongo.isAvilable()) {
-			DBCursor cursor = mongo.getChannels().find();
+			MongoCursor<Document> cursor = mongo.getChannels().find().cursor();
 			
 			if (!cursor.hasNext()) {
 				Channel def = makeDefaultChannel();
@@ -52,7 +53,7 @@ public class ChannelsConfig extends YamlConfig {
 				}
 			} else {
 				while (cursor.hasNext()) {
-					DBObject channelConfig = cursor.next();
+					Document channelConfig = cursor.next();
 					chans.add((String) channelConfig.get("uuid"));
 				}
 			}

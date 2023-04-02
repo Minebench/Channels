@@ -4,13 +4,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
-import com.mongodb.DBCollection;
-
+import com.mongodb.client.MongoCollection;
 import net.md_5.bungee.api.ChatColor;
 import net.zaiyers.Channels.Channels;
+import org.bson.Document;
 
 public class ChannelMongoConfig extends MongoConfig implements ChannelConfig {
-	public ChannelMongoConfig(DBCollection col, String uuid) throws IOException {
+	public ChannelMongoConfig(MongoCollection<Document> col, String uuid) throws IOException {
 		super(col, uuid);
 	}
 

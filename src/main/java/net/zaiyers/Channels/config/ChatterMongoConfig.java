@@ -4,13 +4,13 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mongodb.DBCollection;
-
+import com.mongodb.client.MongoCollection;
 import net.zaiyers.Channels.Channels;
+import org.bson.Document;
 
 public class ChatterMongoConfig extends MongoConfig implements ChatterConfig {
 	
-	public ChatterMongoConfig(DBCollection c, String string) {
+	public ChatterMongoConfig(MongoCollection<Document> c, String string) {
 		super(c, string);
 	}
 

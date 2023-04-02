@@ -5,34 +5,36 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import org.bson.BasicBSONObject;
+import org.bson.Document;
 import org.yaml.snakeyaml.Yaml;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 
 public class MongoConfiguration {
-	private DBObject settings;
+	private Document settings;
 	
-	public MongoConfiguration(DBCollection col, String uuid) {
+	public MongoConfiguration(MongoCollection<Document> col, String uuid) {
 		if (uuid != null) {
-			DBObject search = new BasicDBObject("uuid", uuid);
-			
-			DBCursor cursor = col.find(search);
+			BasicDBObject search = new BasicDBObject("uuid", uuid);
+
+			MongoCursor<Document> cursor = col.find(search).cursor();
 			while (cursor.hasNext()) {
 				settings = cursor.next();
 			}
 		}
 	}
 
-	public static void save(DBCollection col, MongoConfiguration cfg) {
-		DBObject config = new BasicDBObject();
+	public static void save(MongoCollection<Document> col, MongoConfiguration cfg) {
+		Document config = new Document();
 		config.putAll(cfg.settings);
 		
-		col.remove(new BasicDBObject("uuid", cfg.settings.get("uuid")));
-		col.insert(config);
+		col.deleteMany(new BasicDBObject("uuid", cfg.settings.get("uuid")));
+		col.insertOne(config);
 	}
 	
 	public List<String> getStringList(String path) {
@@ -100,7 +102,7 @@ public class MongoConfiguration {
 	
 	public void load(InputStreamReader io) {
 		Yaml yaml = new Yaml();
-		settings = new BasicDBObject();
+		settings = new Document();
 		settings.putAll(yaml.loadAs(io, LinkedHashMap.class));
 	}
 	
