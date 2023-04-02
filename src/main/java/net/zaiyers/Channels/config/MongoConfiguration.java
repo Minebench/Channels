@@ -7,13 +7,10 @@ import java.util.List;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
-import org.bson.BasicBSONObject;
 import org.bson.Document;
 import org.yaml.snakeyaml.Yaml;
 
-import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 
 public class MongoConfiguration {
 	private Document settings;
@@ -49,11 +46,11 @@ public class MongoConfiguration {
         return stringList;
 	}
 	
-	private BasicDBList getList(String path) {	
+	private List<Object> getList(String path) {
 		if (settings.get(path) instanceof List) {
-			return (BasicDBList) settings.get(path);
+			return (List<Object>) settings.get(path);
 		} else if (settings.get(path) != null) {
-			BasicDBList list = new BasicDBList();
+			List<Object> list = new ArrayList<>();
 			list.add(settings.get(path));
 			return list;
 		}
@@ -91,7 +88,7 @@ public class MongoConfiguration {
 	
 	public void set(String key, Object value) {
 		if (value instanceof ArrayList<?>) {
-			BasicDBList save = new BasicDBList();
+			List<Object> save = new ArrayList<>();
 			save.addAll(((ArrayList<?>) value));
 			
 			settings.put(key, save);
