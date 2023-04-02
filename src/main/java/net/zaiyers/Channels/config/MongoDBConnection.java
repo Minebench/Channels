@@ -2,6 +2,8 @@ package net.zaiyers.Channels.config;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
+import com.mongodb.MongoCredential;
+import com.mongodb.MongoException;
 import com.mongodb.ServerApi;
 import com.mongodb.ServerApiVersion;
 import com.mongodb.client.MongoClient;
@@ -9,7 +11,6 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import net.md_5.bungee.config.Configuration;
-import net.zaiyers.Channels.Channels;
 import org.bson.Document;
 
 public class MongoDBConnection {
@@ -32,19 +33,17 @@ public class MongoDBConnection {
 				.version(ServerApiVersion.V1)
 				.build();
 
-
-		if (cfg.getString("mongo.user") != null && !cfg.getString("mongo.user").isEmpty()) {
+		MongoClientSettings.Builder settings = MongoClientSettings.builder()
+				.applyConnectionString(new ConnectionString("mongodb://" + mongoHost + ":" + mongoPort + "/"))
+				.serverApi(serverApi);
+		if (cfg.getString("mongo.user") != null && !cfg.getString("mongo.pass").isEmpty()) {
 			if (cfg.getString("mongo.authdb") == null || cfg.getString("mongo.pwd") == null || cfg.getString("mongo.authdb").isEmpty()) {
-				Channels.getInstance().getLogger().severe("Invalid configuration for mongoauth");
-				return false;
+				throw new MongoException("Invalid configuration for mongoauth! To not use mongoauth leave the user empty!");
 			}
+			settings.credential(MongoCredential.createPlainCredential(cfg.getString("mongo.user"), cfg.getString("mongo.authdb"), cfg.getString("mongo.pass").toCharArray()));
 		}
 
-		MongoClientSettings settings = MongoClientSettings.builder()
-				.applyConnectionString(new ConnectionString("mongodb://" + cfg.getString("mongo.user") + ":" + cfg.getString("mongo.pwd") + "@" + mongoHost + ":" + mongoPort + "/"))
-				.serverApi(serverApi)
-				.build();
-		try (MongoClient mongo = MongoClients.create(settings)) {
+		try (MongoClient mongo = MongoClients.create(settings.build())) {
 			this.mongo = mongo;
 			// try auth
 			db = mongo.getDatabase(cfg.getString("mongo.db"));
