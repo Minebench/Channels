@@ -16,6 +16,7 @@ import net.zaiyers.Channels.Chatter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class ChannelListCommand extends AbstractCommand {
 
@@ -67,12 +68,12 @@ public class ChannelListCommand extends AbstractCommand {
 				return;
 			}
 			
-			if (isConsoleCommand || chatter.hasPermission(channel, "list") || (channel.isTemporary() && channel.getSubscribers().contains(chatter.getPlayer().getUniqueId().toString()))) {
-				String[] uuids = channel.getSubscribers().toArray(new String[0]);
+			if (isConsoleCommand || chatter.hasPermission(channel, "list") || (channel.isTemporary() && channel.getSubscriberUUIDs().contains(chatter.getPlayer().getUniqueId()))) {
+				UUID[] uuids = channel.getSubscriberUUIDs().toArray(new UUID[0]);
 				Channels.notify(sender, "channels.chatter.channel-list-chatters", ImmutableMap.of("channel", channel.getName(), "channelColor", channel.getColor().toString()));
 
 				List<Chatter> chatters = new ArrayList<>();
-				for (String uuid : uuids) {
+				for (UUID uuid : uuids) {
 					Chatter subscriber = Channels.getInstance().getChatter(uuid);
 					if (subscriber.getPlayer() != null && subscriber.getPlayer().isConnected() && (
 							chatter == null

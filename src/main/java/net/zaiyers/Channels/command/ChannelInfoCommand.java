@@ -74,7 +74,7 @@ public class ChannelInfoCommand extends AbstractCommand {
 				}
 			}
 			Channels.notify(sender, "channels.command.channel-info-bans", ImmutableMap.of("bans", bans));
-			Channels.notify(sender, "channels.command.channel-info-subscribers", ImmutableMap.of("subscribers", ""+channel.getSubscribers().size()));
+			Channels.notify(sender, "channels.command.channel-info-subscribers", ImmutableMap.of("subscribers", ""+channel.getSubscriberUUIDs().size()));
 		} else {
 			Channels.notify(sender, "channels.permission.info-channel", ImmutableMap.of("channel", channel.getName(), "channelColor", channel.getColor().toString()));
 		}

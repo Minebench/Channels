@@ -2,9 +2,8 @@ package net.zaiyers.Channels;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -25,7 +24,7 @@ public class Channel {
 	/**
 	 * list of subscribers
 	 */
-	private ArrayList<String> subscribers = new ArrayList<String>();
+	private Set<UUID> subscribers = new HashSet<>();
 	
 	/**
 	 * channel configuration
@@ -42,8 +41,8 @@ public class Channel {
 			return;
 		}
 		
-		if (!subscribers.contains(chatter.getPlayer().getUniqueId().toString())) {
-			subscribers.add(chatter.getPlayer().getUniqueId().toString());
+		if (!subscribers.contains(chatter.getPlayer().getUniqueId())) {
+			subscribers.add(chatter.getPlayer().getUniqueId());
 		}
 	}
 	
@@ -51,7 +50,11 @@ public class Channel {
 	 * remove subscriber
 	 */
 	public void unsubscribe(Chatter chatter) {
-		subscribers.remove(chatter.getPlayer().getUniqueId().toString());
+		unsubscribe(chatter.getPlayer().getUniqueId());
+	}
+
+	private void unsubscribe(UUID subscriberId) {
+		subscribers.remove(subscriberId);
 		
 		// delete empty and temporary channels
 		if (temporary && subscribers.size() == 0) {
@@ -128,8 +131,8 @@ public class Channel {
 	 * @param message
 	 */
 	public void send(Chatter messageSender, Message message) {
-		List<String> subCur = new ArrayList<>(subscribers);
-		for (String uuid: subCur) {
+		List<UUID> subCur = new ArrayList<>(subscribers);
+		for (UUID uuid : subCur) {
 			Chatter receiver = Channels.getInstance().getChatter(uuid);
 			if (receiver != null && receiver.getPlayer() != null) {
 				if (messageSender != null && receiver.getIgnores().contains(messageSender.getPlayer().getUniqueId().toString())) {
@@ -143,7 +146,7 @@ public class Channel {
 				// send the message
 				receiver.sendMessage(messageSender, message);
 			} else {
-				subscribers.remove(uuid);
+				unsubscribe(uuid);
 			}
 		}
 	}
@@ -353,13 +356,11 @@ public class Channel {
 		
 		// announce
 		String banned = Channels.getPlayerName(chatterUUID);
-		for (String subscriber: subscribers) {
-			Channels.notify(Channels.getInstance().getChatter(subscriber).getPlayer(), "channels.chatter.banned-from-channel", ImmutableMap.of(
-					"chatter", banned,
-					"channelColor", getColor().toString(),
-					"channel", getName()
-			));
-		}
+		notifySubscribers("channels.chatter.banned-from-channel", ImmutableMap.of(
+				"chatter", banned,
+				"channelColor", getColor().toString(),
+				"channel", getName()
+		));
 	}
 	
 	/**
@@ -374,13 +375,11 @@ public class Channel {
 		}
 		
 		// announce
-		for (String subscriber: subscribers) {
-			Channels.notify(Channels.getInstance().getChatter(subscriber).getPlayer(), "channels.chatter.kicked-from-channel", ImmutableMap.of(
-					"chatter", Channels.getPlayerName(chatterUUID),
-					"channelColor", getColor().toString(),
-					"channel", getName()
-			));
-		}
+		notifySubscribers("channels.chatter.kicked-from-channel", ImmutableMap.of(
+				"chatter", Channels.getPlayerName(chatterUUID),
+				"channelColor", getColor().toString(),
+				"channel", getName()
+		));
 	}
 
 	/**
@@ -392,11 +391,11 @@ public class Channel {
 		
 		// announce
 		String banned = Channels.getPlayerName(chatterUUID);
-		for (String subscriber: subscribers) {
-			Channels.notify(Channels.getInstance().getChatter(subscriber).getPlayer(), "channels.chatter.unbanned-from-channel", ImmutableMap.of(
-					"chatter", banned,
-					"channelColor", getColor().toString(),
-					"channel", getName()
+		for (UUID subscriber : subscribers) {
+			notifySubscribers("channels.chatter.unbanned-from-channel", ImmutableMap.of(
+						"chatter", banned,
+						"channelColor", getColor().toString(),
+						"channel", getName()
 				));
 		}
 	}
@@ -428,8 +427,18 @@ public class Channel {
 	/**
 	 * get list of channel subscriber uuids
 	 * @return
+	 * @deprecated Use {@link #getSubscriberUUIDs()}
 	 */
+	@Deprecated
 	public List<String> getSubscribers() {
+		return subscribers.stream().map(UUID::toString).collect(Collectors.toList());
+	}
+
+	/**
+	 * get list of channel subscriber uuids
+	 * @return
+	 */
+	public Collection<UUID> getSubscriberUUIDs() {
 		return subscribers;
 	}
 
@@ -438,10 +447,18 @@ public class Channel {
 	}
 
 	public void removeChannel() {
-		ImmutableMap<String, String> replacements = ImmutableMap.of("channel", getName(), "channelColor", getColor().toString());
-		for (String subscriberUUID: getSubscribers()) {
-			Channels.notify(Channels.getInstance().getChatter(subscriberUUID).getPlayer(), "channels.command.channel-removed", replacements);
-		}
+		notifySubscribers("channels.command.channel-removed", ImmutableMap.of("channel", getName(), "channelColor", getColor().toString()));
 		cfg.removeConfig();
+	}
+
+	private void notifySubscribers(String messageKey, Map<String, String> replacements) {
+		for (UUID subscriberUUID : subscribers) {
+			Chatter chatter = Channels.getInstance().getChatter(subscriberUUID);
+			if (chatter != null && chatter.getPlayer() != null) {
+				Channels.notify(chatter.getPlayer(), messageKey, replacements);
+			} else {
+				unsubscribe(subscriberUUID);
+			}
+		}
 	}
 }
