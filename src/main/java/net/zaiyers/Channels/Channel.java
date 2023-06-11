@@ -142,6 +142,8 @@ public class Channel {
 
 				// send the message
 				receiver.sendMessage(messageSender, message);
+			} else {
+				subscribers.remove(uuid);
 			}
 		}
 	}
