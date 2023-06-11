@@ -34,6 +34,7 @@ public class ServerDefaultChannelCommand extends AbstractCommand {
 		}
 		
 		Channels.getConfig().setServerDefaultChannel(args[1], chan.getUUID(), force);
+		Channels.getConfig().save();
 		Channels.notify(sender, "channels.command.set-server-default-channel", ImmutableMap.of("server", args[1], "channel", chan.getName(), "channelColor", chan.getColor().toString()));
 		Channels.getInstance().checkSanity(sender, chan.getUUID());
 	}
