@@ -511,7 +511,7 @@ public class Channels extends Plugin {
 				// channel exists
 				if (getChannel(channelUUID) != null) {
 					// I'm allowed to join
-					if (chatter.hasPermission(Channels.getInstance().getChannel(channelUUID), "subscribe")) {
+					if (chatter.hasPermission(getChannel(channelUUID), "subscribe")) {
 						getChannel(channelUUID).subscribe(chatter);
 					} else {
 						// chatter no longer has permission for this channel - remove from chatter config
