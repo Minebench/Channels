@@ -14,6 +14,7 @@ import net.zaiyers.Channels.config.ChannelMongoConfig;
 import net.zaiyers.Channels.config.ChannelYamlConfig;
 import net.zaiyers.Channels.message.ChannelMessage;
 import net.zaiyers.Channels.message.ConsoleMessage;
+import net.zaiyers.Channels.message.Message;
 
 public class Channel {
 	/**
@@ -110,22 +111,7 @@ public class Channel {
 
 		Chatter messageSender = sender.hasPermission("channels.bypass.ignore") ? null: sender;
 
-		List<String> subCur = new ArrayList<String>(subscribers);
-		for (String uuid: subCur) {
-			Chatter receiver = Channels.getInstance().getChatter(uuid);
-			if (receiver != null && receiver.getPlayer() != null) {
-				if (receiver.getIgnores().contains(sender.getPlayer().getUniqueId().toString()) && messageSender != null) {
-					// I don't want to read this message
-					continue;
-				} else if (!cfg.isGlobal() && !receiver.hasPermission(this, "globalread") && receiver.getPlayer().getServer() != null && !cfg.getServers().contains(receiver.getPlayer().getServer().getInfo().getName())) {
-					// channel is not distributed to this player's server
-					continue;
-				}
-				
-				// send the message
-				receiver.sendMessage(messageSender, message);
-			}
-		}
+		send(messageSender, message);
 	}
 	
 	/**
@@ -133,15 +119,30 @@ public class Channel {
 	 * @param consoleMessage
 	 */
 	public void send(ConsoleMessage consoleMessage) {
-		for (String uuid: subscribers) {
-			Chatter reciever = Channels.getInstance().getChatter(uuid);
-			if (!cfg.isGlobal() && !reciever.hasPermission(this, "globalread") && !cfg.getServers().contains(reciever.getPlayer().getServer().getInfo().getName())) {
-				// channel is not distributed to this players server
-				continue;
+		send(null, consoleMessage);
+	}
+
+	/**
+	 * send a message message to channel
+	 * @param messageSender
+	 * @param message
+	 */
+	public void send(Chatter messageSender, Message message) {
+		List<String> subCur = new ArrayList<>(subscribers);
+		for (String uuid: subCur) {
+			Chatter receiver = Channels.getInstance().getChatter(uuid);
+			if (receiver != null && receiver.getPlayer() != null) {
+				if (messageSender != null && receiver.getIgnores().contains(messageSender.getPlayer().getUniqueId().toString())) {
+					// I don't want to read this message
+					continue;
+				} else if (!cfg.isGlobal() && !receiver.hasPermission(this, "globalread") && receiver.getPlayer().getServer() != null && !cfg.getServers().contains(receiver.getPlayer().getServer().getInfo().getName())) {
+					// channel is not distributed to this player's server
+					continue;
+				}
+
+				// send the message
+				receiver.sendMessage(messageSender, message);
 			}
-			
-			// send the message
-			reciever.sendMessage(null, consoleMessage);
 		}
 	}
 
