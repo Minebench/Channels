@@ -34,6 +34,7 @@ public class ChannelListCommand extends AbstractCommand {
 		if (args.length == 1 && args[0].equalsIgnoreCase("list")) {
 			Channels.notify(sender, "channels.chatter.available-channels");
 			for (Channel channel: Channels.getInstance().getChannels().values()) {
+				boolean onThisServer = channel.isGlobal() || isConsoleCommand || channel.getServers().contains(chatter.getPlayer().getServer().getInfo().getName());
 				if (isConsoleCommand ||
 						(
 							(
@@ -41,15 +42,12 @@ public class ChannelListCommand extends AbstractCommand {
 								||
 								channel.isTemporary()
 							)
-							&&
-							(
-								channel.isGlobal()
-								||
-								channel.getServers().contains(chatter.getPlayer().getServer().getInfo().getName())
-							)
+							&& onThisServer
 						)
 				) {
 						sender.sendMessage(" - " + channel.getColor() + channel.getTag() + " - " + channel.getName() + ChatColor.WHITE + " (" + ((channel.getPassword().isEmpty()) ? "public":"private") + ")");
+				} else if (chatter.hasPermission(channel, "globalread")) {
+					sender.sendMessage(" - " + channel.getColor() + channel.getTag() + " - " + channel.getName() + ChatColor.WHITE + " (" + ((channel.getPassword().isEmpty()) ? "public":"private") + ") " + (onThisServer ? " " : " not") + "available on this server");
 				}
 			}
 		} else if (args.length == 2 || (args.length == 1 && args[0].equalsIgnoreCase("who") && !isConsoleCommand)) {
