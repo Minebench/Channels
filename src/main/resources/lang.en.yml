@@ -63,6 +63,7 @@ channels:
       channel-info-head: "&aChannel %channelColor%%channel% &aInformation:"
       channel-info-name: "&aName: &f%name%"
       channel-info-tag: "&aTag: &f%tag%"
+      channel-info-uuid: "&aUUID: '&f%uuid%'"
       channel-info-color: "&aColor: %color%%colorName%"
       channel-info-password: "&aPassword: &f%password%"
       channel-info-autofocus: "&aAutofocus: &f%autofocus%"

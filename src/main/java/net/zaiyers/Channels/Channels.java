@@ -3,6 +3,7 @@ package net.zaiyers.Channels;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -331,15 +332,17 @@ public class Channels extends Plugin {
 	 * sends a system notification to a chatter
 	 * @param sender The sender to notify
 	 * @param key    The language key
+	 * @param replacements Replacements array
 	 */
-	public static void notify(CommandSender sender, String key) {
-		notify(sender, key, null);
+	public static void notify(CommandSender sender, String key, String... replacements) {
+		sender.sendMessage(Channels.getInstance().getLanguage().getTranslationComponent(key, replacements));
 	}
 
 	/**
 	 * sends a system notification using text replacements
 	 * @param sender The sender to notify
 	 * @param key    The language key
+	 * @param replacements Replacements map
 	 */
 	public static void notify(CommandSender sender, String key, Map<String, String> replacements) {
 		sender.sendMessage(Channels.getInstance().getLanguage().getTranslationComponent(key, replacements));

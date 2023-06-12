@@ -42,6 +42,9 @@ public class ChannelInfoCommand extends AbstractCommand {
 		    
 			Channels.notify(sender, "channels.command.channel-info-name", ImmutableMap.of("name", channel.getName()));
 			Channels.notify(sender, "channels.command.channel-info-tag", ImmutableMap.of("tag", channel.getTag()));
+			if (isConsoleCommand || chatter.hasPermission(channel, "debug")) {
+				Channels.notify(sender, "channels.command.channel-info-uuid", "uuid", channel.getUUID());
+			}
 			Channels.notify(sender, "channels.command.channel-info-color", ImmutableMap.of("color", channel.getColor().toString(), "colorName", channel.getColor().name()));
 			Channels.notify(sender, "channels.command.channel-info-password", ImmutableMap.of("password", (channel.getPassword() == null) ? "(none)":channel.getPassword()));
 			Channels.notify(sender, "channels.command.channel-info-autofocus", ImmutableMap.of("autofocus", channel.doAutofocus() ? "true":"false"));
