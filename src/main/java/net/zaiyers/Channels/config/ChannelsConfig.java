@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import com.mongodb.client.MongoCursor;
 import net.zaiyers.Channels.Channel;
@@ -42,38 +43,63 @@ public class ChannelsConfig extends YamlConfig {
 	 * get configured channels
 	 */
 	public List<String> getChannels() {
-		ArrayList<String> chans = new ArrayList<String>(); 
-		
-		if (mongo != null && mongo.isAvailable()) {
-			MongoCursor<Document> cursor = mongo.getChannels().find().cursor();
-			
-			if (!cursor.hasNext()) {
-				Channel def = makeDefaultChannel();
-				if (def != null) {
-					chans.add(def.getUUID());
-				}
-			} else {
-				while (cursor.hasNext()) {
-					Document channelConfig = cursor.next();
-					chans.add((String) channelConfig.get("uuid"));
-				}
-			}
-		} else {
-			File channelConfigDir = new File(configFile.getParentFile(), "channels");
-			if (!channelConfigDir.exists()) {
-				channelConfigDir.mkdirs();
-				Channel def = makeDefaultChannel();
-				if (def == null) {
-					channelConfigDir.delete();
+		List<String> chans = new ArrayList<>();
+
+		File channelConfigDir = new File(configFile.getParentFile(), "channels");
+		if (!channelConfigDir.exists()) {
+			channelConfigDir.mkdirs();
+			// try to import channels from Mongo
+			if (mongo != null && mongo.isAvailable()) {
+				MongoCursor<Document> cursor = mongo.getChannels().find().cursor();
+
+				if (!cursor.hasNext()) {
+					makeDefaultChannel();
 				} else {
-					chans.add(def.getUUID());
-				}
-			} else {
-				for (File channelConfigFile: channelConfigDir.listFiles()) {
-					if (channelConfigFile.getName().endsWith(".yml")) {
-						chans.add(channelConfigFile.getName().substring(0, 36));
+					while (cursor.hasNext()) {
+						Document channelConfig = cursor.next();
+						String uuid = (String) channelConfig.get("uuid");
+						try {
+							ChannelMongoConfig cfg = new ChannelMongoConfig(Channels.getConfig().getMongoDBConnection().getChannels(), uuid);
+							Channel channel = new Channel(uuid);
+
+							// import data
+							channel.setAutofocus(cfg.doAutofocus());
+							channel.setAutojoin(cfg.doAutojoin());
+							channel.setColor(cfg.getColor());
+							channel.setBackend(cfg.isBackend());
+							channel.setName(cfg.getName());
+							channel.setFormat(cfg.getFormat());
+							channel.setTag(cfg.getTag());
+							channel.setPassword(cfg.getPassword());
+							channel.setGlobal(cfg.isGlobal());
+							for (String server : cfg.getServers()) {
+								channel.addServer(server);
+							}
+							for (String moderator : cfg.getModerators()) {
+								channel.addModerator(moderator);
+							}
+							for (String ban : cfg.getBans()) {
+								channel.banChatter(UUID.fromString(ban));
+							}
+
+							// write channel to file
+							channel.save();
+
+							Channels.getInstance().getLogger().info("Imported channel " + channel.getName() + " (" + uuid + ") from Mongo");
+
+						} catch (IOException e) {
+							Channels.getInstance().getLogger().log(Level.SEVERE, "Error while trying to import channel " + uuid, e);
+						}
+						chans.add((String) channelConfig.get("uuid"));
 					}
 				}
+			} else {
+				makeDefaultChannel();
+			}
+		}
+		for (File channelConfigFile : channelConfigDir.listFiles()) {
+			if (channelConfigFile.getName().endsWith(".yml")) {
+				chans.add(channelConfigFile.getName().substring(0, 36));
 			}
 		}
 		
