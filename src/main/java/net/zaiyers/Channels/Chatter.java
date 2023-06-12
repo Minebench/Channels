@@ -63,7 +63,7 @@ public class Chatter {
 
 		// load my preferences
 		String uuid = player.getUniqueId().toString();
-		if (Channels.getConfig().getMongoDBConnection() != null && Channels.getConfig().getMongoDBConnection().isAvilable()) {
+		if (Channels.getConfig().getMongoDBConnection() != null && Channels.getConfig().getMongoDBConnection().isAvailable()) {
 			cfg = new ChatterMongoConfig(Channels.getConfig().getMongoDBConnection().getChatters(), uuid);
 		} else {
 			cfg = new ChatterYamlConfig(

@@ -68,7 +68,7 @@ public class Channel {
 	 * @throws IOException 
 	 */
 	public Channel(String uuid) throws IOException {
-		if (Channels.getConfig().getMongoDBConnection() != null && Channels.getConfig().getMongoDBConnection().isAvilable()) {
+		if (Channels.getConfig().getMongoDBConnection() != null && Channels.getConfig().getMongoDBConnection().isAvailable()) {
 			cfg = new ChannelMongoConfig(Channels.getConfig().getMongoDBConnection().getChannels(), uuid);
 		} else {
 			cfg = new ChannelYamlConfig(new File(Channels.getInstance().getDataFolder().getAbsolutePath(), "channels" + File.separatorChar + uuid + ".yml"));

@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.mongodb.DBObject;
-
 import com.mongodb.client.MongoCursor;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
@@ -34,6 +32,9 @@ public class ChannelsConfig extends YamlConfig {
 		
 		if (cfg.getBoolean("mongo.use")) {
 			mongo = new MongoDBConnection(cfg);
+			if (!mongo.isAvailable()) {
+				throw new IOException("Unable to connect to Mongo DB even though it was enabled?");
+			}
 		}
 	}
 	
@@ -43,7 +44,7 @@ public class ChannelsConfig extends YamlConfig {
 	public List<String> getChannels() {
 		ArrayList<String> chans = new ArrayList<String>(); 
 		
-		if (mongo != null && mongo.isAvilable()) {
+		if (mongo != null && mongo.isAvailable()) {
 			MongoCursor<Document> cursor = mongo.getChannels().find().cursor();
 			
 			if (!cursor.hasNext()) {
@@ -206,8 +207,11 @@ public class ChannelsConfig extends YamlConfig {
 	}
 	
 	public MongoDBConnection getMongoDBConnection() {
-		if (mongo != null && mongo.isAvilable()) {
-			return mongo;
+		if (mongo != null) {
+			if (mongo.isAvailable()) {
+				return mongo;
+			}
+			Channels.getInstance().getLogger().warning("We wanted to use a mongo connection but it wasn't available?");
 		}
 		
 		return null;

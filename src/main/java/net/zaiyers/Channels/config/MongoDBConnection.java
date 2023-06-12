@@ -11,7 +11,10 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import net.md_5.bungee.config.Configuration;
+import net.zaiyers.Channels.Channels;
 import org.bson.Document;
+
+import java.util.logging.Level;
 
 public class MongoDBConnection {
 	private MongoClient mongo;
@@ -53,7 +56,7 @@ public class MongoDBConnection {
 			channels = db.getCollection(cfg.getString("mongo.channelCollection"));
 			chatters = db.getCollection(cfg.getString("mongo.chatterCollection"));
 		} catch (Exception e) {
-			e.printStackTrace();
+			Channels.getInstance().getLogger().log(Level.SEVERE, "Error while connecting to Mongo DB", e);
 			return false;
 		}
 		
@@ -64,7 +67,7 @@ public class MongoDBConnection {
 	 * mongo configuration is available
 	 * @return
 	 */
-	public boolean isAvilable() {
+	public boolean isAvailable() {
 		return mongo != null;
 	}
 	

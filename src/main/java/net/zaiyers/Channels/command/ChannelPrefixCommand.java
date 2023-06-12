@@ -48,7 +48,7 @@ public class ChannelPrefixCommand extends AbstractCommand {
 			}
 
 			ChatterConfig cfg;
-			if (Channels.getConfig().getMongoDBConnection() != null && Channels.getConfig().getMongoDBConnection().isAvilable()) {
+			if (Channels.getConfig().getMongoDBConnection() != null && Channels.getConfig().getMongoDBConnection().isAvailable()) {
 				cfg = new ChatterMongoConfig(Channels.getConfig().getMongoDBConnection().getChatters(), chatterUUID.toString());
 			} else {
 				cfg = ChatterYamlConfig.load(chatterUUID);
