@@ -47,7 +47,7 @@ public class ChannelListCommand extends AbstractCommand {
 				) {
 						sender.sendMessage(" - " + channel.getColor() + channel.getTag() + " - " + channel.getName() + ChatColor.WHITE + " (" + ((channel.getPassword().isEmpty()) ? "public":"private") + ")");
 				} else if (chatter.hasPermission(channel, "globalread")) {
-					sender.sendMessage(" - " + channel.getColor() + channel.getTag() + " - " + channel.getName() + ChatColor.WHITE + " (" + ((channel.getPassword().isEmpty()) ? "public":"private") + ") " + (onThisServer ? " " : " not") + "available on this server");
+					sender.sendMessage(" - " + channel.getColor() + channel.getTag() + " - " + channel.getName() + ChatColor.WHITE + " (" + ((channel.getPassword().isEmpty()) ? "public":"private") + ") " + ChatColor.GRAY + (onThisServer ? "" : " not") + " on this server");
 				}
 			}
 		} else if (args.length == 2 || (args.length == 1 && args[0].equalsIgnoreCase("who") && !isConsoleCommand)) {
