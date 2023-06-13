@@ -19,7 +19,7 @@ public class ServerDefaultChannelCommand extends AbstractCommand {
 		
 		Channel chan = Channels.getInstance().getChannel(args[2]);
 		if (chan == null) {
-			Channels.notify(sender, "channels.command.channel-not-found", ImmutableMap.of("channel", args[1]));
+			Channels.notify(sender, "channels.command.channel-not-found", ImmutableMap.of("channel", args[2]));
 			return;
 		}
 		
