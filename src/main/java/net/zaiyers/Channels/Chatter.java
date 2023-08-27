@@ -108,9 +108,12 @@ public class Chatter {
 		// subscribe to channel
 		chan.subscribe(this);
 
-		if (chan.doAutofocus() && privateRecipient == null && !chan.getUUID().equals(getChannel()) && !Channels.getInstance().getChannel(getChannel()).doAutofocus()) {
-			setDefaultChannelUUID(chan.getUUID());
-			Channels.notify(player, "channels.chatter.default-channel-set", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
+		if (chan.doAutofocus() && privateRecipient == null && !chan.getUUID().equals(getChannel())) {
+			Channel currentChannel = Channels.getInstance().getChannel(getChannel());
+			if (currentChannel == null || !currentChannel.doAutofocus()) {
+				setDefaultChannelUUID(chan.getUUID());
+				Channels.notify(player, "channels.chatter.default-channel-set", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
+			}
 		}
 	}
 

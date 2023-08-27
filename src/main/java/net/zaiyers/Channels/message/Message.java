@@ -2,6 +2,7 @@ package net.zaiyers.Channels.message;
 
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.BaseComponent;
+import net.zaiyers.Channels.Channel;
 
 public interface Message {
 	/**

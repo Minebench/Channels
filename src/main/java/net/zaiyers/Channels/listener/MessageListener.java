@@ -23,10 +23,10 @@ public class MessageListener implements Listener {
 		if (event.isCancelled() || !(event.getSender() instanceof ProxiedPlayer) || event.isCommand()) {
 			return;
 		}
-		
-        boolean canceled = true;
+
+		boolean canceled = true;
 		ProxiedPlayer player = (ProxiedPlayer) event.getSender();
-		
+
 		if (event.getMessage().charAt(0) == '@' && event.getMessage().length() > 0) {
 			//private message
 			String[] splittedMsg;
@@ -36,7 +36,7 @@ public class MessageListener implements Listener {
 			} else {
 				splittedMsg = new String[0];
 			}
-			
+
 			ChannelsCommand cmd = new PMCommand(player, splittedMsg);
 			cmd.execute();
 		} else {
@@ -49,7 +49,7 @@ public class MessageListener implements Listener {
 				} else {
 					Message msg = new PrivateMessage(chatter, recipient, event.getMessage());
 					ChannelsChatEvent chatEvent = new ChannelsChatEvent(msg);
-					if (!Channels.getInstance().getProxy().getPluginManager().callEvent( chatEvent ).isCancelled()) {
+					if (!Channels.getInstance().getProxy().getPluginManager().callEvent(chatEvent).isCancelled()) {
 						msg.send();
 						recipient.setLastPrivateSender(chatter);
 					}
@@ -59,40 +59,44 @@ public class MessageListener implements Listener {
 				Channel chan = Channels.getInstance().getChannel(chatter.getChannel());
 
 				if (chatter.hasPermission(chan, "speak")) {
-                    if (!chan.isGlobal() && !chan.getServers().contains(chatter.getPlayer().getServer().getInfo().getName())) {
-                        // channel is not available on this server
-                        String serverDefaultChannel = Channels.getConfig().getServerDefaultChannel(chatter.getPlayer().getServer().getInfo().getName());
-                        if (serverDefaultChannel != null) {
-                            // use server default channel
-                            chan = Channels.getInstance().getChannel(serverDefaultChannel);
-                        } else {
-                            // use global default channel
-                            chan = Channels.getInstance().getChannel(Channels.getConfig().getDefaultChannelUUID());
-                        }
+					if (!chan.isGlobal() && !chan.getServers().contains(chatter.getPlayer().getServer().getInfo().getName())) {
+						// channel is not available on this server
+						String serverDefaultChannel = Channels.getConfig().getServerDefaultChannel(chatter.getPlayer().getServer().getInfo().getName());
+						if (serverDefaultChannel != null) {
+							// use server default channel
+							chan = Channels.getInstance().getChannel(serverDefaultChannel);
+						} else {
+							// use global default channel
+							chan = Channels.getInstance().getChannel(Channels.getConfig().getDefaultChannelUUID());
+						}
 
-                        if (chan.doAutojoin() && chatter.hasPermission(chan, "subscribe")) {
-                            chatter.setDefaultChannelUUID(chan.getUUID());
-                            chatter.subscribe(chan);
-                            Channels.notify(chatter.getPlayer(), "channels.chatter.default-channel-set", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
-                        } // else the guy is screwed due to a misconfiguration - see Channels.checkSanity()
-                    }
+						if (chan != null && chan.doAutojoin() && chatter.hasPermission(chan, "subscribe")) {
+							chatter.setDefaultChannelUUID(chan.getUUID());
+							chatter.subscribe(chan);
+							Channels.notify(chatter.getPlayer(), "channels.chatter.default-channel-set", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
+						} else {
+							// else the guy is screwed due to a misconfiguration - see Channels.checkSanity()
+							event.setCancelled(true);
+							return;
+						}
+					}
 
-                    Message msg = new ChannelMessage(chatter, Channels.getInstance().getChannel(chatter.getChannel()), event.getMessage());
-                    ChannelsChatEvent chatEvent = new ChannelsChatEvent(msg);
-                    if (!Channels.getInstance().getProxy().getPluginManager().callEvent(chatEvent).isCancelled()) {
-                        if (Channels.getInstance().getChannel(chatter.getChannel()).isBackend()) {
-                            canceled = false;
-                        } else {
-                            msg.send();
-                        }
-                    }
-                } else {
-                    // Chatter cannot speak in channel
-                    Channels.notify(chatter.getPlayer(), "channels.permission.channel-no-speak", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
-                }
+					ChannelMessage msg = new ChannelMessage(chatter, chan, event.getMessage());
+					ChannelsChatEvent chatEvent = new ChannelsChatEvent(msg);
+					if (!Channels.getInstance().getProxy().getPluginManager().callEvent(chatEvent).isCancelled()) {
+						if (msg.getChannel().isBackend()) {
+							canceled = false;
+						} else {
+							msg.send();
+						}
+					}
+				} else {
+					// Chatter cannot speak in channel
+					Channels.notify(chatter.getPlayer(), "channels.permission.channel-no-speak", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
+				}
 			}
 		}
-		
+
 
 		// do not pass to server
 		event.setCancelled(canceled);
