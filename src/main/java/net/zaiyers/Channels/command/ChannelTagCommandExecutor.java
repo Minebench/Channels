@@ -63,7 +63,7 @@ public class ChannelTagCommandExecutor extends Command implements TabExecutor {
 		
 		ChannelsChatEvent chatEvent = new ChannelsChatEvent(msg);
 		if (!Channels.getInstance().getProxy().getPluginManager().callEvent( chatEvent ).isCancelled()) {
-			msg.send();
+			msg.send(chatEvent.isHidden());
 		}
 	}
 	

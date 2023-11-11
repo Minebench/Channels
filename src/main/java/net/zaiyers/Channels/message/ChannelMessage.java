@@ -91,8 +91,8 @@ public class ChannelMessage extends AbstractMessage {
 	/**
 	 * send the message to its channel
 	 */
-	public void send() {
-		channel.send(this);		
+	public void send(boolean hidden) {
+		channel.send(this, hidden);
 	}
 	
 	/**

@@ -7,6 +7,7 @@ import net.zaiyers.Channels.message.Message;
 public class ChannelsChatEvent extends Event implements Cancellable {
 	private Message message;
 	private boolean cancelled = false;
+	private boolean hidden = false;
 	
 	public ChannelsChatEvent(Message msg) {
 		message = msg;
@@ -18,6 +19,14 @@ public class ChannelsChatEvent extends Event implements Cancellable {
 
 	public void setCancelled(boolean cancel) {
 		cancelled = cancel;
+	}
+	
+	public boolean isHidden() {
+		return hidden;
+	}
+
+	public void setHidden(boolean hidden) {
+		this.hidden = hidden;
 	}
 	
 	/**

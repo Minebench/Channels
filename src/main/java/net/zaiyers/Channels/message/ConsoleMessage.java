@@ -63,8 +63,8 @@ public class ConsoleMessage extends AbstractMessage {
 		return super.getProcessedMessage();
 	}
 	
-	public void send() {
-		channel.send(this);
+	public void send(boolean hidden) {
+		channel.send(this, hidden);
 	}
 
 	public CommandSender getSender() {

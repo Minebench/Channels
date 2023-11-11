@@ -28,7 +28,7 @@ public class PrivateMessage extends AbstractMessage {
 		rawMessage = Matcher.quoteReplacement(message);
 	}
 	
-	public void send() {
+	public void send(boolean hidden) {
 		if (receiver != null && receiver.isAFK()) {
 			if (receiver.getAFKMessage() != null) {
 				Channels.notify(sender.getPlayer(), "channels.chatter.is-afk-with-msg", ImmutableMap.of("chatter", receiver.getName(), "msg", receiver.getAFKMessage()));
@@ -56,7 +56,7 @@ public class PrivateMessage extends AbstractMessage {
 		processMessage(SenderRole.SENDER);
 		sender.sendMessage(sender, this);
 
-		if (!receiver.getIgnores().contains(sender.getPlayer().getUniqueId().toString()) || bypassIgnore) {
+		if (!hidden && (bypassIgnore || !receiver.getIgnores().contains(sender.getPlayer().getUniqueId().toString()))) {
 			processMessage(SenderRole.RECEIVER);
 			receiver.sendMessage(bypassIgnore ? null : sender, this);
 			receiver.setLastPrivateSender(sender);

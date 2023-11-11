@@ -54,7 +54,7 @@ public class PMCommand extends AbstractCommand {
 				Message msg = new PrivateMessage(chatter, recipient, argsToMessage(args));
 				ChannelsChatEvent chatEvent = new ChannelsChatEvent(msg);
 				if (!Channels.getInstance().getProxy().getPluginManager().callEvent( chatEvent ).isCancelled()) {
-					msg.send();
+					msg.send(chatEvent.isHidden());
 					recipient.setLastPrivateSender(chatter);
 				}
 			}

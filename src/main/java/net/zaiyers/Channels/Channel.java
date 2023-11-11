@@ -9,7 +9,6 @@ import com.google.common.collect.ImmutableMap;
 
 import net.md_5.bungee.api.ChatColor;
 import net.zaiyers.Channels.config.ChannelConfig;
-import net.zaiyers.Channels.config.ChannelMongoConfig;
 import net.zaiyers.Channels.config.ChannelYamlConfig;
 import net.zaiyers.Channels.message.ChannelMessage;
 import net.zaiyers.Channels.message.ConsoleMessage;
@@ -90,10 +89,10 @@ public class Channel {
 	
 	/**
 	 * send message to subscribers
-	 * 
 	 * @param message
+	 * @param hidden
 	 */
-	public void send(ChannelMessage message) {
+	public void send(ChannelMessage message, boolean hidden) {
 		Chatter sender = message.getChatter();
 		if (sender.isMuted()) {
 			// notify and return
@@ -110,23 +109,24 @@ public class Channel {
 
 		Chatter messageSender = sender.hasPermission("channels.bypass.ignore") ? null: sender;
 
-		send(messageSender, message);
+		send(messageSender, message, hidden);
 	}
 	
 	/**
 	 * send console message to channel
 	 * @param consoleMessage
 	 */
-	public void send(ConsoleMessage consoleMessage) {
-		send(null, consoleMessage);
+	public void send(ConsoleMessage consoleMessage, boolean hidden) {
+		send(null, consoleMessage, hidden);
 	}
 
 	/**
-	 * send a message message to channel
+	 * send a message to channel
 	 * @param messageSender
 	 * @param message
+	 * @param hidden
 	 */
-	public void send(Chatter messageSender, Message message) {
+	public void send(Chatter messageSender, Message message, boolean hidden) {
 		List<UUID> subCur = new ArrayList<>(subscribers);
 		for (UUID uuid : subCur) {
 			Chatter receiver = Channels.getInstance().getChatter(uuid);
@@ -136,6 +136,10 @@ public class Channel {
 					continue;
 				} else if (!cfg.isGlobal() && !receiver.hasPermission(this, "globalread") && receiver.getPlayer().getServer() != null && !cfg.getServers().contains(receiver.getPlayer().getServer().getInfo().getName())) {
 					// channel is not distributed to this player's server
+					continue;
+				}
+
+				if (hidden && messageSender != receiver) {
 					continue;
 				}
 

@@ -2,13 +2,20 @@ package net.zaiyers.Channels.message;
 
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.BaseComponent;
-import net.zaiyers.Channels.Channel;
 
 public interface Message {
 	/**
 	 * sends the message to its recipients
 	 */
-	public void send();
+	default void send() {
+		send(false);
+	}
+
+	/**
+	 * sends the message to its recipients
+	 * @param hidden Whether this message should only be shown to the sender
+	 */
+	public void send(boolean hidden);
 
 	/**
 	 * get the final message

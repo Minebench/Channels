@@ -38,7 +38,7 @@ public class ReplyCommand extends AbstractCommand {
 					Message msg = new PrivateMessage(chatter, recipient, text);
 					ChannelsChatEvent chatEvent = new ChannelsChatEvent(msg);
 					if (!Channels.getInstance().getProxy().getPluginManager().callEvent( chatEvent ).isCancelled()) {
-						msg.send();
+						msg.send(chatEvent.isHidden());
 					}
 				}
 			} else {

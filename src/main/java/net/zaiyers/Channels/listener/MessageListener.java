@@ -50,8 +50,10 @@ public class MessageListener implements Listener {
 					Message msg = new PrivateMessage(chatter, recipient, event.getMessage());
 					ChannelsChatEvent chatEvent = new ChannelsChatEvent(msg);
 					if (!Channels.getInstance().getProxy().getPluginManager().callEvent(chatEvent).isCancelled()) {
-						msg.send();
-						recipient.setLastPrivateSender(chatter);
+						msg.send(chatEvent.isHidden());
+						if (!chatEvent.isHidden()) {
+							recipient.setLastPrivateSender(chatter);
+						}
 					}
 				}
 			} else {
@@ -87,7 +89,7 @@ public class MessageListener implements Listener {
 						if (msg.getChannel().isBackend()) {
 							canceled = false;
 						} else {
-							msg.send();
+							msg.send(chatEvent.isHidden());
 						}
 					}
 				} else {

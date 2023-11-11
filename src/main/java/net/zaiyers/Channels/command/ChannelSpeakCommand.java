@@ -64,7 +64,7 @@ public class ChannelSpeakCommand extends AbstractCommand {
 
 		ChannelsChatEvent chatEvent = new ChannelsChatEvent(msg);
 		if (!Channels.getInstance().getProxy().getPluginManager().callEvent( chatEvent ).isCancelled()) {
-			msg.send();
+			msg.send(chatEvent.isHidden());
 		}
 	}
 
