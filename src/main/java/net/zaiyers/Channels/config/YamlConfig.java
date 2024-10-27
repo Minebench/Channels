@@ -5,15 +5,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import net.md_5.bungee.config.Configuration;
-import net.md_5.bungee.config.ConfigurationProvider;
-import net.md_5.bungee.config.YamlConfiguration;
 import net.zaiyers.Channels.Channels;
 
 public abstract class YamlConfig implements Config {
 	protected Configuration cfg;
 	private final Configuration defaultCfg;
-	protected final static ConfigurationProvider ymlCfg = ConfigurationProvider.getProvider( YamlConfiguration.class );
 	
 	protected File configFile; 
 	
@@ -26,7 +22,7 @@ public abstract class YamlConfig implements Config {
 		this.configFile = configFile;
 		InputStream stream = Channels.getInstance().getResourceAsStream(configFile.getName());
 		if (stream != null) {
-			defaultCfg = ymlCfg.load(new InputStreamReader(stream));
+			defaultCfg = new Configuration().load(new InputStreamReader(stream));
 		} else {
 			defaultCfg = null;
 		}
@@ -42,11 +38,11 @@ public abstract class YamlConfig implements Config {
 				configFile.getParentFile().mkdirs();
 			}
 			configFile.createNewFile();
-			cfg = ymlCfg.load(configFile, defaultCfg);
+			cfg = new Configuration(defaultCfg).load(configFile);
 			
 			createDefaultConfig();
 		} else {
-			cfg = ymlCfg.load(configFile, defaultCfg);
+			cfg = new Configuration(defaultCfg).load(configFile);
 		}
 	}
 	
@@ -55,7 +51,7 @@ public abstract class YamlConfig implements Config {
 	 */
 	public void save() {
 		try {
-			ymlCfg.save(cfg, configFile);
+			cfg.save(configFile);
 		} catch (IOException e) {
 			Channels.getInstance().getLogger().severe("Unable to save configuration at "+configFile.getAbsolutePath());
 			e.printStackTrace();

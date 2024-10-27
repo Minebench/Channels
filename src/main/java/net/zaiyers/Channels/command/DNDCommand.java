@@ -2,23 +2,23 @@ package net.zaiyers.Channels.command;
 
 import com.google.common.collect.ImmutableMap;
 
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.proxy.Player;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.Chatter;
 
 public class DNDCommand extends AbstractCommand {
-	public DNDCommand(CommandSender sender, String[] args) {
+	public DNDCommand(CommandSource sender, String[] args) {
 		super(sender, args);
 	}
 
 	public void execute() {
-		if (!(sender instanceof ProxiedPlayer)) {
+		if (!(sender instanceof Player)) {
 			Channels.notify(sender, "channels.command.is-player-command");
 			return;
 		}
 		
-		Chatter chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUniqueId());
+		Chatter chatter = Channels.getInstance().getChatter(((Player) sender).getUniqueId());
 		if (chatter.isDND() && args.length == 0) {
 			chatter.setDND(false, null);
 			Channels.notify(sender, "channels.chatter.no-longer-dnd");

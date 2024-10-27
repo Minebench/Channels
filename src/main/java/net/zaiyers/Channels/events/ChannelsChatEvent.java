@@ -1,24 +1,23 @@
 package net.zaiyers.Channels.events;
 
-import net.md_5.bungee.api.plugin.Cancellable;
-import net.md_5.bungee.api.plugin.Event;
+import com.velocitypowered.api.event.ResultedEvent;
 import net.zaiyers.Channels.message.Message;
 
-public class ChannelsChatEvent extends Event implements Cancellable {
-	private Message message;
-	private boolean cancelled = false;
+public class ChannelsChatEvent implements ResultedEvent<ResultedEvent.GenericResult> {
+	private final Message message;
+	private GenericResult result;
 	private boolean hidden = false;
-	
+
 	public ChannelsChatEvent(Message msg) {
 		message = msg;
 	}
 
 	public boolean isCancelled() {
-		return cancelled;
+		return !getResult().isAllowed();
 	}
 
 	public void setCancelled(boolean cancel) {
-		cancelled = cancel;
+		setResult(cancel ? GenericResult.denied() : GenericResult.allowed());
 	}
 	
 	public boolean isHidden() {
@@ -35,5 +34,15 @@ public class ChannelsChatEvent extends Event implements Cancellable {
 	 */
 	public Message getMessage() {
 		return message;
+	}
+
+	@Override
+	public GenericResult getResult() {
+		return result;
+	}
+
+	@Override
+	public void setResult(GenericResult result) {
+		this.result = result;
 	}
 }

@@ -3,13 +3,13 @@ package net.zaiyers.Channels.command;
 import java.io.IOException;
 import java.util.UUID;
 
-import net.md_5.bungee.api.CommandSender;
+import com.velocitypowered.api.command.CommandSource;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 
 public class ChannelCreateCommand extends AbstractCommand implements ChannelsCommand{
 
-	public ChannelCreateCommand(CommandSender sender, String[] args) {
+	public ChannelCreateCommand(CommandSource sender, String[] args) {
 		super(sender, args);
 	}
 

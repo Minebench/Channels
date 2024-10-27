@@ -1,0 +1,25 @@
+{
+  "id": "channels",
+  "name": "Channels",
+  "version": "${minecraft.plugin.version}",
+  "main": "net.zaiyers.Channels.Channels",
+  "authors": ["zaiyers", "Phoenix616"],
+  "dependencies": [
+    {
+      "id": "uuiddb",
+      "optional": true
+    },
+    {
+      "id": "luckperms",
+      "optional": true
+    },
+    {
+      "id": "vnpvelocity",
+      "optional": true
+    },
+    {
+      "id": "miniplaceholders",
+      "optional": true
+    }
+  ]
+}

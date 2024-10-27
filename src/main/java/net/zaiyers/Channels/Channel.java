@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableMap;
 
-import net.md_5.bungee.api.ChatColor;
+import net.kyori.adventure.text.format.TextColor;
 import net.zaiyers.Channels.config.ChannelConfig;
 import net.zaiyers.Channels.config.ChannelYamlConfig;
 import net.zaiyers.Channels.message.ChannelMessage;
@@ -99,8 +99,8 @@ public class Channel {
 			Channels.notify(sender.getPlayer(), "channels.chatter.is-muted");
 			return;
 		}
-		if (sender.getPlayer().getServer() != null) {
-			String serverName = sender.getPlayer().getServer().getInfo().getName();
+		if (sender.getPlayer().getCurrentServer().isPresent()) {
+			String serverName = sender.getPlayer().getCurrentServer().get().getServerInfo().getName();
 			if (!cfg.isGlobal() && !sender.hasPermission(this, "globalread") && !cfg.getServers().contains(serverName)) {
 				Channels.notify(sender.getPlayer(), "channels.command.channel-not-available", ImmutableMap.of("channelColor", getColor().toString(), "channel", getName(), "server", serverName));
 				return;
@@ -134,7 +134,9 @@ public class Channel {
 				if (messageSender != null && receiver.getIgnores().contains(messageSender.getPlayer().getUniqueId().toString())) {
 					// I don't want to read this message
 					continue;
-				} else if (!cfg.isGlobal() && !receiver.hasPermission(this, "globalread") && receiver.getPlayer().getServer() != null && !cfg.getServers().contains(receiver.getPlayer().getServer().getInfo().getName())) {
+				} else if (!cfg.isGlobal() && !receiver.hasPermission(this, "globalread")
+						&& receiver.getPlayer().getCurrentServer().isPresent()
+						&& !cfg.getServers().contains(receiver.getPlayer().getCurrentServer().get().getServerInfo().getName())) {
 					// channel is not distributed to this player's server
 					continue;
 				}
@@ -143,8 +145,10 @@ public class Channel {
 					continue;
 				}
 
-				// send the message
-				receiver.sendMessage(messageSender, message);
+				if (receiver.canSeeChat()) {
+					// send the message
+					receiver.sendMessage(messageSender, message);
+				}
 			} else {
 				unsubscribe(uuid);
 			}
@@ -163,7 +167,7 @@ public class Channel {
 	 * get message color
 	 * @return
 	 */
-	public ChatColor getColor() {
+	public TextColor getColor() {
 		return cfg.getColor();
 	}
 
@@ -400,7 +404,7 @@ public class Channel {
 		}
 	}
 
-	public void setColor(ChatColor color) {
+	public void setColor(TextColor color) {
 		cfg.setColor(color);
 	}
 

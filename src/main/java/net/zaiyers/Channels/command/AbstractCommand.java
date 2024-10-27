@@ -1,12 +1,12 @@
 package net.zaiyers.Channels.command;
 
-import net.md_5.bungee.api.CommandSender;
+import com.velocitypowered.api.command.CommandSource;
 
 public abstract class AbstractCommand implements ChannelsCommand {	
 	/**
 	 * command sender
 	 */
-	protected CommandSender sender;
+	protected CommandSource sender;
 	
 	/**
 	 * arguments to this command
@@ -16,10 +16,10 @@ public abstract class AbstractCommand implements ChannelsCommand {
 	/**
 	 * constructor :)
 	 * 
-	 * @param chatter
+	 * @param sender
 	 * @param args
 	 */
-	public AbstractCommand(CommandSender sender, String[] args) {
+	public AbstractCommand(CommandSource sender, String[] args) {
 		this.sender = sender;
 		this.args = args;
 	}

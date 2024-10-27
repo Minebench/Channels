@@ -5,20 +5,20 @@ import java.util.UUID;
 
 import com.google.common.collect.ImmutableMap;
 
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.proxy.Player;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.Chatter;
 
 
 public class IgnoreCommand extends AbstractCommand {
 
-	public IgnoreCommand(CommandSender sender, String[] args) {
+	public IgnoreCommand(CommandSource sender, String[] args) {
 		super(sender, args);
 	}
 
 	public void execute() {
-		if (!(sender instanceof ProxiedPlayer)) {
+		if (!(sender instanceof Player)) {
 			Channels.notify(sender, "channels.command.is-player-command");
 			return;
 		}
@@ -50,7 +50,7 @@ public class IgnoreCommand extends AbstractCommand {
 					return; // i don't know a player by that name
 				}
 			}
-			Chatter chatter = Channels.getInstance().getChatter( ((ProxiedPlayer) sender).getUniqueId());
+			Chatter chatter = Channels.getInstance().getChatter( ((Player) sender).getUniqueId());
 			// toggle ignore
 			if (chatter.getIgnores().contains(ignoreUUID.toString())) {
 				chatter.removeIgnore(ignoreUUID.toString());
@@ -61,7 +61,7 @@ public class IgnoreCommand extends AbstractCommand {
 			}
 		} else {
 			// list ignores
-			Chatter chatter = Channels.getInstance().getChatter( ((ProxiedPlayer) sender).getUniqueId());
+			Chatter chatter = Channels.getInstance().getChatter( ((Player) sender).getUniqueId());
 			List<String> ignores = chatter.getIgnores();
 			if (ignores.size() > 0) {
 				String ignoreList = Channels.getPlayerName(ignores.get(0));

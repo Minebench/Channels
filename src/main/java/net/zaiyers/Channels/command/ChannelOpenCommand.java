@@ -1,17 +1,17 @@
 package net.zaiyers.Channels.command;
 
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.proxy.Player;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 
 public class ChannelOpenCommand extends ChannelCreateCommand {
-	public ChannelOpenCommand(CommandSender sender, String[] args) {
+	public ChannelOpenCommand(CommandSource sender, String[] args) {
 		super(sender, args);
 	}
 
 	public void execute() {
-		if (!(sender instanceof ProxiedPlayer)) {
+		if (!(sender instanceof Player)) {
 			Channels.notify(sender, "channels.command.is-player-command");
 			return;
 		}
@@ -26,7 +26,7 @@ public class ChannelOpenCommand extends ChannelCreateCommand {
 			Channels.getInstance().unregisterTag(channel.getTag());
 			
 			// add sender to moderators
-			channel.addModerator(((ProxiedPlayer) sender).getUniqueId().toString());
+			channel.addModerator(((Player) sender).getUniqueId().toString());
 		}
 	}
 

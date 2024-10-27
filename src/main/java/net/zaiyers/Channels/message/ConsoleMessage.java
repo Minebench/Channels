@@ -4,11 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
 
-import de.themoep.minedown.MineDown;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.BaseComponent;
+import de.themoep.minedown.adventure.MineDown;
+import net.kyori.adventure.text.Component;
+import com.velocitypowered.api.command.CommandSource;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 
@@ -48,7 +46,7 @@ public class ConsoleMessage extends AbstractMessage {
 						"date", dateFormat.format(date),
 						"time", timeFormat.format(date))
 				.replace("msg", new MineDown(rawMessage)
-						.urlHoverText(ChatColor.translateAlternateColorCodes('&', Channels.getInstance().getLanguage().getTranslation("chat.hover.open-url")))
+						.urlHoverText(Channels.getInstance().getLanguage().getTranslation("chat.hover.open-url"))
 						.toComponent())
 				.toComponent();
 	}
@@ -57,7 +55,7 @@ public class ConsoleMessage extends AbstractMessage {
 	 * the final message
 	 */
 	@Override
-	public BaseComponent[] getProcessedMessage() {
+	public Component getProcessedMessage() {
 		if (processedMessage == null)
 			processMessage();
 		return super.getProcessedMessage();
@@ -67,8 +65,8 @@ public class ConsoleMessage extends AbstractMessage {
 		channel.send(this, hidden);
 	}
 
-	public CommandSender getSender() {
-		return ProxyServer.getInstance().getConsole();
+	public CommandSource getSender() {
+		return Channels.getInstance().getProxy().getConsoleCommandSource();
 	}
 	
 	public Channel getChannel() {

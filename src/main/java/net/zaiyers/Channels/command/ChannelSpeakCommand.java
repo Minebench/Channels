@@ -2,8 +2,8 @@ package net.zaiyers.Channels.command;
 
 import com.google.common.collect.ImmutableMap;
 
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.proxy.Player;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.events.ChannelsChatEvent;
@@ -14,7 +14,7 @@ import net.zaiyers.Channels.message.Message;
 
 public class ChannelSpeakCommand extends AbstractCommand {
 
-	public ChannelSpeakCommand(CommandSender sender, String[] args) {
+	public ChannelSpeakCommand(CommandSource sender, String[] args) {
 		super(sender, args);
 	}
 
@@ -32,10 +32,10 @@ public class ChannelSpeakCommand extends AbstractCommand {
 			return;
 		}
 		
-		if (!(sender instanceof ProxiedPlayer)) {
+		if (!(sender instanceof Player)) {
 			msg = new ConsoleMessage(chan, argsToMessage(args));
 		} else {
-			Chatter chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUniqueId());
+			Chatter chatter = Channels.getInstance().getChatter(((Player) sender).getUniqueId());
 			
 			if (!chatter.getSubscriptions().contains(chan.getUUID())) {
 				Channels.notify(sender, "channels.chatter.channel-not-subscribed", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
@@ -54,7 +54,7 @@ public class ChannelSpeakCommand extends AbstractCommand {
 				return;
 			} else {
                 if(chan.isBackend()) {
-                    ((ProxiedPlayer) sender).chat(argsToMessage(args));
+                    ((Player) sender).spoofChatInput(argsToMessage(args));
                     return;
                 } else {
                     msg = new ChannelMessage(chatter, chan, argsToMessage(args));
@@ -63,7 +63,7 @@ public class ChannelSpeakCommand extends AbstractCommand {
 		}
 
 		ChannelsChatEvent chatEvent = new ChannelsChatEvent(msg);
-		if (!Channels.getInstance().getProxy().getPluginManager().callEvent( chatEvent ).isCancelled()) {
+		if (!Channels.getInstance().getProxy().getEventManager().fire( chatEvent ).isCancelled()) {
 			msg.send(chatEvent.isHidden());
 		}
 	}

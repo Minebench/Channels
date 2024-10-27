@@ -15,6 +15,7 @@ import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.message.PrivateMessage;
 import net.zaiyers.Channels.message.PrivateMessage.SenderRole;
 import org.bson.Document;
+import org.spongepowered.configurate.ConfigurateException;
 
 public class ChannelsConfig extends YamlConfig {
 	/**
@@ -111,7 +112,7 @@ public class ChannelsConfig extends YamlConfig {
 	 */
 	public void save() {
 		try {
-			ymlCfg.save(cfg, configFile);
+			cfg.save(configFile);
 		} catch (IOException e) {
 			Channels.getInstance().getLogger().warning("Unable to save configuration!");
 			e.printStackTrace();
@@ -191,7 +192,12 @@ public class ChannelsConfig extends YamlConfig {
 	 * create default configuration
 	 */
 	public void createDefaultConfig() {
-		cfg = ymlCfg.load(new InputStreamReader(Channels.getInstance().getResourceAsStream("config.yml")));
+		cfg = new Configuration();
+		try {
+			cfg.load(new InputStreamReader(Channels.getInstance().getResourceAsStream("config.yml")));
+		} catch (ConfigurateException e) {
+			throw new RuntimeException(e);
+		}
 		cfg.set("defaultChannelUUID", UUID.randomUUID().toString());
 		
 		save();

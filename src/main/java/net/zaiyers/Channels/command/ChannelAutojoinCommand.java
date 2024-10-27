@@ -2,12 +2,12 @@ package net.zaiyers.Channels.command;
 
 import com.google.common.collect.ImmutableMap;
 
-import net.md_5.bungee.api.CommandSender;
+import com.velocitypowered.api.command.CommandSource;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 
 public class ChannelAutojoinCommand extends AbstractCommand {
-	public ChannelAutojoinCommand(CommandSender sender, String[] args) {
+	public ChannelAutojoinCommand(CommandSource sender, String[] args) {
 		super(sender, args);
 	}
 

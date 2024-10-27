@@ -5,11 +5,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Map;
+import java.util.logging.Level;
 
-import de.themoep.minedown.MineDown;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
+import de.themoep.minedown.adventure.MineDown;
+import net.kyori.adventure.text.Component;
 import net.zaiyers.Channels.Channels;
+import org.spongepowered.configurate.ConfigurateException;
 
 public class LanguageConfig extends YamlConfig {
 	public LanguageConfig(File configFile) throws IOException {
@@ -21,8 +22,13 @@ public class LanguageConfig extends YamlConfig {
 		if (defaultConfig == null) {
 			defaultConfig = Channels.getInstance().getResourceAsStream("lang.en.yml");
 		}
-		cfg = ymlCfg.load(new InputStreamReader(defaultConfig));
-		
+		cfg = new Configuration();
+		try {
+			cfg.load(new InputStreamReader(defaultConfig));
+		} catch (ConfigurateException e) {
+			Channels.getInstance().getLogger().log(Level.WARNING, "Unable to load default language configuration " + configFile.getName() + " from jar file!", e);
+		}
+
 		save();
 	}
 	
@@ -31,7 +37,7 @@ public class LanguageConfig extends YamlConfig {
 	 */
 	public String getTranslation(String key) {
 		if (cfg.getString(key, "").isEmpty()) {
-			return ChatColor.RED + "Unknown language key: " + ChatColor.GOLD + key;
+			return "Unknown language key: " + key;
 		} else {
 			return cfg.getString(key);
 		}
@@ -40,14 +46,14 @@ public class LanguageConfig extends YamlConfig {
 	/**
 	 * get translation as a base component from the config with replacements
 	 */
-	public BaseComponent[] getTranslationComponent(String key, String... replacements) {
+	public Component getTranslationComponent(String key, String... replacements) {
 		return new MineDown(getTranslation(key)).replace(replacements).toComponent();
 	}
 	
 	/**
 	 * get translation as a base component from the config with replacements
 	 */
-	public BaseComponent[] getTranslationComponent(String key, Map<String, String> replacements) {
+	public Component getTranslationComponent(String key, Map<String, String> replacements) {
 		return new MineDown(getTranslation(key)).replace(replacements).replaceFirst(true).toComponent();
 	}
 }

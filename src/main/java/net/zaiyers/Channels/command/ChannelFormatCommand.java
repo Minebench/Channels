@@ -1,7 +1,7 @@
 package net.zaiyers.Channels.command;
 
 import com.google.common.collect.ImmutableMap;
-import net.md_5.bungee.api.CommandSender;
+import com.velocitypowered.api.command.CommandSource;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 
@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class ChannelFormatCommand extends AbstractCommand {
 
-	public ChannelFormatCommand(CommandSender sender, String[] args) {
+	public ChannelFormatCommand(CommandSource sender, String[] args) {
 		super(sender, args);
 	}
 

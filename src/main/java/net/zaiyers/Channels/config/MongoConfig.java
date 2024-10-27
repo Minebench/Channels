@@ -2,15 +2,13 @@ package net.zaiyers.Channels.config;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
-import net.md_5.bungee.config.ConfigurationProvider;
-import net.md_5.bungee.config.YamlConfiguration;
 import org.bson.Document;
 
 public abstract class MongoConfig implements Config {
 	/**
 	 * access values using bungees configuration class
 	 */
-	protected MongoConfiguration cfg;	
+	protected MongoConfiguration cfg;
 	
 	/**
 	 * uuid of this config
@@ -20,12 +18,7 @@ public abstract class MongoConfig implements Config {
 	/**
 	 * collection for this config
 	 */
-	private MongoCollection<Document> col;
-	
-	/**
-	 * used to load default configs
-	 */
-	protected final static ConfigurationProvider ymlCfg = ConfigurationProvider.getProvider( YamlConfiguration.class );
+	private final MongoCollection<Document> col;
 
 	/**
 	 * load config from collection, select by uuid

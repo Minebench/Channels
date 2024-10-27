@@ -1,7 +1,7 @@
 package net.zaiyers.Channels.message;
 
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.BaseComponent;
+import com.velocitypowered.api.command.CommandSource;
+import net.kyori.adventure.text.Component;
 
 public interface Message {
 	/**
@@ -20,7 +20,7 @@ public interface Message {
 	/**
 	 * get the final message
 	 */
-	public BaseComponent[] getProcessedMessage();
+	public Component getProcessedMessage();
 	
 	/**
 	 * get the unprocessed message
@@ -38,5 +38,5 @@ public interface Message {
 	 */
 	public long getTime();
 
-	public CommandSender getSender();
+	public CommandSource getSender();
 }

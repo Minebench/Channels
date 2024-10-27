@@ -5,12 +5,14 @@ import java.io.IOException;
 import java.util.List;
 
 import com.google.common.collect.ImmutableMap;
+import com.velocitypowered.api.proxy.Player;
+import com.velocitypowered.api.proxy.player.PlayerSettings;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.luckperms.api.cacheddata.CachedMetaData;
 import net.luckperms.api.context.ContextSet;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.query.QueryOptions;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.zaiyers.Channels.config.ChatterConfig;
 import net.zaiyers.Channels.config.ChatterMongoConfig;
 import net.zaiyers.Channels.config.ChatterYamlConfig;
@@ -22,7 +24,7 @@ public class Chatter {
 	/**
 	 * player object of the chatter
 	 */
-	private ProxiedPlayer player;
+	private Player player;
 
 	/**
 	 * afk status
@@ -58,7 +60,7 @@ public class Chatter {
 	 * @param player
 	 * @throws IOException
 	 */
-	public Chatter(ProxiedPlayer player) throws IOException {
+	public Chatter(Player player) throws IOException {
 		this.player = player;
 
 		// load my preferences
@@ -131,8 +133,8 @@ public class Chatter {
 		// if removed channel is currently focused one switch to server default channel
 		if (uuid.equals(getChannel())) {
 			Channel chan = null;
-			if (player != null && player.getServer() != null) {
-				chan = Channels.getInstance().getChannel(Channels.getConfig().getServerDefaultChannel(player.getServer().getInfo().getName()));
+			if (player != null && player.getCurrentServer().isPresent()) {
+				chan = Channels.getInstance().getChannel(Channels.getConfig().getServerDefaultChannel(player.getCurrentServer().get().getServerInfo().getName()));
 			}
 
 			if (chan == null) {
@@ -252,7 +254,7 @@ public class Chatter {
 	 * get my name
 	 */
 	public String getName() {
-		return player.getName();
+		return player.getUsername();
 	}
 
 	/**
@@ -278,7 +280,7 @@ public class Chatter {
 	 * this chatters player instance
 	 * @return
 	 */
-	public ProxiedPlayer getPlayer() {
+	public Player getPlayer() {
 		return player;
 	}
 
@@ -295,7 +297,8 @@ public class Chatter {
 	 * @param message The message
 	 */
 	public void sendMessage(Chatter sender, Message message) {
-		player.sendMessage(sender != null && Channels.getConfig().shouldSendUuidsInMessages() ? sender.getPlayer().getUniqueId() : null, message.getProcessedMessage());
+		// TODO: Support message signing
+		player.sendMessage(message.getProcessedMessage());
 	}
 
 	/**
@@ -361,7 +364,7 @@ public class Chatter {
 	 */
 	public void setAFK(boolean isAfk, String afkMessage) {
 		ChatterAfkEvent event = new ChatterAfkEvent(this, isAfk, afkMessage);
-		Channels.getInstance().getProxy().getPluginManager().callEvent(event);
+		Channels.getInstance().getProxy().getEventManager().fire(event);
 		afk = isAfk;
 		this.afkMessage = event.getMessage();
 	}
@@ -381,7 +384,7 @@ public class Chatter {
 	 */
 	public void setDND(boolean isDnd, String dndMsg) {
 		ChatterDndEvent event = new ChatterDndEvent(this, isDnd, dndMsg);
-		Channels.getInstance().getProxy().getPluginManager().callEvent(event);
+		Channels.getInstance().getProxy().getEventManager().fire(event);
 		dnd = isDnd;
 		dndMessage = event.getMessage();
 	}
@@ -407,14 +410,14 @@ public class Chatter {
 	 * @param string
 	 */
 	public void sendMessage(String string) {
-		player.sendMessage(TextComponent.fromLegacyText(string));
+		player.sendMessage(LegacyComponentSerializer.legacySection().deserialize(string));
 	}
 
 	/**
 	 * Send a text component
 	 * @param textComponent
 	 */
-	public void sendMessage(TextComponent textComponent) {
+	public void sendMessage(Component textComponent) {
 		player.sendMessage(textComponent);
 	}
 
@@ -424,5 +427,14 @@ public class Chatter {
 
 	public void addIgnore(String uuid) {
 		cfg.addIgnore(uuid);
+	}
+
+	/**
+	 * check if chatter can see chat in their client
+	 * @return true if they can see chat
+	 */
+	public boolean canSeeChat() {
+		PlayerSettings.ChatMode chatMode = player.getPlayerSettings().getChatMode();
+		return chatMode == null || chatMode == PlayerSettings.ChatMode.SHOWN;
 	}
 }

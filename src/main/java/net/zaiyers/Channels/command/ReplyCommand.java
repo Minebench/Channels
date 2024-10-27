@@ -2,8 +2,8 @@ package net.zaiyers.Channels.command;
 
 import com.google.common.collect.ImmutableMap;
 
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.proxy.Player;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.events.ChannelsChatEvent;
 import net.zaiyers.Channels.Chatter;
@@ -11,17 +11,17 @@ import net.zaiyers.Channels.message.Message;
 import net.zaiyers.Channels.message.PrivateMessage;
 
 public class ReplyCommand extends AbstractCommand {
-	public ReplyCommand(CommandSender sender, String[] args) {
+	public ReplyCommand(CommandSource sender, String[] args) {
 		super(sender, args);
 	}
 
 	public void execute() {
-		if (!(sender instanceof ProxiedPlayer)) {
+		if (!(sender instanceof Player)) {
 			Channels.notify(sender, "channels.command.is-player-command");
 			return;
 		}
 		
-		Chatter chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUniqueId());
+		Chatter chatter = Channels.getInstance().getChatter(((Player) sender).getUniqueId());
 
 		if (chatter.getLastSender() != null) {
 			Chatter recipient = Channels.getInstance().getChatter(chatter.getLastSender());
@@ -37,7 +37,7 @@ public class ReplyCommand extends AbstractCommand {
 					
 					Message msg = new PrivateMessage(chatter, recipient, text);
 					ChannelsChatEvent chatEvent = new ChannelsChatEvent(msg);
-					if (!Channels.getInstance().getProxy().getPluginManager().callEvent( chatEvent ).isCancelled()) {
+					if (!Channels.getInstance().getProxy().getEventManager().fire( chatEvent ).isCancelled()) {
 						msg.send(chatEvent.isHidden());
 					}
 				}

@@ -2,37 +2,62 @@ package net.zaiyers.Channels;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Path;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.google.common.collect.ImmutableMap;
-import de.themoep.vnpbungee.VNPBungee;
+import com.google.inject.Inject;
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.event.Subscribe;
+import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
+import com.velocitypowered.api.plugin.Plugin;
+import com.velocitypowered.api.plugin.annotation.DataDirectory;
+import com.velocitypowered.api.proxy.Player;
+import com.velocitypowered.api.proxy.ProxyServer;
+import com.velocitypowered.api.proxy.server.RegisteredServer;
+import com.velocitypowered.api.proxy.server.ServerInfo;
+import de.themoep.vnpvelocity.VNPVelocity;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.model.user.User;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.config.ServerInfo;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.plugin.Plugin;
+import net.zaiyers.Channels.command.AbstractCommandExecutor;
 import net.zaiyers.Channels.command.ChannelTagCommandExecutor;
 import net.zaiyers.Channels.command.ChannelsCommandExecutor;
 import net.zaiyers.Channels.config.ChannelsConfig;
 import net.zaiyers.Channels.config.LanguageConfig;
-import net.zaiyers.Channels.integration.BTLPIntegration;
+import net.zaiyers.Channels.integration.MiniPlaceholdersIntegration;
 import net.zaiyers.Channels.listener.MessageListener;
 import net.zaiyers.Channels.listener.PlayerJoinListener;
 import net.zaiyers.Channels.listener.PlayerQuitListener;
 import net.zaiyers.Channels.listener.ServerSwitchListener;
 import net.zaiyers.UUIDDB.core.UUIDDBPlugin;
 
-public class Channels extends Plugin {
+@Plugin(id = "channels")
+public class Channels {
 	private static Channels instance;
+	/**
+	 * Velocity instance
+	 */
+	private final ProxyServer proxy;
+
+	/**
+	 * The plugin logger
+	 */
+	private final Logger logger;
+
+	/**
+	 * Data folder of the plugin
+	 */
+	private final Path dataFolder;
 
 	/**
 	 * List of Chatters
@@ -66,12 +91,20 @@ public class Channels extends Plugin {
 
 	private static UUIDDBPlugin uuidDb = null;
 
-	private static VNPBungee vnpBungee = null;
+	private static VNPVelocity vnpVelocity = null;
+
+	@Inject
+	public Channels(ProxyServer proxy, Logger logger, @DataDirectory Path dataFolder) {
+		this.proxy = proxy;
+		this.logger = logger;
+		this.dataFolder = dataFolder;
+	}
 
 	/**
 	 * executed on startup
 	 */
-	public void onEnable() {
+	@Subscribe
+	public void onProxyInitialization(ProxyInitializeEvent event) {
 		instance = this;
 
 		// load configuration
@@ -94,24 +127,24 @@ public class Channels extends Plugin {
 			return;
 		}
 
-		if (getProxy().getPluginManager().getPlugin("VNPBungee") != null) {
-			getLogger().info("Found VNPBungee!");
-			vnpBungee = VNPBungee.getInstance();
+		if (getProxy().getPluginManager().getPlugin("vnpvelocity").isPresent()) {
+			getLogger().info("Found VNPVelocity!");
+			vnpVelocity = VNPVelocity.getInstance();
 		}
 
-		if (getProxy().getPluginManager().getPlugin("LuckPerms") != null) {
+		if (getProxy().getPluginManager().getPlugin("luckperms").isPresent()) {
 			getLogger().info("Found LuckPerms!");
 			luckPermsApi = LuckPermsProvider.get();
 		}
 
-		if (getProxy().getPluginManager().getPlugin("UUIDDB") != null) {
+		if (getProxy().getPluginManager().getPlugin("uuiddb").isPresent()) {
 			getLogger().info("Found UUIDDB!");
-			uuidDb = (UUIDDBPlugin) getProxy().getPluginManager().getPlugin("UUIDDB");
+			uuidDb = (UUIDDBPlugin) getProxy().getPluginManager().getPlugin("uuiddb").get();
 		}
 
-		if (getProxy().getPluginManager().getPlugin("BungeeTabListPlus") != null) {
-			getLogger().info("Found BungeeTabListPlus!");
-			new BTLPIntegration();
+		if (getProxy().getPluginManager().getPlugin("miniplaceholders").isPresent()) {
+			getLogger().info("Found MiniPlaceholders!");
+			new MiniPlaceholdersIntegration();
 		}
 
 		if (getUuidDb() == null && getLuckPermsApi() == null) {
@@ -126,18 +159,18 @@ public class Channels extends Plugin {
 		ServerSwitchListener swl = new ServerSwitchListener();
 
 		// enable listeners
-		getProxy().getPluginManager().registerListener(this, ml);
-		getProxy().getPluginManager().registerListener(this, pjl);
-		getProxy().getPluginManager().registerListener(this, pql);
-		getProxy().getPluginManager().registerListener(this, swl);
+		getProxy().getEventManager().register(this, ml);
+		getProxy().getEventManager().register(this, pjl);
+		getProxy().getEventManager().register(this, pql);
+		getProxy().getEventManager().register(this, swl);
 
 		// register command executors
-		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("channel", "ch", "channels"));
-		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("pm", "tell", "msg"));
-		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("reply", "r"));
-		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("afk"));
-		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("dnd"));
-		getProxy().getPluginManager().registerCommand(this, new ChannelsCommandExecutor("ignore"));
+		registerCommand(new ChannelsCommandExecutor("channel", "ch", "channels"));
+		registerCommand(new ChannelsCommandExecutor("pm", "tell", "msg"));
+		registerCommand(new ChannelsCommandExecutor("reply", "r"));
+		registerCommand(new ChannelsCommandExecutor("afk"));
+		registerCommand(new ChannelsCommandExecutor("dnd"));
+		registerCommand(new ChannelsCommandExecutor("ignore"));
 
 		// load and register channels
 		for (String channelUUID : config.getChannels()) {
@@ -153,7 +186,15 @@ public class Channels extends Plugin {
 			}
 		}
 
-		checkSanity(getProxy().getConsole(), null);
+		checkSanity(getProxy().getConsoleCommandSource(), null);
+	}
+
+	private void registerCommand(AbstractCommandExecutor command) {
+		getProxy().getCommandManager().register(getProxy().getCommandManager()
+				.metaBuilder(command.getName())
+				.aliases(command.getAliases())
+				.plugin(this)
+				.build(), command);
 	}
 
 	/**
@@ -216,13 +257,13 @@ public class Channels extends Plugin {
 		channels.remove(uuid);
 	}
 
-	public Chatter getChatter(ProxiedPlayer player) {
+	public Chatter getChatter(Player player) {
 		Chatter chatter = chatters.get(player.getUniqueId());
 		if (chatter == null) {
 			chatter = createChatter(player);
 		}
 		if (chatter == null) {
-			getLogger().log(Level.WARNING, "Could not get the chatter for " + player.getName() + "/" + player.getUniqueId() + "?");
+			getLogger().log(Level.WARNING, "Could not get the chatter for " + player.getUsername() + "/" + player.getUniqueId() + "?");
 			return null;
 		}
 		chatters.put(player.getUniqueId(), chatter);
@@ -248,9 +289,9 @@ public class Channels extends Plugin {
 		if (chatter != null) {
 			return chatter;
 		}
-		ProxiedPlayer player = getProxy().getPlayer(playerId);
-		if (player != null) {
-			return getChatter(player);
+		Optional<Player> player = getProxy().getPlayer(playerId);
+		if (player.isPresent()) {
+			return getChatter(player.get());
 		}
 		getLogger().log(Level.WARNING, "Could not create the chatter? The player with the uuid " + playerId + " wasn't found online?");
 		return null;
@@ -261,9 +302,9 @@ public class Channels extends Plugin {
 	 * @return null if chatter not found
 	 */
 	public Chatter getChatterByName(String name) {
-		ProxiedPlayer player = getProxy().getPlayer(name);
-		if (player != null) {
-			return getChatter(player);
+		Optional<Player> player = getProxy().getPlayer(name);
+		if (player.isPresent()) {
+			return getChatter(player.get());
 		}
 		name = name.toLowerCase();
 		for (Chatter onlinechatter : chatters.values()) {
@@ -320,21 +361,12 @@ public class Channels extends Plugin {
 	}
 
 	/**
-	 * makes a string pretty
-	 * @param string The string to make pretty
-	 * @return A string with all chat colors/formattings applied
-	 */
-	public static String addSpecialChars(String string) {
-		return ChatColor.translateAlternateColorCodes('&', string);
-	}
-
-	/**
 	 * sends a system notification to a chatter
 	 * @param sender The sender to notify
 	 * @param key    The language key
 	 * @param replacements Replacements array
 	 */
-	public static void notify(CommandSender sender, String key, String... replacements) {
+	public static void notify(CommandSource sender, String key, String... replacements) {
 		sender.sendMessage(Channels.getInstance().getLanguage().getTranslationComponent(key, replacements));
 	}
 
@@ -344,7 +376,7 @@ public class Channels extends Plugin {
 	 * @param key    The language key
 	 * @param replacements Replacements map
 	 */
-	public static void notify(CommandSender sender, String key, Map<String, String> replacements) {
+	public static void notify(CommandSource sender, String key, Map<String, String> replacements) {
 		sender.sendMessage(Channels.getInstance().getLanguage().getTranslationComponent(key, replacements));
 	}
 
@@ -364,7 +396,7 @@ public class Channels extends Plugin {
 	public void registerTag(String tag) {
 		ChannelTagCommandExecutor executor = new ChannelTagCommandExecutor(tag.toLowerCase());
 
-		getProxy().getPluginManager().registerCommand(this, executor);
+		registerCommand(executor);
 
 		tagCommandExecutors.put(tag, executor);
 	}
@@ -375,7 +407,7 @@ public class Channels extends Plugin {
 	 */
 	public void unregisterTag(String tag) {
 		if (tagCommandExecutors.containsKey(tag)) {
-			getProxy().getPluginManager().unregisterCommand(tagCommandExecutors.get(tag));
+			getProxy().getCommandManager().unregister(tagCommandExecutors.get(tag).getName());
 			tagCommandExecutors.remove(tag);
 		}
 	}
@@ -389,7 +421,7 @@ public class Channels extends Plugin {
 	 * @param sender    The sender to check
 	 * @param channelId The uuid of the channel
 	 */
-	public void checkSanity(CommandSender sender, String channelId) {
+	public void checkSanity(CommandSource sender, String channelId) {
 		Channel chan = channels.get(channelId);
 		Channel def = channels.get(config.getDefaultChannelUUID());
 
@@ -399,7 +431,8 @@ public class Channels extends Plugin {
 		}
 
 		// check servers
-		for (ServerInfo server : getProxy().getServers().values()) {
+		for (RegisteredServer registeredServer : getProxy().getAllServers()) {
+			ServerInfo server = registeredServer.getServerInfo();
 			Channel serverDef = channels.get(config.getServerDefaultChannel(server.getName()));
 			if (serverDef != null) {
 				if (!serverDef.isGlobal() && !serverDef.getServers().contains(server.getName())) {
@@ -415,11 +448,11 @@ public class Channels extends Plugin {
 	}
 
 	/**
-	 * Get the instance of VNPBungee if it is installed
-	 * @return The VNPBungee instance or <tt>null</tt> if VNPBungee is not installed
+	 * Get the instance of VNPVelocity if it is installed
+	 * @return The VNPVelocity instance or <tt>null</tt> if VNPVelocity is not installed
 	 */
-	public static VNPBungee getVNPBungee() {
-		return vnpBungee;
+	public static VNPVelocity getVNPVelocity() {
+		return vnpVelocity;
 	}
 
 	/**
@@ -455,10 +488,10 @@ public class Channels extends Plugin {
 	public static String getPlayerName(UUID playerId) {
 		String playerName = null;
 
-		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(playerId);
+		Optional<Player> player = Channels.getInstance().getProxy().getPlayer(playerId);
 
-		if (player != null) {
-			playerName = player.getName();
+		if (player.isPresent()) {
+			playerName = player.get().getUsername();
 		}
 
 		if (getUuidDb() != null) {
@@ -483,10 +516,10 @@ public class Channels extends Plugin {
 	public static UUID getPlayerId(String name) {
 		UUID playerId = null;
 
-		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(name);
+		Optional<Player> player = Channels.getInstance().getProxy().getPlayer(name);
 
-		if (player != null) {
-			playerId = player.getUniqueId();
+		if (player.isPresent()) {
+			playerId = player.get().getUniqueId();
 		}
 
 		if (playerId == null && getUuidDb() != null) {
@@ -506,7 +539,20 @@ public class Channels extends Plugin {
 		return playerId;
 	}
 
-	private Chatter createChatter(ProxiedPlayer player) {
+	/**
+	 * Parse a CSS hex string or a named color to a TextColor
+	 * @param colorString The color string to parse
+	 * @return The parsed TextColor or <tt>null</tt> if none found
+	 */
+	public static TextColor parseTextColor(String colorString) {
+		TextColor color = TextColor.fromCSSHexString(colorString);
+		if (color != null) {
+			return color;
+		}
+		return NamedTextColor.NAMES.value(colorString);
+	}
+
+	private Chatter createChatter(Player player) {
 		try {
 			Chatter chatter = new Chatter(player);
 
@@ -539,15 +585,42 @@ public class Channels extends Plugin {
 
 			return chatter;
 		} catch (IOException e) {
-			getLogger().severe("Unable to create Chatter '" + player.getName() + "'/" + player.getUniqueId());
-			e.printStackTrace();
+			getLogger().log(Level.SEVERE, "Unable to create Chatter '" + player.getUsername() + "'/" + player.getUniqueId(), e);
 		}
 		return null;
+	}
+
+	public InputStream getResourceAsStream(String name) {
+		return getClass().getClassLoader().getResourceAsStream(name);
 	}
 
 	private class ChatterNotFoundException extends ExecutionException {
 		ChatterNotFoundException(String msg) {
 			super(msg);
 		}
+	}
+
+	/**
+	 * Get the plugin logger
+	 * @return The plugin logger
+	 */
+	public Logger getLogger() {
+		return logger;
+	}
+
+	/**
+	 * Get the data folder of the plugin
+	 * @return The data folder
+	 */
+	public File getDataFolder() {
+		return dataFolder.toFile();
+	}
+
+	/**
+	 * Get the proxy server
+	 * @return The proxy server
+	 */
+	public ProxyServer getProxy() {
+		return proxy;
 	}
 }

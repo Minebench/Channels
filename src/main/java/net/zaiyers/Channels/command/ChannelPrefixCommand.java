@@ -2,24 +2,25 @@ package net.zaiyers.Channels.command;
 
 import com.google.common.collect.ImmutableMap;
 
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.proxy.Player;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.config.ChatterConfig;
 import net.zaiyers.Channels.config.ChatterMongoConfig;
 import net.zaiyers.Channels.config.ChatterYamlConfig;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public class ChannelPrefixCommand extends AbstractCommand {
 
-	public ChannelPrefixCommand(CommandSender sender, String[] args) {
+	public ChannelPrefixCommand(CommandSource sender, String[] args) {
 		super(sender, args);
 	}
 
 	public void execute() {
 		UUID chatterUUID;
-		ProxiedPlayer player = Channels.getInstance().getProxy().getPlayer(args[1]);
+		Optional<Player> player = Channels.getInstance().getProxy().getPlayer(args[1]);
 		
 		String value;
 		if (args.length < 3) {
@@ -63,10 +64,10 @@ public class ChannelPrefixCommand extends AbstractCommand {
 			
 			Channels.notify(sender, "channels.chatter.set-prefix", ImmutableMap.of("chatter", Channels.getPlayerName(chatterUUID), "prefix", value));
 		} else {
-			chatterUUID = player.getUniqueId();
+			chatterUUID = player.get().getUniqueId();
 			Channels.getInstance().getChatter(chatterUUID).setPrefix(value);
 			
-			Channels.notify(sender, "channels.chatter.set-prefix", ImmutableMap.of("chatter", player.getName(), "prefix", value));
+			Channels.notify(sender, "channels.chatter.set-prefix", ImmutableMap.of("chatter", player.get().getUsername(), "prefix", value));
 		}
 	}
 

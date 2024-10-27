@@ -2,14 +2,16 @@ package net.zaiyers.Channels.command;
 
 import com.google.common.collect.ImmutableMap;
 
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.proxy.Player;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 
+import java.util.Optional;
+
 public class ChannelKickCommand extends AbstractCommand {
 
-	public ChannelKickCommand(CommandSender sender, String[] args) {
+	public ChannelKickCommand(CommandSource sender, String[] args) {
 		super(sender, args);
 	}
 
@@ -20,18 +22,18 @@ public class ChannelKickCommand extends AbstractCommand {
 			return;
 		}
 		
-		if (sender instanceof ProxiedPlayer && !chan.isMod(((ProxiedPlayer) sender).getUniqueId().toString()) && !sender.hasPermission("channels.kick.foreign")) {
+		if (sender instanceof Player && !chan.isMod(((Player) sender).getUniqueId().toString()) && !sender.hasPermission("channels.kick.foreign")) {
 			Channels.notify(sender, "channels.command.channel-no-permission");
 			return;
 		}
 		
 		String chatterUUID;
-		ProxiedPlayer player = Channels.getInstance().getProxy().getPlayer(args[2]);
-		if (player == null) {
+		Optional<Player> player = Channels.getInstance().getProxy().getPlayer(args[2]);
+		if (player.isEmpty()) {
 			Channels.notify(sender, "channels.command.chatter-not-found", ImmutableMap.of("chatter", args[2]));
 			return;
 		} else {
-			chatterUUID = player.getUniqueId().toString();
+			chatterUUID = player.get().getUniqueId().toString();
 		}
 		
 		chan.kickChatter(chatterUUID);
