@@ -4,9 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.logging.Level;
 
-import net.md_5.bungee.api.ChatColor;
+import net.kyori.adventure.text.format.TextColor;
 import net.zaiyers.Channels.Channels;
+import org.spongepowered.configurate.ConfigurateException;
 
 public class ChannelYamlConfig extends YamlConfig implements ChannelConfig {
 
@@ -31,8 +33,8 @@ public class ChannelYamlConfig extends YamlConfig implements ChannelConfig {
 		return cfg.getString("format");
 	}
 
-	public ChatColor getColor() {
-		return ChatColor.of(cfg.getString("color"));
+	public TextColor getColor() {
+		return Channels.parseTextColor(cfg.getString("color"));
 	}
 
 	public String getPassword() {
@@ -76,7 +78,12 @@ public class ChannelYamlConfig extends YamlConfig implements ChannelConfig {
 	}
 
 	public void createDefaultConfig() {
-		cfg = ymlCfg.load(new InputStreamReader(Channels.getInstance().getResourceAsStream("channel.yml")));
+		cfg = new Configuration();
+		try {
+			cfg.load(new InputStreamReader(Channels.getInstance().getResourceAsStream("channel.yml")));
+		} catch (ConfigurateException e) {
+			Channels.getInstance().getLogger().log(Level.SEVERE, "Unable to load default channel configuration from jar", e);
+		}
 
 		save();
 	}
@@ -131,8 +138,8 @@ public class ChannelYamlConfig extends YamlConfig implements ChannelConfig {
 		cfg.set("bans", bans);
 	}
 
-	public void setColor(ChatColor color) {
-		cfg.set("color", color.name());
+	public void setColor(TextColor color) {
+		cfg.set("color", color.toString());
 	}
 
 	public void setGlobal(boolean global) {

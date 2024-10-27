@@ -2,8 +2,8 @@ package net.zaiyers.Channels.command;
 
 import com.google.common.collect.ImmutableMap;
 
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.proxy.Player;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.events.ChannelsChatEvent;
 import net.zaiyers.Channels.Chatter;
@@ -11,17 +11,17 @@ import net.zaiyers.Channels.message.Message;
 import net.zaiyers.Channels.message.PrivateMessage;
 
 public class PMCommand extends AbstractCommand {
-	public PMCommand(CommandSender sender, String[] args) {
+	public PMCommand(CommandSource sender, String[] args) {
 		super(sender, args);
 	}
 
 	public void execute() {	
-		if (!(sender instanceof ProxiedPlayer)) {
+		if (!(sender instanceof Player)) {
 			Channels.notify(sender, "channels.command.is-player-command");
 			return;
 		}
 		
-		Chatter chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender));
+		Chatter chatter = Channels.getInstance().getChatter(((Player) sender));
 		
 		if (args.length == 0) {
 			chatter.setPrivateRecipient(null);
@@ -34,29 +34,27 @@ public class PMCommand extends AbstractCommand {
 			return;
 		}
 
-		if (args.length > 0) {
-			//set recipient
-			Chatter recipient = Channels.getInstance().getChatterByName(args[0]);
-			if (recipient == null || recipient.getPlayer() == null || !recipient.getPlayer().isConnected() || (
-					args.length == 1
-							&& Channels.getConfig().shouldHideVanished()
-							&& Channels.getVNPBungee() != null
-							&& !Channels.getVNPBungee().canSee(chatter.getPlayer(), recipient.getPlayer()))
-					) {
-				//nobody matched
-				Channels.notify(sender, "channels.command.chatter-not-found", ImmutableMap.of("chatter", args[0]));
-			} else if (args.length == 1) {
-				chatter.setPrivateRecipient(recipient.getPlayer().getUniqueId().toString());
-				Channels.notify(sender, "channels.chatter.recipient-set", ImmutableMap.of("recipient", recipient.getName()));
-			} else if (args.length > 1) {
-				//send message
-				
-				Message msg = new PrivateMessage(chatter, recipient, argsToMessage(args));
-				ChannelsChatEvent chatEvent = new ChannelsChatEvent(msg);
-				if (!Channels.getInstance().getProxy().getPluginManager().callEvent( chatEvent ).isCancelled()) {
-					msg.send(chatEvent.isHidden());
-					recipient.setLastPrivateSender(chatter);
-				}
+		//set recipient
+		Chatter recipient = Channels.getInstance().getChatterByName(args[0]);
+		if (recipient == null || recipient.getPlayer() == null || !recipient.getPlayer().isActive() || (
+				args.length == 1
+						&& Channels.getConfig().shouldHideVanished()
+						&& Channels.getVNPVelocity() != null
+						&& !Channels.getVNPVelocity().canSee(chatter.getPlayer(), recipient.getPlayer()))
+				) {
+			//nobody matched
+			Channels.notify(sender, "channels.command.chatter-not-found", ImmutableMap.of("chatter", args[0]));
+		} else if (args.length == 1) {
+			chatter.setPrivateRecipient(recipient.getPlayer().getUniqueId().toString());
+			Channels.notify(sender, "channels.chatter.recipient-set", ImmutableMap.of("recipient", recipient.getName()));
+		} else if (args.length > 1) {
+			//send message
+
+			Message msg = new PrivateMessage(chatter, recipient, argsToMessage(args));
+			ChannelsChatEvent chatEvent = new ChannelsChatEvent(msg);
+			if (!Channels.getInstance().getProxy().getEventManager().fire( chatEvent ).isCancelled()) {
+				msg.send(chatEvent.isHidden());
+				recipient.setLastPrivateSender(chatter);
 			}
 		}
 	}

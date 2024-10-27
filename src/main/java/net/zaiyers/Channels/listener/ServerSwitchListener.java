@@ -2,17 +2,21 @@ package net.zaiyers.Channels.listener;
 
 import com.google.common.collect.ImmutableMap;
 
-import net.md_5.bungee.api.event.ServerSwitchEvent;
-import net.md_5.bungee.api.plugin.Listener;
-import net.md_5.bungee.event.EventHandler;
+import com.velocitypowered.api.event.Subscribe;
+import com.velocitypowered.api.event.player.ServerPostConnectEvent;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.Chatter;
 
-public class ServerSwitchListener implements Listener {
-	@EventHandler
-	public void onServerSwitch(ServerSwitchEvent e) {
-		String serverName = e.getPlayer().getServer().getInfo().getName();
+public class ServerSwitchListener {
+
+	@Subscribe
+	public void onServerSwitch(ServerPostConnectEvent e) {
+		if (e.getPlayer().getCurrentServer().isEmpty()) {
+			return;
+		}
+
+		String serverName = e.getPlayer().getCurrentServer().get().getServerInfo().getName();
 		
 		if (Channels.getConfig().forceServerDefaultChannel(serverName)) {
 			Channel channel = Channels.getInstance().getChannel(Channels.getConfig().getServerDefaultChannel(serverName));

@@ -1,6 +1,6 @@
 package net.zaiyers.Channels.message;
 
-import net.md_5.bungee.api.chat.BaseComponent;
+import net.kyori.adventure.text.Component;
 
 import java.util.regex.Matcher;
 
@@ -13,7 +13,7 @@ abstract public class AbstractMessage implements Message {
 	/**
 	 * pretty message
 	 */
-	protected BaseComponent[] processedMessage;
+	protected Component processedMessage;
 	
 	/**
 	 * time this message was send
@@ -23,7 +23,7 @@ abstract public class AbstractMessage implements Message {
 	/**
 	 * the final message
 	 */
-	public BaseComponent[] getProcessedMessage() {
+	public Component getProcessedMessage() {
 		return processedMessage;
 	}
 	

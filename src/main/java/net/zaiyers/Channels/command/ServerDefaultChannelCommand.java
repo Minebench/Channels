@@ -2,17 +2,17 @@ package net.zaiyers.Channels.command;
 
 import com.google.common.collect.ImmutableMap;
 
-import net.md_5.bungee.api.CommandSender;
+import com.velocitypowered.api.command.CommandSource;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 
 public class ServerDefaultChannelCommand extends AbstractCommand {
-	public ServerDefaultChannelCommand(CommandSender sender, String[] args) {
+	public ServerDefaultChannelCommand(CommandSource sender, String[] args) {
 		super(sender, args);
 	}
 
-	public void execute() {		
-		if (Channels.getInstance().getProxy().getServerInfo(args[1]) == null) {
+	public void execute() {
+		if (Channels.getInstance().getProxy().getServer(args[1]).isEmpty()) {
 			Channels.notify(sender, "channels.command.channel-unknown-server");
 			return;
 		}

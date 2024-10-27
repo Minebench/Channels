@@ -2,28 +2,29 @@ package net.zaiyers.Channels.command;
 
 import com.google.common.collect.ImmutableMap;
 
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import com.velocitypowered.api.proxy.Player;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import com.velocitypowered.api.command.CommandSource;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 
 public class ChannelColorCommand extends AbstractCommand {
 
-	public ChannelColorCommand(CommandSender sender, String[] args) {
+	public ChannelColorCommand(CommandSource sender, String[] args) {
 		super(sender, args);
 	}
 
 	public void execute() {
 		if (args.length == 1) {
 			//list available colors
-			String colorlist = "";
-			for (ChatColor color: ChatColor.values()) {
-				colorlist+=color+color.name()+ChatColor.RESET+" ";
+			Component colorlist = Component.empty();
+			for (NamedTextColor color: NamedTextColor.NAMES.values()) {
+				colorlist = colorlist.append(Component.text(color.toString() + " ").color(color));
 			}
 			
-			sender.sendMessage(new TextComponent(colorlist));
+			sender.sendMessage(colorlist);
 			return;
 		} else if (args.length < 3) {
 			Channels.notify(sender, "channels.usage.ChannelColorCommand"); return;
@@ -35,13 +36,16 @@ public class ChannelColorCommand extends AbstractCommand {
 			return;
 		}
 		
-		if (sender instanceof ProxiedPlayer  && !chan.isMod(((ProxiedPlayer) sender).getUniqueId().toString()) && !sender.hasPermission("channels.setcolor.foreign")) {
+		if (sender instanceof Player && !chan.isMod(((Player) sender).getUniqueId().toString()) && !sender.hasPermission("channels.setcolor.foreign")) {
 			Channels.notify(sender, "channels.command.channel-no-permission");
 			return;
 		}
 		
 		try {
-			ChatColor color = ChatColor.of(args[2]);
+			TextColor color = Channels.parseTextColor(args[2]);
+			if (color == null) {
+				throw new IllegalArgumentException();
+			}
 			chan.setColor(color);
 			Channels.notify(sender, "channels.command.channel-modified", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
 		} catch (IllegalArgumentException e) {

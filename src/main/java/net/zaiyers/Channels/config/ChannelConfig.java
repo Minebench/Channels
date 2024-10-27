@@ -2,7 +2,7 @@ package net.zaiyers.Channels.config;
 
 import java.util.List;
 
-import net.md_5.bungee.api.ChatColor;
+import net.kyori.adventure.text.format.TextColor;
 
 public interface ChannelConfig extends Config {
 	/**
@@ -23,7 +23,7 @@ public interface ChannelConfig extends Config {
 	/**
 	 * @return channelcolor
 	 */
-	public ChatColor getColor();
+	public TextColor getColor();
 	
 	/**
 	 * @return channelpassword
@@ -136,7 +136,7 @@ public interface ChannelConfig extends Config {
 	 * set channel color
 	 * @param color new color
 	 */
-	public void setColor(ChatColor color);
+	public void setColor(TextColor color);
 	
 	/**
 	 * make channel global

@@ -6,8 +6,10 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import net.zaiyers.Channels.Channels;
+import org.spongepowered.configurate.ConfigurateException;
 
 public class ChatterYamlConfig extends YamlConfig implements ChatterConfig {
 
@@ -46,7 +48,7 @@ public class ChatterYamlConfig extends YamlConfig implements ChatterConfig {
 	}
 
 	public List<String> getSubscriptions() {
-		ArrayList<String> subs = new ArrayList<String>();
+		ArrayList<String> subs = new ArrayList<>();
 		for (String sub : cfg.getStringList("subscriptions")) {
 			subs.add(sub);
 		}
@@ -81,7 +83,7 @@ public class ChatterYamlConfig extends YamlConfig implements ChatterConfig {
 
 	public void save() {
 		try {
-			ymlCfg.save(cfg, configFile);
+			cfg.save(configFile);
 		} catch (IOException e) {
 			Channels.getInstance().getLogger().severe("Unable to save chatter configuration '" + configFile.getAbsolutePath() + "'");
 			e.printStackTrace();
@@ -89,15 +91,20 @@ public class ChatterYamlConfig extends YamlConfig implements ChatterConfig {
 	}
 
 	public void createDefaultConfig() {
-		cfg = ymlCfg.load(
-				new InputStreamReader(Channels.getInstance().getResourceAsStream("chatter.yml"))
-		);
+		cfg = new Configuration();
+		try {
+			cfg.load(
+					new InputStreamReader(Channels.getInstance().getResourceAsStream("chatter.yml"))
+			);
+		} catch (ConfigurateException e) {
+			Channels.getInstance().getLogger().log(Level.SEVERE, "Unable to load default chatter configuration from jar", e);
+		}
 
 		// set default channel
 		cfg.set("channelUUID", Channels.getConfig().getDefaultChannelUUID().toString());
 
 		// subscribe to default channel
-		ArrayList<String> subs = new ArrayList<String>();
+		ArrayList<String> subs = new ArrayList<>();
 		subs.add(Channels.getConfig().getDefaultChannelUUID());
 		setSubscriptions(subs);
 
@@ -105,7 +112,7 @@ public class ChatterYamlConfig extends YamlConfig implements ChatterConfig {
 	}
 
 	public void setSubscriptions(List<String> subs) {
-		List<String> subscriptions = new ArrayList<String>();
+		List<String> subscriptions = new ArrayList<>();
 		for (String u : subs) {
 			subscriptions.add(u.toString());
 		}

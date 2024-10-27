@@ -2,13 +2,13 @@ package net.zaiyers.Channels.command;
 
 import com.google.common.collect.ImmutableMap;
 
-import net.md_5.bungee.api.CommandSender;
+import com.velocitypowered.api.command.CommandSource;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 
 public class ChannelRemoveServerCommand extends AbstractCommand {
 
-	public ChannelRemoveServerCommand(CommandSender sender, String[] args) {
+	public ChannelRemoveServerCommand(CommandSource sender, String[] args) {
 		super(sender, args);
 	}
 
@@ -20,7 +20,7 @@ public class ChannelRemoveServerCommand extends AbstractCommand {
 		}
 		
 		chan.removeServer(args[2]);
-		if (Channels.getInstance().getProxy().getServerInfo(args[2]) == null) {
+		if (Channels.getInstance().getProxy().getServer(args[2]).isEmpty()) {
 			Channels.notify(sender, "channels.command.channel-removed-unknown-server", ImmutableMap.of("channel", args[1]));
 		} else {
 			Channels.notify(sender, "channels.command.channel-removed-server", ImmutableMap.of("server", args[2], "channel", chan.getName(), "channelColor", chan.getColor().toString()));

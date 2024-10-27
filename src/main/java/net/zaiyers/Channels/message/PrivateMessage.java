@@ -6,11 +6,10 @@ import java.util.regex.Matcher;
 
 import com.google.common.collect.ImmutableMap;
 
-import de.themoep.minedown.MineDown;
-import de.themoep.minedown.MineDownParser;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.proxy.player.PlayerSettings;
+import de.themoep.minedown.adventure.MineDown;
+import de.themoep.minedown.adventure.MineDownParser;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.Chatter;
 
@@ -18,7 +17,7 @@ public class PrivateMessage extends AbstractMessage {
 	private Chatter sender;
 	private Chatter receiver;
 	
-	public static enum SenderRole {
+	public enum SenderRole {
 		SENDER, RECEIVER
 	}
 	
@@ -47,19 +46,19 @@ public class PrivateMessage extends AbstractMessage {
 		}
 
 		boolean bypassIgnore = sender.hasPermission("channels.bypass.ignore");
-		if (receiver != null && receiver.getPlayer().getChatMode() != ProxiedPlayer.ChatMode.SHOWN) {
-			if (receiver.getPlayer().getChatMode() == ProxiedPlayer.ChatMode.HIDDEN || !bypassIgnore) {
-				Channels.notify(sender.getPlayer(), "Channels.chatter.hides-chat", ImmutableMap.of("chatter", receiver.getName()));
-			}
+		if (receiver != null && receiver.getPlayer().getPlayerSettings().getChatMode() != PlayerSettings.ChatMode.SHOWN && !bypassIgnore) {
+			Channels.notify(sender.getPlayer(), "Channels.chatter.hides-chat", ImmutableMap.of("chatter", receiver.getName()));
 		}
 		
 		processMessage(SenderRole.SENDER);
 		sender.sendMessage(sender, this);
 
 		if (!hidden && (bypassIgnore || !receiver.getIgnores().contains(sender.getPlayer().getUniqueId().toString()))) {
-			processMessage(SenderRole.RECEIVER);
-			receiver.sendMessage(bypassIgnore ? null : sender, this);
-			receiver.setLastPrivateSender(sender);
+			if (receiver.canSeeChat()) {
+				processMessage(SenderRole.RECEIVER);
+				receiver.sendMessage(bypassIgnore ? null : sender, this);
+				receiver.setLastPrivateSender(sender);
+			}
 		}
 	}
 	
@@ -75,7 +74,7 @@ public class PrivateMessage extends AbstractMessage {
 		String pmFormat = Channels.getConfig().getPrivateMessageFormat(role);
 		
 		MineDown messageMd = new MineDown(rawMessage)
-				.urlHoverText(ChatColor.translateAlternateColorCodes('&', Channels.getInstance().getLanguage().getTranslation("chat.hover.open-url")));
+				.urlHoverText(Channels.getInstance().getLanguage().getTranslation("chat.hover.open-url"));
 		if (!getChatter().hasPermission("channels.color")) {
 			messageMd.disable(MineDownParser.Option.LEGACY_COLORS);
 		}
@@ -99,7 +98,7 @@ public class PrivateMessage extends AbstractMessage {
 				.toComponent();
 	}
 	
-	public CommandSender getSender() {
+	public CommandSource getSender() {
 		return sender.getPlayer();
 	}
 	

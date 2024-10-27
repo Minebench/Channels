@@ -2,12 +2,12 @@ package net.zaiyers.Channels.command;
 
 import java.util.ArrayList;
 
-import net.md_5.bungee.api.CommandSender;
+import com.velocitypowered.api.command.CommandSource;
 import net.zaiyers.Channels.Channels;
 
 public class ChannelHelpCommand extends AbstractCommand implements ChannelsCommand {
 
-	public ChannelHelpCommand(CommandSender sender, String[] args) {
+	public ChannelHelpCommand(CommandSource sender, String[] args) {
 		super(sender, args);
 	}
 

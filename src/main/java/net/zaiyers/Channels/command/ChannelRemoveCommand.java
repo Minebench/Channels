@@ -2,20 +2,20 @@ package net.zaiyers.Channels.command;
 
 import com.google.common.collect.ImmutableMap;
 
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.proxy.Player;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 
 public class ChannelRemoveCommand extends AbstractCommand {
-	public ChannelRemoveCommand(CommandSender sender, String[] args) {
+	public ChannelRemoveCommand(CommandSource sender, String[] args) {
 		super(sender, args);
 	}
 
 	public void execute() {
 		Channel channel = Channels.getInstance().getChannel(args[1]);
 		if (channel != null) {
-			if (sender instanceof ProxiedPlayer && !channel.isMod(((ProxiedPlayer) sender).getUniqueId().toString()) && !sender.hasPermission("channels.remove.foreign")) {
+			if (sender instanceof Player && !channel.isMod(((Player) sender).getUniqueId().toString()) && !sender.hasPermission("channels.remove.foreign")) {
 				Channels.notify(sender, "channels.command.channel-no-permission");
 				return;
 			}

@@ -1,14 +1,14 @@
 package net.zaiyers.Channels.listener;
 
-import net.md_5.bungee.api.event.PlayerDisconnectEvent;
-import net.md_5.bungee.api.plugin.Listener;
-import net.md_5.bungee.event.EventHandler;
+import com.velocitypowered.api.event.Subscribe;
+import com.velocitypowered.api.event.connection.DisconnectEvent;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.Chatter;
 
-public class PlayerQuitListener implements Listener {
-	@EventHandler
-	public void onPlayerQuit(PlayerDisconnectEvent event) {
+public class PlayerQuitListener {
+
+	@Subscribe
+	public void onPlayerQuit(DisconnectEvent event) {
 		Chatter chatter = Channels.getInstance().getChatter(event.getPlayer());
 
 		if (chatter != null) {

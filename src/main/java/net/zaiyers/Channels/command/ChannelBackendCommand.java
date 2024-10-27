@@ -1,13 +1,13 @@
 package net.zaiyers.Channels.command;
 
 import com.google.common.collect.ImmutableMap;
-import net.md_5.bungee.api.CommandSender;
+import com.velocitypowered.api.command.CommandSource;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 
 public class ChannelBackendCommand extends AbstractCommand {
 
-	public ChannelBackendCommand(CommandSender sender, String[] args) {
+	public ChannelBackendCommand(CommandSource sender, String[] args) {
 		super(sender, args);
 	}
 

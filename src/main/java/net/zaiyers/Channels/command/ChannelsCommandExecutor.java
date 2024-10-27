@@ -2,33 +2,28 @@ package net.zaiyers.Channels.command;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import com.google.common.collect.ImmutableMap;
 
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.config.ServerInfo;
-import net.md_5.bungee.api.plugin.Command;
-import net.md_5.bungee.api.plugin.TabExecutor;
+import com.velocitypowered.api.proxy.Player;
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.proxy.server.RegisteredServer;
+import com.velocitypowered.api.proxy.server.ServerInfo;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 
-public class ChannelsCommandExecutor extends Command implements TabExecutor {
-	String command;
+public class ChannelsCommandExecutor extends AbstractCommandExecutor {
 	
 	public ChannelsCommandExecutor(String name, String... aliases) {
 		super(name, "", aliases);
-		
-		command = name;
 	}
 
 	@Override
-	public void execute(CommandSender sender, String[] args) {
+	public void execute(CommandSource sender, String[] args) {
 		ChannelsCommand cmd;
 		
-		if (command.equals("channel")) {
+		if (getName().equals("channel")) {
 			if (args.length > 0) {
 				String cmdName = args[0].toLowerCase();
 				if (cmdName.equals("ignore")) {
@@ -105,15 +100,15 @@ public class ChannelsCommandExecutor extends Command implements TabExecutor {
 			} else {
 				cmd = new ChannelHelpCommand(sender, args);
 			}
-		} else if (command.equals("pm")) {
+		} else if (getName().equals("pm")) {
 			cmd = new PMCommand(sender, args);
-		} else if (command.equals("reply")) {
+		} else if (getName().equals("reply")) {
 			cmd = new ReplyCommand(sender, args);
-		} else if (command.equals("afk")) {
+		} else if (getName().equals("afk")) {
 			cmd = new AFKCommand(sender, args);
-		} else if (command.equals("dnd")) {
+		} else if (getName().equals("dnd")) {
 			cmd = new DNDCommand(sender, args);
-		} else if (command.equals("ignore")) {
+		} else if (getName().equals("ignore")) {
 			cmd = new IgnoreCommand(sender, args);
 		} else {
 			cmd = new ChannelHelpCommand(sender, args);
@@ -131,7 +126,8 @@ public class ChannelsCommandExecutor extends Command implements TabExecutor {
 		}
 	}
 
-	public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
+	@Override
+	public List<String> onTabComplete(CommandSource sender, String[] args) {
 		if ("channel".equals(getName())) {
 			if (args.length <= 1) {
 				return matchingCommands(sender, (args.length > 0) ? args[0] : "");
@@ -170,7 +166,7 @@ public class ChannelsCommandExecutor extends Command implements TabExecutor {
 	 * @param s
 	 * @return
 	 */
-	private Iterable<String> matchingCommands(CommandSender sender, String s) {
+	private List<String> matchingCommands(CommandSource sender, String s) {
 		List<String> commands = new ArrayList<String>();
 		
 		if ("subscribe".startsWith(s.toLowerCase()) && sender.hasPermission(CommandPermission.ChannelSubscribeCommand.toString())) {
@@ -319,12 +315,11 @@ public class ChannelsCommandExecutor extends Command implements TabExecutor {
 	 * @param s
 	 * @return
 	 */
-	public static Iterable<String> matchingPlayers(final String s) {
-		return ProxyServer.getInstance().getPlayers().stream().filter(
-		        player -> player.getName().toLowerCase().startsWith(s.toLowerCase())
-        ).collect(Collectors.toList()).stream().map(
-                CommandSender::getName
-        ).collect(Collectors.toList());
+	public static List<String> matchingPlayers(final String s) {
+		return Channels.getInstance().getProxy().getAllPlayers().stream()
+				.map(Player::getUsername)
+				.filter(username -> username.toLowerCase(Locale.ROOT).startsWith(s.toLowerCase()))
+				.collect(Collectors.toList());
 	}
 	
 	/**
@@ -332,12 +327,11 @@ public class ChannelsCommandExecutor extends Command implements TabExecutor {
 	 * @param s
 	 * @return
 	 */
-	private static Iterable<String> matchingChannels(final String s) {
-		return Channels.getInstance().getChannels().values().stream().filter(
-				channel -> channel.getName().toLowerCase().startsWith(s.toLowerCase())
-		).collect(Collectors.toList()).stream().map(
-				Channel::getName
-		).collect(Collectors.toList());
+	private static List<String> matchingChannels(final String s) {
+		return Channels.getInstance().getChannels().values().stream()
+				.map(Channel::getName)
+				.filter(name -> name.toLowerCase(Locale.ROOT).startsWith(s.toLowerCase()))
+				.collect(Collectors.toList());
 	}
 	
 	/**
@@ -345,12 +339,12 @@ public class ChannelsCommandExecutor extends Command implements TabExecutor {
 	 * @param s
 	 * @return
 	 */
-	private static Iterable<String> matchingServers(final String s) {
-		return StreamSupport.stream(ProxyServer.getInstance().getServers().values().stream().filter(
-				info -> info.getName().toLowerCase().startsWith(s.toLowerCase())
-		).collect(Collectors.toList()).spliterator(), false).map(
-				ServerInfo::getName
-		).collect(Collectors.toList());
+	private static List<String> matchingServers(final String s) {
+		return Channels.getInstance().getProxy().getAllServers().stream()
+				.map(RegisteredServer::getServerInfo)
+				.map(ServerInfo::getName)
+				.filter(name -> name.toLowerCase(Locale.ROOT).startsWith(s.toLowerCase()))
+				.collect(Collectors.toList());
 	}
 	
 	/**
@@ -358,11 +352,11 @@ public class ChannelsCommandExecutor extends Command implements TabExecutor {
 	 * @param s
 	 * @return
 	 */
-	private static Iterable<String> matchingBoolean(final String s) {
+	private static List<String> matchingBoolean(final String s) {
 		if ("true".startsWith(s.toLowerCase())) {
-			return Arrays.asList((new String[] {"true"}));
+			return List.of("true");
 		} else if ("false".startsWith(s.toLowerCase())) {
-			return Arrays.asList((new String[] {"false"}));
+			return List.of("false");
 		}
 		
 		return Collections.emptyList();
@@ -373,11 +367,10 @@ public class ChannelsCommandExecutor extends Command implements TabExecutor {
 	 * @param s
 	 * @return
 	 */
-	private static Iterable<String> matchingColors(final String s) {
-		return Arrays.stream(ChatColor.values()).filter(
-				color -> color.toString().toLowerCase().startsWith(s.toLowerCase())
-		).collect(Collectors.toList()).stream().map(
-				ChatColor::toString
-		).collect(Collectors.toList());
+	private static List<String> matchingColors(final String s) {
+		return NamedTextColor.NAMES.values().stream()
+				.map(NamedTextColor::toString)
+				.filter(string -> string.toLowerCase().startsWith(s.toLowerCase()))
+				.collect(Collectors.toList());
 	}
 }

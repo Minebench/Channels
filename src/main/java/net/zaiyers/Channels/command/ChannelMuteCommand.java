@@ -2,29 +2,28 @@ package net.zaiyers.Channels.command;
 
 import com.google.common.collect.ImmutableMap;
 
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.proxy.Player;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.Chatter;
 
+import java.util.Optional;
+
 public class ChannelMuteCommand extends AbstractCommand {
 
-	public ChannelMuteCommand(CommandSender sender, String[] args) {
+	public ChannelMuteCommand(CommandSource sender, String[] args) {
 		super(sender, args);
 	}
 
 	public void execute() {
-		ProxiedPlayer player = Channels.getInstance().getProxy().getPlayer(args[1]);
-		if (player == null) {
+		Optional<Player> player = Channels.getInstance().getProxy().getPlayer(args[1]);
+		if (player.isEmpty()) {
 			Channels.notify(sender, "channels.command.chatter-not-found", ImmutableMap.of("chatter", args[1]));
-			return;
 		} else {
-			Chatter chatter = Channels.getInstance().getChatter(player.getUniqueId());
+			Chatter chatter = Channels.getInstance().getChatter(player.get().getUniqueId());
 			chatter.setMuted(true);
-			Channels.notify(player, "channels.command.chatter-muted", ImmutableMap.of("chatter", chatter.getName()));
+			Channels.notify(player.get(), "channels.command.chatter-muted", ImmutableMap.of("chatter", chatter.getName()));
 		}
-		
-		
 	}
 
 	public boolean validateInput() {

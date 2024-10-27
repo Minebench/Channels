@@ -1,9 +1,8 @@
 package net.zaiyers.Channels.events;
 
-import net.md_5.bungee.api.plugin.Event;
 import net.zaiyers.Channels.Chatter;
 
-public class ChatterAfkEvent extends Event {
+public class ChatterAfkEvent {
 	private final Chatter chatter;
 	private final boolean isAfk;
 	private String message;

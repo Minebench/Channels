@@ -5,7 +5,8 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 import com.mongodb.client.MongoCollection;
-import net.md_5.bungee.api.ChatColor;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import net.zaiyers.Channels.Channels;
 import org.bson.Document;
 
@@ -26,8 +27,8 @@ public class ChannelMongoConfig extends MongoConfig implements ChannelConfig {
 		return cfg.getString("format");
 	}
 
-	public ChatColor getColor() {
-		return ChatColor.of(cfg.getString("color"));
+	public TextColor getColor() {
+		return Channels.parseTextColor(cfg.getString("color"));
 	}
 
 	public String getPassword() {
@@ -128,8 +129,8 @@ public class ChannelMongoConfig extends MongoConfig implements ChannelConfig {
 		cfg.set("bans", bans);
 	}
 
-	public void setColor(ChatColor color) {
-		cfg.set("color", color.name());
+	public void setColor(TextColor color) {
+		cfg.set("color", color.toString());
 	}
 
 	public void setGlobal(boolean global) {

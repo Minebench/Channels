@@ -4,12 +4,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
 
-import de.themoep.minedown.MineDown;
-import de.themoep.minedown.MineDownParser;
-import de.themoep.minedown.Replacer;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.BaseComponent;
+import de.themoep.minedown.adventure.MineDown;
+import de.themoep.minedown.adventure.MineDownParser;
+import de.themoep.minedown.adventure.Replacer;
+import net.kyori.adventure.text.Component;
+import com.velocitypowered.api.command.CommandSource;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.Chatter;
@@ -51,7 +50,7 @@ public class ChannelMessage extends AbstractMessage {
 		SimpleDateFormat timeFormat = Channels.getConfig().getTimeFormat();
 		
 		MineDown messageMd = new MineDown(rawMessage)
-				.urlHoverText(ChatColor.translateAlternateColorCodes('&', Channels.getInstance().getLanguage().getTranslation("chat.hover.open-url")));
+				.urlHoverText(Channels.getInstance().getLanguage().getTranslation("chat.hover.open-url"));
 		if (!chatter.hasPermission("channels.color")) {
 			messageMd.disable(MineDownParser.Option.LEGACY_COLORS);
 		}
@@ -82,7 +81,7 @@ public class ChannelMessage extends AbstractMessage {
 	 * the final message
 	 */
 	@Override
-	public BaseComponent[] getProcessedMessage() {
+	public Component getProcessedMessage() {
 		if (processedMessage == null)
 			processMessage();
 		return super.getProcessedMessage();
@@ -103,7 +102,7 @@ public class ChannelMessage extends AbstractMessage {
 		return chatter;
 	}
 
-	public CommandSender getSender() {
+	public CommandSource getSender() {
 		return chatter.getPlayer();
 	}
 	

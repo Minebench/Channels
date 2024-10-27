@@ -2,10 +2,9 @@ package net.zaiyers.Channels.command;
 
 import com.google.common.collect.ImmutableMap;
 
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.plugin.Command;
-import net.md_5.bungee.api.plugin.TabExecutor;
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.command.SimpleCommand;
+import com.velocitypowered.api.proxy.Player;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.events.ChannelsChatEvent;
@@ -14,11 +13,13 @@ import net.zaiyers.Channels.message.ChannelMessage;
 import net.zaiyers.Channels.message.ConsoleMessage;
 import net.zaiyers.Channels.message.Message;
 
-public class ChannelTagCommandExecutor extends Command implements TabExecutor {
+import java.util.List;
+
+public class ChannelTagCommandExecutor extends AbstractCommandExecutor {
 	/**
 	 * uuid of the channel
 	 */
-	private String channelUUID;
+	private final String channelUUID;
 
 	public ChannelTagCommandExecutor(String name) {
 		super(name);
@@ -27,14 +28,14 @@ public class ChannelTagCommandExecutor extends Command implements TabExecutor {
 	}
 
 	@Override
-	public void execute(CommandSender sender, String[] args) {	
+	public void execute(CommandSource sender, String[] args) {
 		Message msg;
 		Channel chan = Channels.getInstance().getChannel(channelUUID);
 		
-		if (!(sender instanceof ProxiedPlayer)) {
+		if (!(sender instanceof Player)) {
 			msg = new ConsoleMessage(chan, argsToMessage(args));
 		} else {
-			Chatter chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUniqueId());
+			Chatter chatter = Channels.getInstance().getChatter(((Player) sender).getUniqueId());
 			
 			if (!chatter.getSubscriptions().contains(chan.getUUID())) {
 				Channels.notify(sender, "channels.chatter.channel-not-subscribed", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
@@ -53,7 +54,7 @@ public class ChannelTagCommandExecutor extends Command implements TabExecutor {
 				return;
 			} else {
 				if(chan.isBackend()) {
-					((ProxiedPlayer) sender).chat(argsToMessage(args));
+					((Player) sender).spoofChatInput(argsToMessage(args));
 					return;
 				} else {
 					msg = new ChannelMessage(chatter, chan, argsToMessage(args));
@@ -62,20 +63,34 @@ public class ChannelTagCommandExecutor extends Command implements TabExecutor {
 		}
 		
 		ChannelsChatEvent chatEvent = new ChannelsChatEvent(msg);
-		if (!Channels.getInstance().getProxy().getPluginManager().callEvent( chatEvent ).isCancelled()) {
+		if (!Channels.getInstance().getProxy().getEventManager().fire( chatEvent ).isCancelled()) {
 			msg.send(chatEvent.isHidden());
 		}
 	}
 	
 	private String argsToMessage(String[] args) {
-		String message = args[0];
+		StringBuilder message = new StringBuilder(args[0]);
 		for (int i=1; i<args.length; i++) {
-			message+=" "+args[i];
+			message.append(" ").append(args[i]);
 		}
-		return message;
+		return message.toString();
 	}
 
-	public Iterable<String> onTabComplete(CommandSender arg0, String[] args) {
+	public List<String> onTabComplete(CommandSource arg0, String[] args) {
 		return ChannelsCommandExecutor.matchingPlayers((args.length > 0) ? args[args.length-1] : "");
+	}
+
+	public boolean hasPermission(final SimpleCommand.Invocation invocation) {
+		if (!super.hasPermission(invocation)) {
+			return false;
+		}
+
+		if (!(invocation.source() instanceof Player)) {
+			return true;
+		}
+
+		Channel chan = Channels.getInstance().getChannel(channelUUID);
+		Chatter chatter = Channels.getInstance().getChatter(((Player) invocation.source()).getUniqueId());
+		return chatter.getSubscriptions().contains(chan.getUUID()) && chatter.hasPermission(chan, "speak");
 	}
 }

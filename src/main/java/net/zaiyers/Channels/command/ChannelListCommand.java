@@ -2,14 +2,13 @@ package net.zaiyers.Channels.command;
 
 import com.google.common.collect.ImmutableMap;
 
-import de.themoep.minedown.MineDown;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.chat.hover.content.Text;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import de.themoep.minedown.adventure.MineDown;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.proxy.Player;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.Chatter;
@@ -20,21 +19,22 @@ import java.util.UUID;
 
 public class ChannelListCommand extends AbstractCommand {
 
-	public ChannelListCommand(CommandSender sender, String[] args) {
+	public ChannelListCommand(CommandSource sender, String[] args) {
 		super(sender, args);
 	}
 
 	public void execute() {
-		boolean isConsoleCommand = !(sender instanceof ProxiedPlayer );
+		boolean isConsoleCommand = !(sender instanceof Player );
 		Chatter chatter = null;
 		if (!isConsoleCommand) {
-			chatter = Channels.getInstance().getChatter(((ProxiedPlayer) sender).getUniqueId());
+			chatter = Channels.getInstance().getChatter(((Player) sender).getUniqueId());
 		}
 		
 		if (args.length == 1 && args[0].equalsIgnoreCase("list")) {
 			Channels.notify(sender, "channels.chatter.available-channels");
 			for (Channel channel: Channels.getInstance().getChannels().values()) {
-				boolean onThisServer = channel.isGlobal() || isConsoleCommand || channel.getServers().contains(chatter.getPlayer().getServer().getInfo().getName());
+				boolean onThisServer = channel.isGlobal() || isConsoleCommand
+						|| channel.getServers().contains(chatter.getPlayer().getCurrentServer().get().getServerInfo().getName());
 				if (isConsoleCommand ||
 						(
 							(
@@ -45,9 +45,18 @@ public class ChannelListCommand extends AbstractCommand {
 							&& onThisServer
 						)
 				) {
-						sender.sendMessage(" - " + channel.getColor() + channel.getTag() + " - " + channel.getName() + ChatColor.WHITE + " (" + ((channel.getPassword().isEmpty()) ? "public":"private") + ")");
+					sender.sendMessage(Component.text(" - ")
+							.append(Component.text(channel.getTag()).color(channel.getColor()))
+							.append(Component.text(" - "))
+							.append(Component.text(channel.getName()).color(channel.getColor()))
+							.append(Component.text(" (" + (channel.getPassword().isEmpty() ? "public" : "private")+ ")")));
 				} else if (chatter.hasPermission(channel, "globalread")) {
-					sender.sendMessage(" - " + channel.getColor() + channel.getTag() + " - " + channel.getName() + ChatColor.WHITE + " (" + ((channel.getPassword().isEmpty()) ? "public":"private") + ") " + ChatColor.GRAY + (onThisServer ? "" : " not") + " on this server");
+					sender.sendMessage(Component.text(" - ")
+							.append(Component.text(channel.getTag()).color(channel.getColor()))
+							.append(Component.text(" - "))
+							.append(Component.text(channel.getName()).color(channel.getColor()))
+							.append(Component.text(" (" + (channel.getPassword().isEmpty() ? "public" : "private")+ ")"))
+							.append(Component.text(" " + (onThisServer ? "" : "not") + " on this server").color(NamedTextColor.GRAY)));
 				}
 			}
 		} else if (args.length == 2 || (args.length == 1 && args[0].equalsIgnoreCase("who") && !isConsoleCommand)) {
@@ -73,40 +82,46 @@ public class ChannelListCommand extends AbstractCommand {
 				List<Chatter> chatters = new ArrayList<>();
 				for (UUID uuid : uuids) {
 					Chatter subscriber = Channels.getInstance().getChatter(uuid);
-					if (subscriber.getPlayer() != null && subscriber.getPlayer().isConnected() && (
+					if (subscriber.getPlayer() != null && subscriber.getPlayer().isActive() && (
 							chatter == null
 									|| !Channels.getConfig().shouldHideVanished()
-									|| Channels.getVNPBungee() == null
-									|| Channels.getVNPBungee().canSee(chatter.getPlayer(), subscriber.getPlayer()))
+									|| Channels.getVNPVelocity() == null
+									|| Channels.getVNPVelocity().canSee(chatter.getPlayer(), subscriber.getPlayer()))
 							) {
 						chatters.add(subscriber);
 					}
 				}
 
 				if (chatters.size() > 0) {
-					ComponentBuilder chatterList = new ComponentBuilder("");
+					Component chatterList = Component.empty();
 					for (int i=0; i < chatters.size(); i++) {
 						Chatter subscriber = chatters.get(i);
 						if (i > 0) {
-							chatterList.append(", ").color(ChatColor.WHITE);
+							chatterList.append(Component.text(", ").color(NamedTextColor.WHITE));
 						}
 						chatterList.append(MineDown.parse(subscriber.getPrefix()))
-								.append(subscriber.getName()).color(ChatColor.WHITE)
+								.append(Component.text(subscriber.getName()).color(NamedTextColor.WHITE))
 								.append(MineDown.parse(subscriber.getSuffix()));
 						if (subscriber.isAFK()) {
-							chatterList.append("(AFK)").color(ChatColor.GRAY);
+							chatterList.append(Component.text("(AFK)").color(NamedTextColor.GRAY));
 							if (subscriber.getAFKMessage() != null) {
-								chatterList.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(TextComponent.fromLegacyText(ChatColor.GRAY + "AFK: " + ChatColor.ITALIC + subscriber.getAFKMessage()))));
+								chatterList.hoverEvent(HoverEvent.showText(Component.text()
+										.append(Component.text("AFK: ").color(NamedTextColor.GRAY))
+										.append(Component.text(subscriber.getAFKMessage()).decorate(TextDecoration.ITALIC))
+								));
 							}
 						}
 						if (subscriber.isDND()) {
-							chatterList.append("(DND)").color(ChatColor.GRAY);
-							if (subscriber.getDNDMessage() != null) {
-								chatterList.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(TextComponent.fromLegacyText(ChatColor.GRAY + "DND: " + ChatColor.ITALIC + subscriber.getDNDMessage()))));
+							chatterList.append(Component.text("(DND)").color(NamedTextColor.GRAY));
+							if (subscriber.getAFKMessage() != null) {
+								chatterList.hoverEvent(HoverEvent.showText(Component.text()
+										.append(Component.text("DND: ").color(NamedTextColor.GRAY))
+										.append(Component.text(subscriber.getDNDMessage()).decorate(TextDecoration.ITALIC))
+								));
 							}
 						}
 					}
-					sender.sendMessage(chatterList.create());
+					sender.sendMessage(chatterList);
 				}
 			} else {
 				Channels.notify(sender, "channels.permission.list-channel", ImmutableMap.of("channel", channel.getName(), "channelColor", channel.getColor().toString()));

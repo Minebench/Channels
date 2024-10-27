@@ -2,11 +2,11 @@ package net.zaiyers.Channels.listener;
 
 import com.google.common.collect.ImmutableMap;
 
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.event.ChatEvent;
-import net.md_5.bungee.api.plugin.Listener;
-import net.md_5.bungee.event.EventHandler;
-import net.md_5.bungee.event.EventPriority;
+import com.velocitypowered.api.event.PostOrder;
+import com.velocitypowered.api.event.Subscribe;
+import com.velocitypowered.api.event.player.PlayerChatEvent;
+import com.velocitypowered.api.proxy.Player;
+import com.velocitypowered.api.proxy.ServerConnection;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.events.ChannelsChatEvent;
@@ -17,17 +17,20 @@ import net.zaiyers.Channels.message.ChannelMessage;
 import net.zaiyers.Channels.message.Message;
 import net.zaiyers.Channels.message.PrivateMessage;
 
-public class MessageListener implements Listener {
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onMessageRecieve(ChatEvent event) {
-		if (event.isCancelled() || !(event.getSender() instanceof ProxiedPlayer) || event.isCommand()) {
+import java.util.Optional;
+
+public class MessageListener {
+
+	@Subscribe(order = PostOrder.LATE)
+	public void onMessageRecieve(PlayerChatEvent event) {
+		if (!event.getResult().isAllowed() || event.getMessage().startsWith("/")) {
 			return;
 		}
 
 		boolean canceled = true;
-		ProxiedPlayer player = (ProxiedPlayer) event.getSender();
+		Player player = event.getPlayer();
 
-		if (event.getMessage().charAt(0) == '@' && event.getMessage().length() > 0) {
+		if (!event.getMessage().isEmpty() && event.getMessage().charAt(0) == '@') {
 			//private message
 			String[] splittedMsg;
 			if (event.getMessage().length() > 1) {
@@ -49,7 +52,7 @@ public class MessageListener implements Listener {
 				} else {
 					Message msg = new PrivateMessage(chatter, recipient, event.getMessage());
 					ChannelsChatEvent chatEvent = new ChannelsChatEvent(msg);
-					if (!Channels.getInstance().getProxy().getPluginManager().callEvent(chatEvent).isCancelled()) {
+					if (!Channels.getInstance().getProxy().getEventManager().fire(chatEvent).isCancelled()) {
 						msg.send(chatEvent.isHidden());
 						if (!chatEvent.isHidden()) {
 							recipient.setLastPrivateSender(chatter);
@@ -60,10 +63,12 @@ public class MessageListener implements Listener {
 				// channel message
 				Channel chan = Channels.getInstance().getChannel(chatter.getChannel());
 
-				if (chatter.hasPermission(chan, "speak")) {
-					if (!chan.isGlobal() && !chan.getServers().contains(chatter.getPlayer().getServer().getInfo().getName())) {
+				Optional<ServerConnection> server = player.getCurrentServer();
+				if (chatter.hasPermission(chan, "speak") && server.isPresent()) {
+					String serverName = server.get().getServerInfo().getName();
+					if (!chan.isGlobal() && !chan.getServers().contains(serverName)) {
 						// channel is not available on this server
-						String serverDefaultChannel = Channels.getConfig().getServerDefaultChannel(chatter.getPlayer().getServer().getInfo().getName());
+						String serverDefaultChannel = Channels.getConfig().getServerDefaultChannel(serverName);
 						if (serverDefaultChannel != null) {
 							// use server default channel
 							chan = Channels.getInstance().getChannel(serverDefaultChannel);
@@ -78,14 +83,14 @@ public class MessageListener implements Listener {
 							Channels.notify(chatter.getPlayer(), "channels.chatter.default-channel-set", ImmutableMap.of("channel", chan.getName(), "channelColor", chan.getColor().toString()));
 						} else {
 							// else the guy is screwed due to a misconfiguration - see Channels.checkSanity()
-							event.setCancelled(true);
+							event.setResult(PlayerChatEvent.ChatResult.denied());
 							return;
 						}
 					}
 
 					ChannelMessage msg = new ChannelMessage(chatter, chan, event.getMessage());
 					ChannelsChatEvent chatEvent = new ChannelsChatEvent(msg);
-					if (!Channels.getInstance().getProxy().getPluginManager().callEvent(chatEvent).isCancelled()) {
+					if (!Channels.getInstance().getProxy().getEventManager().fire(chatEvent).isCancelled()) {
 						if (msg.getChannel().isBackend()) {
 							canceled = false;
 						} else {
@@ -101,6 +106,8 @@ public class MessageListener implements Listener {
 
 
 		// do not pass to server
-		event.setCancelled(canceled);
+		if (canceled) {
+			event.setResult(PlayerChatEvent.ChatResult.denied());
+		}
 	}
 }

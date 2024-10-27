@@ -2,23 +2,24 @@ package net.zaiyers.Channels.command;
 
 import com.google.common.collect.ImmutableMap;
 
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.proxy.Player;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.config.ChatterYamlConfig;
 
+import java.util.Optional;
 import java.util.UUID;
 
 
 public class ChannelSuffixCommand extends AbstractCommand {
 
-	public ChannelSuffixCommand(CommandSender sender, String[] args) {
+	public ChannelSuffixCommand(CommandSource sender, String[] args) {
 		super(sender, args);
 	}
 
 	public void execute() {
 		UUID chatterUUID;
-		ProxiedPlayer player = Channels.getInstance().getProxy().getPlayer(args[1]);
+		Optional<Player> player = Channels.getInstance().getProxy().getPlayer(args[1]);
 		
 		String value;
 		if (args.length < 3) {
@@ -39,7 +40,7 @@ public class ChannelSuffixCommand extends AbstractCommand {
 			}
 		}
 		
-		if (player == null) {
+		if (player.isEmpty()) {
 			chatterUUID = Channels.getPlayerId(args[1]);
 			if (chatterUUID == null) {
 				Channels.notify(sender, "channels.command.chatter-not-found", ImmutableMap.of("chatter", args[1]));
@@ -50,12 +51,12 @@ public class ChannelSuffixCommand extends AbstractCommand {
 			cfg.setSuffix(value);
 			cfg.save();
 			
-			Channels.notify(player, "channels.chatter.set-suffix", ImmutableMap.of("chatter", Channels.getPlayerName(chatterUUID), "suffix", value));
+			Channels.notify(sender, "channels.chatter.set-suffix", ImmutableMap.of("chatter", Channels.getPlayerName(chatterUUID), "suffix", value));
 		} else {
-			chatterUUID = player.getUniqueId();
+			chatterUUID = player.get().getUniqueId();
 			Channels.getInstance().getChatter(chatterUUID).setSuffix(value);
 			
-			Channels.notify(player, "channels.chatter.set-suffix", ImmutableMap.of("chatter", player.getName(), "suffix", value));
+			Channels.notify(sender, "channels.chatter.set-suffix", ImmutableMap.of("chatter", player.get().getUsername(), "suffix", value));
 		}
 	}
 

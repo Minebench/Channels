@@ -10,7 +10,6 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import net.md_5.bungee.config.Configuration;
 import net.zaiyers.Channels.Channels;
 import org.bson.Document;
 
