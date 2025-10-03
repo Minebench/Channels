@@ -111,7 +111,11 @@ public class Channels extends Plugin {
 
 		if (getProxy().getPluginManager().getPlugin("BungeeTabListPlus") != null) {
 			getLogger().info("Found BungeeTabListPlus!");
-			new BTLPIntegration();
+			try {
+				new BTLPIntegration();
+			} catch (IllegalStateException e) {
+				getLogger().log(Level.WARNING, "Error while trying to hook into BungeeTabListPlus!", e);
+			}
 		}
 
 		if (getUuidDb() == null && getLuckPermsApi() == null) {
