@@ -9,6 +9,9 @@ import de.themoep.minedown.adventure.MineDownParser;
 import de.themoep.minedown.adventure.Replacer;
 import net.kyori.adventure.text.Component;
 import com.velocitypowered.api.command.CommandSource;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.ShadowColor;
+import net.kyori.adventure.text.object.ObjectContents;
 import net.zaiyers.Channels.Channel;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.Chatter;
@@ -73,6 +76,7 @@ public class ChannelMessage extends AbstractMessage {
 		)
 				.replace("prefix", MineDown.parse(chatter.getPrefix()))
 				.replace("suffix", MineDown.parse(chatter.getSuffix()))
+				.replace("icon", Component.object(ObjectContents.playerHead(chatter.getPlayer().getUniqueId())).color(NamedTextColor.WHITE).shadowColor(ShadowColor.shadowColor(0, 0, 0, 255)))
 				.replace("msg", messageMd.toComponent())
 				.toComponent();
 	}

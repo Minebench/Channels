@@ -1,8 +1,8 @@
 sendUuidsInMessages: false
 hideVanished: true
 defaultChannelUUID: ''
-privateMessageFormatSender: '[&bTo %receiver-prefix%&b%receiver%%receiver-suffix%:](&7%date% %time%) %msg%'
-privateMessageFormatReceiver: '[&dFrom %sender-prefix%&d%sender%%sender-suffix%:](&7%date% %time%) %msg%'
+privateMessageFormatSender: '[&bTo %receiver-prefix%%receiver-icon%&b%receiver%%receiver-suffix%:](&7%date% %time%) %msg%'
+privateMessageFormatReceiver: '[&dFrom %icon%%sender-prefix%%sender-icon%&d%sender%%sender-suffix%:](&7%date% %time%) %msg%'
 dateFormat: 'yyyy-MM-dd'
 timeFormat: 'HH:mm:ss'
 language: 'en'

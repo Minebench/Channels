@@ -10,6 +10,10 @@ import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.player.PlayerSettings;
 import de.themoep.minedown.adventure.MineDown;
 import de.themoep.minedown.adventure.MineDownParser;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.ShadowColor;
+import net.kyori.adventure.text.object.ObjectContents;
 import net.zaiyers.Channels.Channels;
 import net.zaiyers.Channels.Chatter;
 
@@ -95,6 +99,8 @@ public class PrivateMessage extends AbstractMessage {
 				.replace("sender-suffix", MineDown.parse(sender.getSuffix()))
 				.replace("receiver-prefix", MineDown.parse(receiver.getPrefix()))
 				.replace("receiver-suffix", MineDown.parse(receiver.getSuffix()))
+				.replace("sender-icon", Component.object(ObjectContents.playerHead(sender.getPlayer().getUniqueId())).color(NamedTextColor.WHITE).shadowColor(ShadowColor.shadowColor(0, 0, 0, 255)))
+				.replace("receiver-icon", Component.object(ObjectContents.playerHead(receiver.getPlayer().getUniqueId())).color(NamedTextColor.WHITE).shadowColor(ShadowColor.shadowColor(0, 0, 0, 255)))
 				.toComponent();
 	}
 	
